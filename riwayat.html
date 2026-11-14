@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pendaftaran - MAGA SWALAYAN (Merchandising)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Header Navbar -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400 shrink-0">
+                    <img src="maga.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide">Daftar Pendaftaran Distributor</h1>
+                    <p class="text-[11px] sm:text-xs text-indigo-200">Maga Swalayan</p>
+                </div>
+            </div>
+            
+            <a href="dashboard.html" class="flex items-center gap-1.5 text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 px-3.5 py-2 font-medium transition shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Konten Utama (Kotak Siku) -->
+    <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-6 flex-grow">
+        <div class="bg-white shadow-xl p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-indigo-600"></i>
+                        Semua Data Pendaftaran Masuk
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Pantau seluruh data distributor dan produk yang terdaftar dalam sistem.</p>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <!-- Tombol Download Excel -->
+                    <button id="btnDownloadExcel" onclick="downloadExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 flex items-center gap-2 transition shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Download Excel</span>
+                    </button>
+
+                    <div class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-3 py-2 border border-indigo-100">
+                        Total Data: <span id="totalData">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Data Pendaftaran (Kotak Siku) -->
+            <div class="overflow-x-auto border border-slate-200">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-indigo-50 text-indigo-900 text-xs sm:text-sm uppercase font-semibold">
+                            <th class="p-3.5 sm:p-4">No</th>
+                            <th class="p-3.5 sm:p-4">Nama Distributor</th>
+                            <th class="p-3.5 sm:p-4">Penanggungjawab</th>
+                            <th class="p-3.5 sm:p-4">Email Penginput</th>
+                            <th class="p-3.5 sm:p-4">Sales & Supervisor</th>
+                            <th class="p-3.5 sm:p-4">Nama Produk</th>
+                            <th class="p-3.5 sm:p-4">Jatuh Tempo</th>
+                            <th class="p-3.5 sm:p-4">Waktu Input</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riwayatTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm text-slate-700">
+                        <tr>
+                            <td colspan="8" class="text-center py-8 text-slate-400">Memuat data pendaftaran...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-500 border-t bg-white mt-auto">
+        &copy; 2026 MAGA SWALAYAN. All rights reserved.
+    </footer>
+
+    <!-- Script Pengambilan Data Firestore & Export Excel -->
+    <script type="module">
+        import { auth, db } from "./firebase.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const riwayatTableBody = document.getElementById('riwayatTableBody');
+        const totalData = document.getElementById('totalData');
+        let cachedData = []; // Menyimpan data untuk keperluan ekspor Excel
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+            await loadRiwayatData();
+        });
+
+        async function loadRiwayatData() {
+            try {
+                const q = query(collection(db, "pendaftaran_distributor"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                riwayatTableBody.innerHTML = "";
+                cachedData = [];
+                totalData.textContent = querySnapshot.size;
+
+                if (querySnapshot.empty) {
+                    riwayatTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Belum ada data pendaftaran yang masuk.</td></tr>`;
+                    return;
+                }
+
+                let no = 1;
+                for (const docSnap of querySnapshot.docs) {
+                    const data = docSnap.data();
+                    
+                    // Ambil email penginput berdasarkan userId jika belum tersimpan langsung di dokumen
+                    let userEmail = data.email || "-";
+                    if (userEmail === "-" && data.userId) {
+                        try {
+                            const userDocRef = doc(db, "users", data.userId);
+                            const userDoc = await getDoc(userDocRef);
+                            if (userDoc.exists()) {
+                                userEmail = userDoc.data().email || "-";
+                            }
+                        } catch (err) {
+                            console.error("Gagal mengambil email user:", err);
+                        }
+                    }
+
+                    const dataWithEmail = { ...data, emailPenginput: userEmail };
+                    cachedData.push(dataWithEmail);
+                    
+                    let formattedDate = "-";
+                    if (data.createdAt && data.createdAt.toDate) {
+                        formattedDate = data.createdAt.toDate().toLocaleString('id-ID', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                        });
+                    }
+
+                    const row = `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-3.5 sm:p-4 font-medium">${no++}</td>
+                            <td class="p-3.5 sm:p-4 font-semibold text-slate-800">${data.namaDistributor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">${data.penanggungjawab || '-'}<br><span class="text-xs text-slate-400">${data.noHpKantor || ''}</span></td>
+                            <td class="p-3.5 sm:p-4 text-slate-600 font-medium text-indigo-600">${userEmail}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">Sales: ${data.namaSales || '-'}<br><span class="text-xs text-slate-400">${data.noHpSales || ''}</span><br>Spv: ${data.namaSupervisor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600 max-w-xs truncate">${data.namaproduk || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600 font-medium">${data.jatuhTempo || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-500 text-xs">${formattedDate}</td>
+                        </tr>
+                    `;
+                    riwayatTableBody.innerHTML += row;
+                }
+
+            } catch (error) {
+                console.error("Gagal memuat data riwayat:", error);
+                riwayatTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-rose-500">Gagal memuat data dari database.</td></tr>`;
+            }
+        }
+
+        // Fungsi Ekspor ke Excel (Format CSV dengan pencegahan hilang angka 0 di depan)
+        window.downloadExcel = function() {
+            if (cachedData.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Belum ada data pendaftaran yang dapat diunduh.',
+                    confirmButtonColor: '#4f46e5'
+                });
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // BOM untuk UTF-8 Excel
+            // Header Kolom Excel
+            csvContent += "No,Nama Distributor,Penanggungjawab,Email Penginput,No HP Kantor,Nama Sales,No HP Sales,Nama Supervisor,No HP Supervisor,Nama Produk,Jatuh Tempo,Waktu Input\n";
+
+            cachedData.forEach((item, index) => {
+                let formattedDate = "-";
+                if (item.createdAt && item.createdAt.toDate) {
+                    formattedDate = item.createdAt.toDate().toLocaleString('id-ID');
+                }
+
+                // Menggunakan format teks agar angka 0 di depan nomor HP tidak hilang di Excel
+                const formatNoHP = (no) => no ? `"\t${no}"` : '""';
+
+                const rowData = [
+                    index + 1,
+                    `"${(item.namaDistributor || '').replace(/"/g, '""')}"`,
+                    `"${(item.penanggungjawab || '').replace(/"/g, '""')}"`,
+                    `"${(item.emailPenginput || '').replace(/"/g, '""')}"`,
+                    formatNoHP(item.noHpKantor),
+                    `"${(item.namaSales || '').replace(/"/g, '""')}"`,
+                    formatNoHP(item.noHpSales),
+                    `"${(item.namaSupervisor || '').replace(/"/g, '""')}"`,
+                    formatNoHP(item.noHpSupervisor),
+                    `"${(item.namaproduk || '').replace(/"/g, '""')}"`,
+                    `"${(item.jatuhTempo || '').replace(/"/g, '""')}"`,
+                    `"${formattedDate}"`
+                ];
+                csvContent += rowData.join(",") + "\n";
+            });
+
+            // Buat file blob dan link unduhan
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Daftar_Pendaftaran_Distributor_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>

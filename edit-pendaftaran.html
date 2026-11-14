@@ -17,25 +17,25 @@
     <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 bg-white rounded-xl p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400">
+                <div class="w-10 h-10 bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400 shrink-0">
                     <img src="maga.png" alt="Logo" class="w-full h-full object-contain">
                 </div>
                 <div>
                     <h1 class="text-base sm:text-lg font-bold tracking-wide">Edit Data Pendaftaran</h1>
-                    <p class="text-xs text-indigo-200">Maga Swalayan</p>
+                    <p class="text-[11px] sm:text-xs text-indigo-200">Maga Swalayan</p>
                 </div>
             </div>
             
-            <a href="dashboard.html" class="flex items-center gap-1.5 text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 px-3.5 py-2 rounded-lg font-medium transition shadow-sm">
+            <a href="dashboard.html" class="flex items-center gap-1.5 text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 px-3.5 py-2 font-medium transition shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Dashboard</span>
             </a>
         </div>
     </header>
 
-    <!-- Konten Utama -->
+    <!-- Konten Utama (Kotak Siku) -->
     <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-6 flex-grow">
-        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white shadow-xl p-6 sm:p-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b pb-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
@@ -44,13 +44,13 @@
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">Anda hanya dapat melihat dan mengubah data yang diinput oleh akun Anda sendiri.</p>
                 </div>
-                <div class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-indigo-100">
+                <div class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-3 py-2 border border-indigo-100">
                     Total Data Anda: <span id="totalData">0</span>
                 </div>
             </div>
 
-            <!-- Tabel Data -->
-            <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <!-- Tabel Data (Kotak Siku) -->
+            <div class="overflow-x-auto border border-slate-200">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-indigo-50 text-indigo-900 text-xs sm:text-sm uppercase font-semibold">
@@ -82,11 +82,12 @@
     <script type="module">
         import { auth, db } from "./firebase.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const dataTableBody = document.getElementById('dataTableBody');
         const totalData = document.getElementById('totalData');
         let currentUserId = null;
+        let currentUserEmail = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -94,41 +95,47 @@
                 return;
             }
             currentUserId = user.uid;
+            currentUserEmail = user.email;
             await loadMyData();
         });
 
         async function loadMyData() {
             try {
-                // Query data di Firestore di mana userId sesuai dengan user yang sedang login
-                const q = query(
-                    collection(db, "pendaftaran_distributor"), 
-                    where("userId", "==", currentUserId)
-                );
+                // Ambil semua data diurutkan berdasarkan waktu, lalu filter manual di sisi klien
+                // agar aman dari missing index atau perbedaan field userId/email
+                const q = query(collection(db, "pendaftaran_distributor"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
 
                 dataTableBody.innerHTML = "";
-                totalData.textContent = querySnapshot.size;
+                let myDataList = [];
 
-                if (querySnapshot.empty) {
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    // Cocokkan berdasarkan userId atau email penginput
+                    if (data.userId === currentUserId || data.email === currentUserEmail) {
+                        myDataList.push({ id: docSnap.id, ...data });
+                    }
+                });
+
+                totalData.textContent = myDataList.length;
+
+                if (myDataList.length === 0) {
                     dataTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada data pendaftaran yang Anda input.</td></tr>`;
                     return;
                 }
 
                 let no = 1;
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const docId = docSnap.id;
-
+                myDataList.forEach((item) => {
                     const row = `
                         <tr class="hover:bg-slate-50 transition">
                             <td class="p-3.5 sm:p-4 font-medium">${no++}</td>
-                            <td class="p-3.5 sm:p-4 font-semibold text-slate-800">${data.namaDistributor || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">${data.penanggungjawab || '-'}<br><span class="text-xs text-slate-400">${data.noHpKantor || ''}</span></td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">Sales: ${data.namaSales || '-'}<br>Spv: ${data.namaSupervisor || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600 max-w-xs truncate">${data.namaproduk || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">${data.jatuhTempo || '-'}</td>
+                            <td class="p-3.5 sm:p-4 font-semibold text-slate-800">${item.namaDistributor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">${item.penanggungjawab || '-'}<br><span class="text-xs text-slate-400">${item.noHpKantor || ''}</span></td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">Sales: ${item.namaSales || '-'}<br>Spv: ${item.namaSupervisor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600 max-w-xs truncate">${item.namaproduk || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">${item.jatuhTempo || '-'}</td>
                             <td class="p-3.5 sm:p-4 text-center">
-                                <button onclick='bukaModalEdit(${JSON.stringify({ id: docId, ...data })})' class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-sm transition cursor-pointer">
+                                <button onclick='bukaModalEdit(${JSON.stringify(item)})' class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-2 shadow-sm transition cursor-pointer">
                                     <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
                                 </button>
                             </td>
