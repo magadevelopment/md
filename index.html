@@ -70,69 +70,96 @@
     <!-- Firebase Script & Logika Login -->
     <script type="module">
         import { auth, db } from "./firebase.js";
-        import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const btnLoginGoogle = document.getElementById('btnLoginGoogle');
+        const provider = new GoogleAuthProvider();
+
+        // Fungsi penanganan data user setelah login berhasil (baik popup maupun redirect)
+        async function handleUserData(user) {
+            const usersRef = collection(db, "users");
+            const userSnapshot = await getDocs(usersRef);
+            
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+
+            let assignedRole = "User";
+
+            if (!userDoc.exists()) {
+                assignedRole = userSnapshot.empty ? "Administrator" : "User";
+
+                await setDoc(userDocRef, {
+                    uid: user.uid,
+                    nama: user.displayName || "Tanpa Nama",
+                    email: user.email,
+                    photoURL: user.photoURL || "",
+                    role: assignedRole,
+                    createdAt: serverTimestamp()
+                });
+            } else {
+                assignedRole = userDoc.data().role || "User";
+            }
+
+            localStorage.setItem('userRole', assignedRole);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil!',
+                text: 'Mengalihkan ke Dashboard...',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'layout.html';
+            });
+        }
+
+        // Cek hasil redirect jika menggunakan mode mobile/redirect
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result && result.user) {
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Menyiapkan sesi pengguna',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+                    await handleUserData(result.user);
+                }
+            } catch (error) {
+                console.error("Redirect error:", error);
+            }
+        });
 
         btnLoginGoogle.addEventListener('click', async () => {
-            const provider = new GoogleAuthProvider();
             Swal.fire({
                 title: 'Menghubungkan...',
-                text: 'Membuka jendela autentikasi Google',
+                text: 'Membuka autentikasi Google',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             try {
+                // Deteksi apakah di HP / PWA (opsional, atau gunakan popup dengan fallback redirect)
+                // Di sini kita coba Popup dulu, jika gagal/diblokir browser, arahkan ke Redirect
                 const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-
-                const usersRef = collection(db, "users");
-                const userSnapshot = await getDocs(usersRef);
-                
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-
-                let assignedRole = "User";
-
-                if (!userDoc.exists()) {
-                    assignedRole = userSnapshot.empty ? "Administrator" : "User";
-
-                    await setDoc(userDocRef, {
-                        uid: user.uid,
-                        nama: user.displayName || "Tanpa Nama",
-                        email: user.email,
-                        photoURL: user.photoURL || "",
-                        role: assignedRole,
-                        createdAt: serverTimestamp()
-                    });
-                } else {
-                    assignedRole = userDoc.data().role || "User";
-                }
-
-                // SIMPAN ROLE KE LOCALSTORAGE UNTUK AKSELERASI RENDER DASHBOARD
-                localStorage.setItem('userRole', assignedRole);
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Berhasil!',
-                    text: 'Mengalihkan ke Dashboard...',
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    // DIARAHKAN KE LAYOUT UTAMA AGAR SIDEBAR & HEADER LENGKAP TAMPIL
-                    window.location.href = 'layout.html';
-                });
+                await handleUserData(result.user);
 
             } catch (error) {
-                console.error(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Google Gagal',
-                    text: error.message,
-                    confirmButtonColor: '#dc2626'
-                });
+                console.warn("Popup gagal/diblokir, mencoba metode redirect...", error);
+                try {
+                    // Fallback otomatis menggunakan Redirect jika Popup diblokir (sangat aman untuk HP)
+                    await signInWithRedirect(auth, provider);
+                } catch (redirectError) {
+                    console.error(redirectError);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Google Gagal',
+                        text: redirectError.message,
+                        confirmButtonColor: '#dc2626'
+                    });
+                }
             }
         });
     </script>
