@@ -13,33 +13,33 @@
 </head>
 <body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
 
-    <!-- Header Navbar -->
+    <!-- Header Navbar (Responsif HP & Desktop) -->
     <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+            
+            <!-- Logo & Brand Title -->
             <div class="flex items-center space-x-3">
-                <!-- Logo maga.png -->
-                <div class="w-10 h-10 bg-white rounded-xl p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400">
+                <div class="w-10 h-10 bg-white rounded-xl p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400 shrink-0">
                     <img src="maga.png" alt="Logo Maga" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-wide">Maga Swalayan</h1>
-                    <p class="text-xs text-indigo-200 hidden sm:block">Sistem Informasi Pendaftaran Online</p>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight">Maga Swalayan</h1>
+                    <p class="text-[11px] sm:text-xs text-indigo-200">Merchandising System</p>
                 </div>
             </div>
 
-            <!-- Bagian Profil & Tombol Keluar (Di kanan atas) -->
+            <!-- Bagian Profil & Tombol Keluar -->
             <div class="flex items-center space-x-3">
-                <!-- Info Profil (Foto & Nama) -->
+                <!-- Info Profil -->
                 <div class="flex items-center space-x-2 bg-indigo-700/50 px-3 py-1.5 rounded-full border border-indigo-500/30">
-                    <div id="userAvatarContainer" class="w-8 h-8 rounded-full overflow-hidden bg-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shadow-inner">
-                        <!-- Foto Profil / Inisial akan dimasukkan otomatis via JavaScript -->
+                    <div id="userAvatarContainer" class="w-8 h-8 rounded-full overflow-hidden bg-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shadow-inner shrink-0">
                         <i class="fa-solid fa-user"></i>
                     </div>
-                    <span id="userName" class="text-xs sm:text-sm font-medium text-white max-w-[120px] sm:max-w-[180px] truncate hidden md:inline">Memuat...</span>
+                    <span id="userName" class="text-xs sm:text-sm font-medium text-white max-w-[100px] sm:max-w-[160px] truncate hidden md:inline">Memuat...</span>
                 </div>
 
                 <!-- Tombol Keluar -->
-                <button id="btnLogout" class="flex items-center gap-1.5 text-xs sm:text-sm bg-rose-600 hover:bg-rose-700 px-3 py-2 rounded-lg font-medium transition shadow-sm" title="Keluar">
+                <button id="btnLogout" class="flex items-center gap-1.5 text-xs sm:text-sm bg-rose-600 hover:bg-rose-700 px-3 py-2 rounded-lg font-medium transition shadow-sm cursor-pointer" title="Keluar">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span class="hidden sm:inline">Keluar</span>
                 </button>
@@ -48,36 +48,70 @@
     </header>
 
     <!-- Konten Utama Dashboard -->
-    <main class="max-w-6xl w-full mx-auto p-4 sm:p-6 my-4 flex-grow">
+    <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-4 flex-grow">
         
-        <!-- Banner Ucapan Selamat Datang -->
-        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 relative overflow-hidden">
-            <div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4 pointer-events-none">
+        <!-- Banner Ucapan Selamat Datang (Mode HP & Desktop) -->
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 sm:mb-8 relative overflow-hidden">
+            <div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4 pointer-events-none hidden sm:block">
                 <i class="fa-solid fa-clipboard-user text-9xl"></i>
             </div>
             <div class="relative z-10">
                 <span class="bg-indigo-500/40 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Dashboard Utama</span>
-                <h2 id="welcomeText" class="text-2xl sm:text-3xl font-extrabold mt-3 mb-2">Memuat akun...</h2>
-                <p class="text-indigo-100 text-sm sm:text-base max-w-xl">
+                <h2 id="welcomeText" class="text-xl sm:text-3xl font-extrabold mt-3 mb-2">Memuat akun...</h2>
+                <p class="text-indigo-100 text-xs sm:text-base max-w-2xl">
                     Kelola data pendaftaran distributor, pantau produk yang dibawa, dan akses sistem dengan cepat dan mudah langsung dari perangkat HP atau Desktop Anda.
                 </p>
             </div>
         </div>
 
-        <!-- Menu Pendaftaran Baru (Riwayat sudah dihapus) -->
-        <div class="max-w-xl">
-            <a href="form.html" class="bg-white hover:bg-indigo-50/50 border border-slate-200 hover:border-indigo-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition">
-                        <i class="fa-solid fa-file-circle-plus"></i>
+        <!-- Bagian Menu Utama (Grid Dinamis: 1 Kolom di HP, 2-3 Kolom di Tablet/Desktop) -->
+        <div class="mb-4">
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Menu Navigasi</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                
+                <!-- Kartu Menu 1: Input Pendaftaran Baru -->
+                <a href="form.html" class="bg-white hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-file-circle-plus"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Input Pendaftaran Baru</h4>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Tambah data distributor dan produk baru</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Input Pendaftaran Baru</h3>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Tambah data distributor dan produk baru</p>
+                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+                </a>
+
+                <!-- Kartu Menu 2: Daftar Pendaftaran Baru (Riwayat/Data Masuk) -->
+                <a href="riwayat.html" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-emerald-600 transition">Daftar Pendaftaran</h4>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat dan pantau daftar data pendaftaran</p>
+                        </div>
                     </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
-            </a>
+                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+                </a>
+
+                <!-- Kartu Menu 3: Daftar Pengguna / Tamu (users.html) -->
+                <a href="users.html" class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-users-viewfinder"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-amber-600 transition">Daftar Pengguna / Tamu</h4>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat akun yang masuk & atur hak akses</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+                </a>
+
+            </div>
         </div>
     </main>
 
@@ -86,7 +120,7 @@
         &copy; 2026 MAGA SWALAYAN. All rights reserved.
     </footer>
 
-    <!-- Firebase Auth & Logika Tampil Foto Profil -->
+    <!-- Firebase Auth & Logika Tampil Profil -->
     <script type="module">
         import { auth } from "./firebase.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -95,31 +129,26 @@
         const userNameElem = document.getElementById('userName');
         const avatarContainer = document.getElementById('userAvatarContainer');
 
-        // Cek Sesi Login & Muat Profil
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const displayName = user.displayName || user.email.split('@')[0];
                 const photoURL = user.photoURL;
                 const email = user.email;
 
-                // Tampilkan nama di banner & navbar
                 welcomeText.innerHTML = `Selamat Datang, <span class="text-indigo-200 capitalize">${displayName}</span>! 👋`;
                 userNameElem.textContent = displayName;
 
-                // Tampilkan Foto Profil jika ada
                 if (photoURL) {
                     avatarContainer.innerHTML = `<img src="${photoURL}" alt="Foto Profil" class="w-full h-full object-cover">`;
                 } else {
                     const initial = email.charAt(0).toUpperCase();
                     avatarContainer.innerHTML = `<span class="text-white font-bold">${initial}</span>`;
                 }
-
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        // Tombol Logout
         document.getElementById('btnLogout').addEventListener('click', async () => {
             const result = await Swal.fire({
                 title: 'Keluar Aplikasi?',
@@ -133,12 +162,8 @@
             });
 
             if (result.isConfirmed) {
-                try {
-                    await signOut(auth);
-                    window.location.href = "index.html";
-                } catch (error) {
-                    console.error("Gagal logout:", error);
-                }
+                await signOut(auth);
+                window.location.href = "index.html";
             }
         });
     </script>

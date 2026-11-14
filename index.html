@@ -14,7 +14,7 @@
     <!-- Overlay Gelap Tipis -->
     <div class="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
 
-    <!-- Card Login Container (Menyesuaikan ukuran di HP dan Desktop) -->
+    <!-- Card Login Container -->
     <div class="relative z-10 w-full max-w-sm sm:max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 text-center border border-white/20 mx-auto">
         <div class="mb-6">
             <!-- Logo Maga -->
@@ -38,12 +38,14 @@
         </button>
     </div>
 
-    <!-- Firebase Script -->
+    <!-- Firebase Script & Logika Auto-Role Administrator -->
     <script type="module">
-        import { auth } from "./firebase.js";
+        import { auth, db } from "./firebase.js";
         import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const btnLoginGoogle = document.getElementById('btnLoginGoogle');
+
         btnLoginGoogle.addEventListener('click', async () => {
             const provider = new GoogleAuthProvider();
             Swal.fire({
@@ -54,19 +56,49 @@
             });
 
             try {
-                await signInWithPopup(auth, provider);
+                // 1. Proses Login Google Popup
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                // 2. Cek apakah koleksi 'users' sudah ada isinya atau belum
+                const usersRef = collection(db, "users");
+                const userSnapshot = await getDocs(usersRef);
+                
+                // 3. Cek apakah user spesifik ini sudah terdaftar di database
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists()) {
+                    // Jika user belum ada di database, tentukan role-nya:
+                    // Jika total dokumen di 'users' masih 0, maka dia adalah orang pertama -> Administrator.
+                    // Jika sudah ada orang lain, maka role-nya User/Staff.
+                    const assignedRole = userSnapshot.empty ? "Administrator" : "User";
+
+                    await setDoc(userDocRef, {
+                        uid: user.uid,
+                        nama: user.displayName || "Tanpa Nama",
+                        email: user.email,
+                        photoURL: user.photoURL || "",
+                        role: assignedRole,
+                        createdAt: serverTimestamp()
+                    });
+                }
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Login Berhasil!',
+                    text: 'Mengalihkan ke Dashboard...',
                     timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
                     window.location.href = 'dashboard.html';
                 });
+
             } catch (error) {
+                console.error(error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal',
+                    title: 'Login Google Gagal',
                     text: error.message,
                     confirmButtonColor: '#dc2626'
                 });
