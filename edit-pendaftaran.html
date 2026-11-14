@@ -49,26 +49,11 @@
                 </div>
             </div>
 
-            <!-- Tabel Data (Kotak Siku) -->
-            <div class="overflow-x-auto border border-slate-200">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-indigo-50 text-indigo-900 text-xs sm:text-sm uppercase font-semibold">
-                            <th class="p-3.5 sm:p-4">No</th>
-                            <th class="p-3.5 sm:p-4">Nama Distributor</th>
-                            <th class="p-3.5 sm:p-4">Penanggungjawab</th>
-                            <th class="p-3.5 sm:p-4">Sales & Supervisor</th>
-                            <th class="p-3.5 sm:p-4">Produk</th>
-                            <th class="p-3.5 sm:p-4">Jatuh Tempo</th>
-                            <th class="p-3.5 sm:p-4 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm text-slate-700">
-                        <tr>
-                            <td colspan="7" class="text-center py-6 text-slate-400">Memuat data pendaftaran...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Kontainer Kartu Responsif (Tampil sebagai card di HP maupun Desktop) -->
+            <div id="cardContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="col-span-full text-center py-8 text-slate-400">
+                    Memuat data pendaftaran...
+                </div>
             </div>
         </div>
     </main>
@@ -84,7 +69,7 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { collection, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const dataTableBody = document.getElementById('dataTableBody');
+        const cardContainer = document.getElementById('cardContainer');
         const totalData = document.getElementById('totalData');
         let currentUserId = null;
         let currentUserEmail = null;
@@ -101,17 +86,14 @@
 
         async function loadMyData() {
             try {
-                // Ambil semua data diurutkan berdasarkan waktu, lalu filter manual di sisi klien
-                // agar aman dari missing index atau perbedaan field userId/email
                 const q = query(collection(db, "pendaftaran_distributor"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
 
-                dataTableBody.innerHTML = "";
+                cardContainer.innerHTML = "";
                 let myDataList = [];
 
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    // Cocokkan berdasarkan userId atau email penginput
                     if (data.userId === currentUserId || data.email === currentUserEmail) {
                         myDataList.push({ id: docSnap.id, ...data });
                     }
@@ -120,33 +102,78 @@
                 totalData.textContent = myDataList.length;
 
                 if (myDataList.length === 0) {
-                    dataTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada data pendaftaran yang Anda input.</td></tr>`;
+                    cardContainer.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-slate-400 border border-dashed border-slate-300 p-8">
+                            <i class="fa-solid fa-folder-open text-4xl mb-2 text-slate-300"></i>
+                            <p class="text-sm">Belum ada data pendaftaran yang Anda input.</p>
+                        </div>
+                    `;
                     return;
                 }
 
                 let no = 1;
                 myDataList.forEach((item) => {
-                    const row = `
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-3.5 sm:p-4 font-medium">${no++}</td>
-                            <td class="p-3.5 sm:p-4 font-semibold text-slate-800">${item.namaDistributor || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">${item.penanggungjawab || '-'}<br><span class="text-xs text-slate-400">${item.noHpKantor || ''}</span></td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">Sales: ${item.namaSales || '-'}<br>Spv: ${item.namaSupervisor || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600 max-w-xs truncate">${item.namaproduk || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-slate-600">${item.jatuhTempo || '-'}</td>
-                            <td class="p-3.5 sm:p-4 text-center">
-                                <button onclick='bukaModalEdit(${JSON.stringify(item)})' class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-2 shadow-sm transition cursor-pointer">
-                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                    const cardHtml = `
+                        <div class="bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between relative">
+                            <div>
+                                <!-- Header Kartu -->
+                                <div class="flex justify-between items-start gap-2 mb-3 border-b pb-2">
+                                    <div>
+                                        <span class="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 border border-indigo-100">#${no++}</span>
+                                        <h3 class="text-base font-bold text-slate-800 mt-1">${item.namaDistributor || '-'}</h3>
+                                    </div>
+                                    <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 border border-indigo-100 shrink-0">
+                                        <i class="fa-solid fa-clock mr-1"></i>${item.jatuhTempo || '-'}
+                                    </span>
+                                </div>
+
+                                <!-- Detail Informasi -->
+                                <div class="space-y-2 text-xs sm:text-sm text-slate-600 mb-4">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-user-tie text-indigo-500 mt-0.5 w-4"></i>
+                                        <div>
+                                            <span class="font-semibold text-slate-700">PJ:</span> ${item.penanggungjawab || '-'} 
+                                            <span class="text-slate-400 text-xs">(${item.noHpKantor || '-'})</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-user-tag text-indigo-500 mt-0.5 w-4"></i>
+                                        <div>
+                                            <span class="font-semibold text-slate-700">Sales:</span> ${item.namaSales || '-'} 
+                                            <span class="text-slate-400 text-xs">(${item.noHpSales || '-'})</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-user-gear text-indigo-500 mt-0.5 w-4"></i>
+                                        <div>
+                                            <span class="font-semibold text-slate-700">Supervisor:</span> ${item.namaSupervisor || '-'} 
+                                            <span class="text-slate-400 text-xs">(${item.noHpSupervisor || '-'})</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-2 pt-1 border-t border-slate-100">
+                                        <i class="fa-solid fa-box text-indigo-500 mt-0.5 w-4"></i>
+                                        <div>
+                                            <span class="font-semibold text-slate-700">Produk:</span> 
+                                            <p class="text-slate-600 mt-0.5 whitespace-pre-line">${item.namaproduk || '-'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tombol Aksi Edit -->
+                            <div class="pt-3 border-t border-slate-100 flex justify-end">
+                                <button onclick='bukaModalEdit(${JSON.stringify(item)})' class="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold py-2.5 px-4 shadow-sm transition cursor-pointer flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit Data Ini
                                 </button>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                     `;
-                    dataTableBody.innerHTML += row;
+                    cardContainer.innerHTML += cardHtml;
                 });
 
             } catch (error) {
                 console.error("Gagal memuat data:", error);
-                dataTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-rose-500">Gagal memuat data dari database.</td></tr>`;
+                cardContainer.innerHTML = `<div class="col-span-full text-center py-6 text-rose-500">Gagal memuat data dari database.</div>`;
             }
         }
 

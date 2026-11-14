@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Sistem - MAGA SWALAYAN (Merchandising)</title>
+</head>
+<body>
+    <!-- KONTEN UTAMA YANG DIMUAT KE DALAM LAYOUT.HTML -->
+    <main class="w-full">
+        <div class="bg-white shadow-xl p-6 sm:p-8">
+            <div class="mb-6 border-b pb-4">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-indigo-600"></i>
+                    Penyesuaian & Pengaturan Data
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Pilih menu konfigurasi sistem yang ingin Anda kelola di bawah ini.</p>
+            </div>
+
+            <!-- Menu Card Grid Navigasi Halaman (Menggunakan data-spa agar mulus) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                
+                <!-- Card 1: Profil -->
+                <a href="profil.html" data-spa class="bg-white hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-400 p-6 shadow-sm hover:shadow-md transition flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Profil</h3>
+                    <p class="text-xs text-slate-400 mt-1">Kelola akun dan profil Anda</p>
+                </a>
+
+                <!-- Card 2: Running Text -->
+                <a href="runing-text.html" data-spa class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-400 p-6 shadow-sm hover:shadow-md transition flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 group-hover:text-amber-600 transition">Running Text</h3>
+                    <p class="text-xs text-slate-400 mt-1">Atur pesan teks berjalan</p>
+                </a>
+
+                <!-- Card 3: Banner -->
+                <a href="banner.html" data-spa class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-400 p-6 shadow-sm hover:shadow-md transition flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 group-hover:text-emerald-600 transition">Banner</h3>
+                    <p class="text-xs text-slate-400 mt-1">Kelola banner dan informasi utama</p>
+                </a>
+
+                <!-- Card 4: Promo -->
+                <a href="promo.html" data-spa class="bg-white hover:bg-purple-50/40 border border-slate-200 hover:border-purple-400 p-6 shadow-sm hover:shadow-md transition flex flex-col items-center text-center group">
+                    <div class="w-14 h-14 bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 group-hover:text-purple-600 transition">Promo</h3>
+                    <p class="text-xs text-slate-400 mt-1">Kelola informasi promo & penawaran</p>
+                </a>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

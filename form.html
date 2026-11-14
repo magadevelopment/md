@@ -3,88 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Pendaftaran - MAGA SWALAYAN (Merchandising)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Daftar Pendaftaran Distributor - SWALAYAN MAGA</title>
 </head>
-<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
-
-    <!-- Header Navbar -->
-    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-3xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400">
-                    <img src="maga.png" alt="Logo" class="w-full h-full object-contain">
-                </div>
+<body>
+    <!-- AREA KONTEN UTAMA (Dimuat Dinamis oleh layout.html via SPA) -->
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 flex-grow">
+        
+        <!-- Box Utama Daftar Pendaftaran (Full Lebar) -->
+        <div class="bg-white shadow-xl p-6 sm:p-8 w-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b">
                 <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-wide">Pendaftaran Distributor</h1>
-                    <p class="text-xs text-indigo-200">Maga Swalayan</p>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-indigo-600"></i>
+                        Daftar Pendaftaran Distributor
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kelola dan tambah data pendaftaran distributor baru.</p>
                 </div>
+                <button onclick="openFormModal()" class="bg-indigo-900 hover:bg-indigo-800 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 transition shadow-sm flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center">
+                    <i class="fa-solid fa-plus"></i> Tambah Pendaftaran Baru
+                </button>
             </div>
-            
-            <a href="dashboard.html" class="flex items-center gap-1.5 text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 px-3.5 py-2 font-medium transition shadow-sm">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Dashboard</span>
-            </a>
-        </div>
-    </header>
 
-    <!-- Main Container Formulir (Kotak Siku) -->
-    <main class="max-w-3xl w-full mx-auto p-4 sm:p-6 my-6 flex-grow">
-        <div class="bg-white shadow-xl p-6 sm:p-8">
-            <h2 class="text-xl font-bold text-slate-800 mb-6 border-b pb-3 flex items-center gap-2">
-                <i class="fa-solid fa-file-pen text-indigo-600"></i>
-                Formulir Pendaftaran Distributor
-            </h2>
+            <!-- TAMPILAN TABEL (Hanya tampil di Laptop/Desktop md ke atas) -->
+            <div class="hidden md:block overflow-x-auto min-h-[350px]">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-700 text-xs sm:text-sm border-b border-t">
+                            <th class="p-3 w-10 text-center">No</th>
+                            <th class="p-3 font-semibold">Distributor & PJ</th>
+                            <th class="p-3 font-semibold">Kontak HP</th>
+                            <th class="p-3 font-semibold">Sales & Supervisor</th>
+                            <th class="p-3 font-semibold">Produk & Termin</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelPendaftaranBodyDesktop" class="text-xs sm:text-sm text-slate-700">
+                        <tr>
+                            <td colspan="5" class="text-center py-12 text-slate-400">Memuat data pendaftaran...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAMPILAN CARD (Hanya tampil khusus di HP / Mobile) -->
+            <div id="tabelPendaftaranBodyMobile" class="md:hidden space-y-4 min-h-[350px]">
+                <div class="text-center py-12 text-slate-400 text-xs">Memuat data pendaftaran...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL POPUP FORMULIR PENDAFTARAN -->
+    <div id="formModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/50">
+        <div class="bg-white w-full max-w-2xl shadow-2xl border border-slate-200 p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen text-indigo-600"></i> Formulir Pendaftaran Distributor Baru
+                </h3>
+                <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold cursor-pointer">&times;</button>
+            </div>
 
             <form id="formPendaftaran" class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Distributor</label>
-                    <input type="text" id="nama_distributor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Masukkan nama distributor">
+                    <input type="text" id="nama_distributor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Masukkan nama distributor">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Penanggungjawab</label>
-                    <input type="text" id="penanggungjawab" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nama penanggungjawab">
+                    <input type="text" id="penanggungjawab" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Nama penanggungjawab">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor HP Kantor / Admin</label>
-                    <input type="tel" id="no_hp_kantor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Contoh: 081234567890">
+                    <input type="tel" id="no_hp_kantor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Contoh: 081234567890">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Sales</label>
-                    <input type="text" id="nama_sales" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Masukkan nama sales">
+                    <input type="text" id="nama_sales" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Masukkan nama sales">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">No HP Sales</label>
-                    <input type="tel" id="no_hp_sales" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Contoh: 081234567891">
+                    <input type="tel" id="no_hp_sales" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Contoh: 081234567891">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Supervisor</label>
-                    <input type="text" id="nama_supervisor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Masukkan nama supervisor">
+                    <input type="text" id="nama_supervisor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Masukkan nama supervisor">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">No HP Supervisor</label>
-                    <input type="tel" id="no_hp_supervisor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Contoh: 081234567892">
+                    <input type="tel" id="no_hp_supervisor" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Contoh: 081234567892">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Produk yang Dibawa</label>
-                    <textarea id="nama_produk" rows="3" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Daftar produk yang dibawa"></textarea>
+                    <textarea id="nama_produk" rows="3" required class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="Daftar produk yang dibawa"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Jatuh Tempo (Termin Pembayaran)</label>
-                    <select id="select_jatuh_tempo" class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white mb-2">
+                    <select id="select_jatuh_tempo" class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white mb-2 text-sm">
                         <option value="" disabled selected>-- Pilih Jangka Waktu Jatuh Tempo --</option>
                         <option value="1 Hari">1 Hari (Cash / COD)</option>
                         <option value="7 Hari">7 Hari (1 Minggu)</option>
@@ -95,19 +115,18 @@
                         <option value="60 Hari">60 Hari (2 Bulan)</option>
                         <option value="CUSTOM">-- Ketik Sendiri --</option>
                     </select>
-
-                    <!-- Input teks manual yang awalnya disembunyikan -->
-                    <input type="text" id="input_jatuh_tempo_manual" class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none hidden" placeholder="Ketik jatuh tempo secara manual (Contoh: 45 Hari / 15 Desember 2026)">
+                    <input type="text" id="input_jatuh_tempo_manual" class="w-full px-4 py-2.5 border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm hidden" placeholder="Ketik jatuh tempo secara manual...">
                 </div>
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 shadow-lg transition duration-200 cursor-pointer">
-                        <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Pendaftaran
+                <div class="flex justify-end gap-2 pt-4 border-t">
+                    <button type="button" onclick="closeFormModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-sm py-2 px-4 transition cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm py-2 px-6 transition shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-paper-plane mr-1"></i> Simpan & Kirim
                     </button>
                 </div>
             </form>
         </div>
-    </main>
+    </div>
 
     <!-- Overlay Loading Page -->
     <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center hidden">
@@ -117,101 +136,5 @@
             <p class="text-sm text-slate-500 text-center">Mohon tunggu, sedang mengirim data ke database.</p>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-slate-500 border-t bg-white mt-auto">
-        &copy; 2026 MAGA SWALAYAN. All rights reserved.
-    </footer>
-
-    <!-- Firebase Script & Script Interaksi -->
-    <script type="module">
-        import { auth, db } from "./firebase.js";
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        let currentUserUid = null;
-        let currentUserEmail = null;
-
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = "index.html";
-            } else {
-                currentUserUid = user.uid;
-                currentUserEmail = user.email; // Simpan email user yang sedang login
-            }
-        });
-
-        // Logika tampil/sembunyi input manual jika opsi "CUSTOM" dipilih
-        const selectJatuhTempo = document.getElementById('select_jatuh_tempo');
-        const inputManual = document.getElementById('input_jatuh_tempo_manual');
-
-        selectJatuhTempo.addEventListener('change', (e) => {
-            if (e.target.value === 'CUSTOM') {
-                inputManual.classList.remove('hidden');
-                inputManual.setAttribute('required', 'true');
-                inputManual.focus();
-                inputManual.value = '';
-            } else {
-                inputManual.classList.add('hidden');
-                inputManual.removeAttribute('required');
-                inputManual.value = '';
-            }
-        });
-
-        const formPendaftaran = document.getElementById('formPendaftaran');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-
-        formPendaftaran.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            loadingOverlay.classList.remove('hidden');
-
-            // Tentukan nilai jatuh tempo (dari dropdown atau input manual)
-            let finalJatuhTempo = selectJatuhTempo.value;
-            if (finalJatuhTempo === 'CUSTOM') {
-                finalJatuhTempo = inputManual.value;
-            }
-
-            const formData = {
-                userId: currentUserUid,
-                email: currentUserEmail, // Merekam email akun yang sedang login ke database
-                namaDistributor: document.getElementById('nama_distributor').value,
-                penanggungjawab: document.getElementById('penanggungjawab').value,
-                noHpKantor: document.getElementById('no_hp_kantor').value,
-                namaSales: document.getElementById('nama_sales').value,
-                noHpSales: document.getElementById('no_hp_sales').value,
-                namaSupervisor: document.getElementById('nama_supervisor').value,
-                noHpSupervisor: document.getElementById('no_hp_supervisor').value,
-                namaproduk: document.getElementById('nama_produk').value,
-                jatuhTempo: finalJatuhTempo,
-                createdAt: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "pendaftaran_distributor"), formData);
-                loadingOverlay.classList.add('hidden');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Data pendaftaran distributor berhasil disimpan.',
-                    confirmButtonColor: '#4f46e5'
-                }).then(() => {
-                    formPendaftaran.reset();
-                    inputManual.classList.add('hidden');
-                });
-
-            } catch (error) {
-                console.error("Gagal menyimpan data: ", error);
-                loadingOverlay.classList.add('hidden');
-                
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: 'Terjadi kesalahan saat menyimpan data.',
-                    confirmButtonColor: '#dc2626'
-                });
-            }
-        });
-    </script>
 </body>
 </html>

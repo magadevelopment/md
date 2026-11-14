@@ -3,231 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - MAGA SWALAYAN (Merchandising)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard - SWALAYAN MAGA (Merchandising)</title>
 </head>
-<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
-
-    <!-- Header Navbar -->
-    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
-            
-            <!-- Logo & Brand Title -->
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400 shrink-0">
-                    <img src="maga.png" alt="Logo Maga" class="w-full h-full object-contain">
-                </div>
-                <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight">Maga Swalayan</h1>
-                    <p class="text-[11px] sm:text-xs text-indigo-200">Merchandising System</p>
-                </div>
-            </div>
-
-            <!-- Bagian Profil & Tombol Keluar -->
-            <div class="flex items-center space-x-3">
-                <!-- Info Profil -->
-                <div class="flex items-center space-x-2 bg-indigo-700/50 px-3 py-1.5 border border-indigo-500/30">
-                    <div id="userAvatarContainer" class="w-8 h-8 overflow-hidden bg-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shadow-inner shrink-0">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <span id="userName" class="text-xs sm:text-sm font-medium text-white max-w-[100px] sm:max-w-[160px] truncate hidden md:inline">Memuat...</span>
-                </div>
-
-                <!-- Tombol Keluar -->
-                <button id="btnLogout" class="flex items-center gap-1.5 text-xs sm:text-sm bg-rose-600 hover:bg-rose-700 px-3 py-2 font-medium transition shadow-sm cursor-pointer" title="Keluar">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span class="hidden sm:inline">Keluar</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Konten Utama Dashboard -->
-    <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-4 flex-grow">
+<body>
+    <!-- KONTEN UTAMA DASHBOARD SAJA -->
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 flex-grow">
         
-        <!-- Banner Ucapan Selamat Datang (Kotak Siku) -->
-        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white shadow-xl p-6 sm:p-8 mb-6 sm:mb-8 relative overflow-hidden">
-            <div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4 pointer-events-none hidden sm:block">
-                <i class="fa-solid fa-clipboard-user text-9xl"></i>
+        <!-- Bar Info Akun & Role -->
+        <div class="bg-indigo-900 text-white shadow-md p-4 sm:p-6 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <span id="roleBadgeLabel" class="bg-indigo-700 text-indigo-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 uppercase tracking-wider">MEMUAT ROLE...</span>
+                <h2 id="welcomeText" class="text-lg sm:text-2xl font-bold mt-2">Memuat akun...</h2>
             </div>
-            <div class="relative z-10">
-                <span id="roleBadgeLabel" class="bg-indigo-500/40 text-indigo-100 text-xs font-semibold px-3 py-1 uppercase tracking-wider">MEMUAT ROLE...</span>
-                <h2 id="welcomeText" class="text-xl sm:text-3xl font-extrabold mt-3 mb-2">Memuat akun...</h2>
-                <p class="text-indigo-100 text-xs sm:text-base max-w-2xl">
-                    Kelola data pendaftaran distributor, pantau produk yang dibawa, dan akses sistem dengan cepat dan mudah langsung dari perangkat HP atau Desktop Anda.
-                </p>
+            <div class="text-xs text-indigo-200 bg-indigo-800/60 px-3 py-2 border border-indigo-700">
+                <i class="fa-solid fa-clock mr-1"></i> Sistem Merchandising Aktif
             </div>
         </div>
 
-        <!-- Bagian Menu Utama (Kotak-Kotak Siku) -->
+        <!-- SLIDER BANNER DINAMIS -->
+        <div id="bannerWrapper" class="mb-8 relative">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Banner & Informasi Utama</h3>
+                <div class="flex gap-1.5">
+                    <button id="btnPrevSlide" type="button" class="w-8 h-8 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 flex items-center justify-center shadow-sm transition cursor-pointer" title="Sebelumnya">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <button id="btnNextSlide" type="button" class="w-8 h-8 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 flex items-center justify-center shadow-sm transition cursor-pointer" title="Selanjutnya">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="bannerSliderContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-300">
+                <div class="bg-white border border-slate-200 p-4 text-center text-slate-400 text-xs shadow-sm">Memuat banner...</div>
+            </div>
+        </div>
+
+        <!-- Bagian Menu Navigasi Cepat -->
         <div class="mb-4">
-            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Menu Navigasi</h3>
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Menu Pintasan Cepat</h3>
             <div id="menuContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                
-                <!-- Menu 1: Input Pendaftaran Baru -->
-                <a href="form.html" class="bg-white hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-300 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                <a href="form.html" data-spa class="bg-white hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-300 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
                             <i class="fa-solid fa-file-circle-plus"></i>
                         </div>
                         <div>
-                            <h4 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Input Pendaftaran Baru</h4>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Daftar Pendaftaran</h4>
                             <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Tambah data distributor dan produk baru</p>
                         </div>
                     </div>
                     <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
                 </a>
-
-                <!-- Menu 2: Edit Data Anda -->
-                <a href="edit-pendaftaran.html" class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-300 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-base font-bold text-slate-800 group-hover:text-amber-600 transition">Edit Data Anda</h4>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Ubah data pendaftaran yang Anda kirim</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
-                </a>
-
-                <!-- Menu 3: Daftar Pendaftaran (Khusus Administrator) -->
-                <a id="menuRiwayat" href="riwayat.html" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group hidden">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
-                            <i class="fa-solid fa-list-check"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-base font-bold text-slate-800 group-hover:text-emerald-600 transition">Daftar Pendaftaran</h4>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat dan pantau daftar data pendaftaran</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
-                </a>
-
-                <!-- Menu 4: Daftar Pengguna / Tamu (Khusus Administrator) -->
-                <a id="menuUsers" href="users.html" class="bg-white hover:bg-purple-50/40 border border-slate-200 hover:border-purple-300 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group hidden md:col-span-2 lg:col-span-1">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-purple-100 text-purple-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
-                            <i class="fa-solid fa-users-viewfinder"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-base font-bold text-slate-800 group-hover:text-purple-600 transition">Daftar Pengguna / Tamu</h4>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat akun yang masuk & atur hak akses</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
-                </a>
-
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-slate-500 border-t bg-white mt-auto">
-        &copy; 2026 MAGA SWALAYAN. All rights reserved.
-    </footer>
-
-    <!-- Firebase Auth & Logika Tampil Menu -->
+    <!-- SKRIP KHUSUS HALAMAN DASHBOARD -->
     <script type="module">
-        import { auth, db } from "./firebase.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { db } from "./firebase.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const welcomeText = document.getElementById('welcomeText');
-        const userNameElem = document.getElementById('userName');
-        const avatarContainer = document.getElementById('userAvatarContainer');
-        const roleBadgeLabel = document.getElementById('roleBadgeLabel');
-        const menuRiwayat = document.getElementById('menuRiwayat');
-        const menuUsers = document.getElementById('menuUsers');
+        let activeBanners = [];
+        let currentSlideIndex = 0;
+        let autoplayInterval = null;
 
-        // AKSELERASI INSTAN: Baca localStorage saat pertama kali load agar tidak ada jeda/kedip
-        const cachedRole = localStorage.getItem('userRole');
-        if (cachedRole === 'Administrator') {
-            roleBadgeLabel.textContent = "ADMINISTRATOR DASHBOARD";
-            if(menuRiwayat) menuRiwayat.classList.remove('hidden');
-            if(menuUsers) menuUsers.classList.remove('hidden');
-        } else if (cachedRole === 'User') {
-            roleBadgeLabel.textContent = "DASHBOARD TAMU / USER";
-            if(menuRiwayat) menuRiwayat.classList.add('hidden');
-            if(menuUsers) menuUsers.classList.add('hidden');
+        async function loadActiveBanners() {
+            try {
+                const docRef = doc(db, "pengaturan", "global");
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.bannersList && Array.isArray(data.bannersList)) {
+                        activeBanners = data.bannersList.filter(b => b.active !== false);
+                    } else if (data.bannerTitle && data.bannerImage) {
+                        activeBanners = [{
+                            id: 'default_1',
+                            title: data.bannerTitle,
+                            image: data.bannerImage,
+                            active: true
+                        }];
+                    }
+                }
+                renderBannerSlider();
+                startAutoplay();
+            } catch (error) {
+                console.error("Gagal memuat slider banner:", error);
+                const bannerContainer = document.getElementById('bannerSliderContainer');
+                if(bannerContainer) bannerContainer.innerHTML = `<div class="col-span-full text-center py-4 text-slate-400 text-xs">Gagal memuat banner.</div>`;
+            }
         }
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const displayName = user.displayName || user.email.split('@')[0];
-                const photoURL = user.photoURL;
-                const email = user.email;
+        function renderBannerSlider() {
+            const container = document.getElementById('bannerSliderContainer');
+            if(!container) return;
+            container.innerHTML = "";
 
-                welcomeText.innerHTML = `Selamat Datang, <span class="text-indigo-200 capitalize">${displayName}</span>! 👋`;
-                userNameElem.textContent = displayName;
-
-                if (photoURL) {
-                    avatarContainer.innerHTML = `<img src="${photoURL}" alt="Foto Profil" class="w-full h-full object-cover">`;
-                } else {
-                    const initial = email.charAt(0).toUpperCase();
-                    avatarContainer.innerHTML = `<span class="text-white font-bold">${initial}</span>`;
-                }
-
-                try {
-                    const userDocRef = doc(db, "users", user.uid);
-                    const userDoc = await getDoc(userDocRef);
-
-                    let userRole = "User";
-                    if (userDoc.exists()) {
-                        userRole = userDoc.data().role || "User";
-                    }
-
-                    // Sinkronisasi ulang & perbarui localStorage jika ada perubahan hak akses dari database
-                    localStorage.setItem('userRole', userRole);
-
-                    if (userRole === "Administrator") {
-                        roleBadgeLabel.textContent = "ADMINISTRATOR DASHBOARD";
-                        if(menuRiwayat) menuRiwayat.classList.remove('hidden');
-                        if(menuUsers) menuUsers.classList.remove('hidden');
-                    } else {
-                        roleBadgeLabel.textContent = "DASHBOARD TAMU / USER";
-                        if(menuRiwayat) menuRiwayat.classList.add('hidden');
-                        if(menuUsers) menuUsers.classList.add('hidden');
-                    }
-
-                } catch (error) {
-                    console.error("Gagal mengambil role:", error);
-                    if (!cachedRole) {
-                        roleBadgeLabel.textContent = "DASHBOARD TAMU / USER";
-                    }
-                }
-
-            } else {
-                localStorage.removeItem('userRole');
-                window.location.href = "index.html";
+            if (activeBanners.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-400 text-xs bg-white border border-slate-200">Tidak ada banner aktif saat ini.</div>`;
+                return;
             }
-        });
 
-        document.getElementById('btnLogout').addEventListener('click', async () => {
-            const result = await Swal.fire({
-                title: 'Keluar Aplikasi?',
-                text: "Anda akan keluar dari sesi login saat ini.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#e11d48',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal'
+            const isDesktop = window.innerWidth >= 1024;
+            const itemsPerPage = isDesktop ? 4 : 1;
+
+            if (currentSlideIndex >= activeBanners.length) currentSlideIndex = 0;
+
+            let visibleBanners = [];
+            for (let i = 0; i < itemsPerPage; i++) {
+                let index = (currentSlideIndex + i) % activeBanners.length;
+                visibleBanners.push(activeBanners[index]);
+            }
+
+            visibleBanners.forEach(item => {
+                const imgTag = item.image 
+                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-32 sm:h-36 object-cover border">` 
+                    : `<div class="w-full h-32 sm:h-36 bg-slate-100 flex items-center justify-center text-xs text-slate-400 border">No Image</div>`;
+
+                container.innerHTML += `
+                    <div class="bg-white border border-slate-200 p-3 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            ${imgTag}
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 truncate" title="${item.title}">${item.title}</h4>
+                        </div>
+                    </div>
+                `;
             });
+        }
 
-            if (result.isConfirmed) {
-                localStorage.removeItem('userRole'); // Hapus cache role saat logout
-                await signOut(auth);
-                window.location.href = "index.html";
-            }
+        function nextBannerSlide() {
+            if (activeBanners.length === 0) return;
+            currentSlideIndex = (currentSlideIndex + 1) % activeBanners.length;
+            renderBannerSlider();
+        }
+
+        function prevBannerSlide() {
+            if (activeBanners.length === 0) return;
+            currentSlideIndex = (currentSlideIndex - 1 + activeBanners.length) % activeBanners.length;
+            renderBannerSlider();
+        }
+
+        function startAutoplay() {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+            autoplayInterval = setInterval(() => {
+                nextBannerSlide();
+            }, 3500);
+        }
+
+        function pauseAutoplay() {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+        }
+
+        function resumeAutoplay() {
+            startAutoplay();
+        }
+
+        // Pasang Event Listener secara aman via JavaScript setelah elemen dimuat
+        document.getElementById('btnNextSlide')?.addEventListener('click', nextBannerSlide);
+        document.getElementById('btnPrevSlide')?.addEventListener('click', prevBannerSlide);
+        
+        const wrapper = document.getElementById('bannerWrapper');
+        if (wrapper) {
+            wrapper.addEventListener('mouseenter', pauseAutoplay);
+            wrapper.addEventListener('mouseleave', resumeAutoplay);
+        }
+
+        window.addEventListener('resize', () => {
+            renderBannerSlider();
         });
+
+        // Jalankan saat halaman dashboard dimuat
+        loadActiveBanners();
     </script>
 </body>
 </html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi QR - SWALAYAN MAGA (Merchandising)</title>
+</head>
+<body>
+    <!-- AREA KONTEN UTAMA ABSENSI (Dimuat Dinamis via SPA oleh layout.html) -->
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 flex-grow">
+        <div class="max-w-2xl mx-auto space-y-6">
+            
+            <!-- KARTU UTAMA: SCAN QR (Untuk Pegawai/User) -->
+            <div class="bg-white shadow-xl p-6 sm:p-8 border border-slate-200 rounded-lg">
+                <div class="text-center pb-4 border-b mb-6">
+                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <h2 class="text-xl font-extrabold text-slate-800">Scan QR Code Absensi</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Arahkan kamera HP ke Kode QR Resmi Swalayan Maga untuk melakukan absen.</p>
+                </div>
+
+                <!-- Kotak Tampilan Kamera Scanner -->
+                <div class="relative overflow-hidden rounded-lg border-2 border-dashed border-indigo-200 bg-slate-900 mb-6 flex flex-col items-center justify-center min-h-[280px]">
+                    <div id="reader" class="w-full"></div>
+                </div>
+
+                <div id="scanStatus" class="text-center text-xs font-semibold text-slate-600 bg-slate-50 p-3 border rounded">
+                    Status Kamera: Menyiapkan pemindai...
+                </div>
+            </div>
+
+            <!-- KARTU KHUSUS ADMINISTRATOR: GENERATE QR CODE -->
+            <div id="adminQrSection" class="bg-white shadow-xl p-6 sm:p-8 border border-slate-200 rounded-lg hidden">
+                <div class="flex items-center justify-between pb-4 border-b mb-6">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-gears text-indigo-600"></i> Panel Generator QR Code (Administrator)
+                        </h3>
+                        <p class="text-xs text-slate-500">Buat atau perbarui QR Code absensi harian untuk toko.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div class="w-48 h-48 bg-white p-3 border-2 border-slate-200 shadow-md flex items-center justify-center">
+                        <div id="qrcode" class="flex items-center justify-center"></div>
+                    </div>
+                    <p id="qrCodeInfoText" class="text-xs font-medium text-slate-600 text-center"></p>
+                    <button onclick="generateNewQrCode()" class="bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-semibold py-2.5 px-6 transition shadow-sm cursor-pointer rounded">
+                        <i class="fa-solid fa-rotate mr-1"></i> Buat / Refresh QR Code Hari Ini
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
