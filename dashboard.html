@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MAGA SWALAYAN (Merchandising)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Header Navbar -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Logo maga.png -->
+                <div class="w-10 h-10 bg-white rounded-xl p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400">
+                    <img src="maga.png" alt="Logo Maga" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide">Maga Swalayan</h1>
+                    <p class="text-xs text-indigo-200 hidden sm:block">Sistem Informasi Pendaftaran Online</p>
+                </div>
+            </div>
+
+            <!-- Bagian Profil & Tombol Keluar (Di kanan atas) -->
+            <div class="flex items-center space-x-3">
+                <!-- Info Profil (Foto & Nama) -->
+                <div class="flex items-center space-x-2 bg-indigo-700/50 px-3 py-1.5 rounded-full border border-indigo-500/30">
+                    <div id="userAvatarContainer" class="w-8 h-8 rounded-full overflow-hidden bg-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shadow-inner">
+                        <!-- Foto Profil / Inisial akan dimasukkan otomatis via JavaScript -->
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <span id="userName" class="text-xs sm:text-sm font-medium text-white max-w-[120px] sm:max-w-[180px] truncate hidden md:inline">Memuat...</span>
+                </div>
+
+                <!-- Tombol Keluar -->
+                <button id="btnLogout" class="flex items-center gap-1.5 text-xs sm:text-sm bg-rose-600 hover:bg-rose-700 px-3 py-2 rounded-lg font-medium transition shadow-sm" title="Keluar">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="hidden sm:inline">Keluar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Konten Utama Dashboard -->
+    <main class="max-w-6xl w-full mx-auto p-4 sm:p-6 my-4 flex-grow">
+        
+        <!-- Banner Ucapan Selamat Datang -->
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 relative overflow-hidden">
+            <div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4 pointer-events-none">
+                <i class="fa-solid fa-clipboard-user text-9xl"></i>
+            </div>
+            <div class="relative z-10">
+                <span class="bg-indigo-500/40 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Dashboard Utama</span>
+                <h2 id="welcomeText" class="text-2xl sm:text-3xl font-extrabold mt-3 mb-2">Memuat akun...</h2>
+                <p class="text-indigo-100 text-sm sm:text-base max-w-xl">
+                    Kelola data pendaftaran distributor, pantau produk yang dibawa, dan akses sistem dengan cepat dan mudah langsung dari perangkat HP atau Desktop Anda.
+                </p>
+            </div>
+        </div>
+
+        <!-- Menu Pendaftaran Baru (Riwayat sudah dihapus) -->
+        <div class="max-w-xl">
+            <a href="form.html" class="bg-white hover:bg-indigo-50/50 border border-slate-200 hover:border-indigo-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-file-circle-plus"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition">Input Pendaftaran Baru</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Tambah data distributor dan produk baru</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-500 border-t bg-white mt-auto">
+        &copy; 2026 MAGA SWALAYAN. All rights reserved.
+    </footer>
+
+    <!-- Firebase Auth & Logika Tampil Foto Profil -->
+    <script type="module">
+        import { auth } from "./firebase.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const welcomeText = document.getElementById('welcomeText');
+        const userNameElem = document.getElementById('userName');
+        const avatarContainer = document.getElementById('userAvatarContainer');
+
+        // Cek Sesi Login & Muat Profil
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
+                const photoURL = user.photoURL;
+                const email = user.email;
+
+                // Tampilkan nama di banner & navbar
+                welcomeText.innerHTML = `Selamat Datang, <span class="text-indigo-200 capitalize">${displayName}</span>! 👋`;
+                userNameElem.textContent = displayName;
+
+                // Tampilkan Foto Profil jika ada
+                if (photoURL) {
+                    avatarContainer.innerHTML = `<img src="${photoURL}" alt="Foto Profil" class="w-full h-full object-cover">`;
+                } else {
+                    const initial = email.charAt(0).toUpperCase();
+                    avatarContainer.innerHTML = `<span class="text-white font-bold">${initial}</span>`;
+                }
+
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        // Tombol Logout
+        document.getElementById('btnLogout').addEventListener('click', async () => {
+            const result = await Swal.fire({
+                title: 'Keluar Aplikasi?',
+                text: "Anda akan keluar dari sesi login saat ini.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    await signOut(auth);
+                    window.location.href = "index.html";
+                } catch (error) {
+                    console.error("Gagal logout:", error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
