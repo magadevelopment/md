@@ -50,13 +50,13 @@
     <!-- Konten Utama Dashboard -->
     <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-4 flex-grow">
         
-        <!-- Banner Ucapan Selamat Datang (Mode HP & Desktop) -->
+        <!-- Banner Ucapan Selamat Datang -->
         <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 sm:mb-8 relative overflow-hidden">
             <div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4 pointer-events-none hidden sm:block">
                 <i class="fa-solid fa-clipboard-user text-9xl"></i>
             </div>
             <div class="relative z-10">
-                <span class="bg-indigo-500/40 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Dashboard Utama</span>
+                <span id="roleBadgeLabel" class="bg-indigo-500/40 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Memuat Role...</span>
                 <h2 id="welcomeText" class="text-xl sm:text-3xl font-extrabold mt-3 mb-2">Memuat akun...</h2>
                 <p class="text-indigo-100 text-xs sm:text-base max-w-2xl">
                     Kelola data pendaftaran distributor, pantau produk yang dibawa, dan akses sistem dengan cepat dan mudah langsung dari perangkat HP atau Desktop Anda.
@@ -64,12 +64,12 @@
             </div>
         </div>
 
-        <!-- Bagian Menu Utama (Grid Dinamis: 1 Kolom di HP, 2-3 Kolom di Tablet/Desktop) -->
+        <!-- Bagian Menu Utama -->
         <div class="mb-4">
             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Menu Navigasi</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div id="menuContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 
-                <!-- Kartu Menu 1: Input Pendaftaran Baru -->
+                <!-- Menu 1: Input Pendaftaran Baru (Masuk ke form.html) -->
                 <a href="form.html" class="bg-white hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
@@ -83,8 +83,22 @@
                     <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
                 </a>
 
-                <!-- Kartu Menu 2: Daftar Pendaftaran Baru (Riwayat/Data Masuk) -->
-                <a href="riwayat.html" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                <!-- Menu 2: Edit Data Anda (Tampil untuk Tamu/User maupun Admin) -->
+                <a href="edit-pendaftaran.html" class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-amber-600 transition">Edit Data Anda</h4>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Ubah data pendaftaran yang Anda kirim</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
+                </a>
+
+                <!-- Menu 3: Daftar Pendaftaran (Khusus Administrator) -->
+                <a id="menuRiwayat" href="riwayat.html" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group hidden">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
                             <i class="fa-solid fa-list-check"></i>
@@ -97,14 +111,14 @@
                     <i class="fa-solid fa-chevron-right text-slate-400 group-hover:translate-x-1 transition"></i>
                 </a>
 
-                <!-- Kartu Menu 3: Daftar Pengguna / Tamu (users.html) -->
-                <a href="users.html" class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group md:col-span-2 lg:col-span-1">
+                <!-- Menu 4: Daftar Pengguna / Tamu (Khusus Administrator) -->
+                <a id="menuUsers" href="users.html" class="bg-white hover:bg-purple-50/40 border border-slate-200 hover:border-purple-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition flex items-center justify-between group hidden md:col-span-2 lg:col-span-1">
                     <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
                             <i class="fa-solid fa-users-viewfinder"></i>
                         </div>
                         <div>
-                            <h4 class="text-base font-bold text-slate-800 group-hover:text-amber-600 transition">Daftar Pengguna / Tamu</h4>
+                            <h4 class="text-base font-bold text-slate-800 group-hover:text-purple-600 transition">Daftar Pengguna / Tamu</h4>
                             <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Lihat akun yang masuk & atur hak akses</p>
                         </div>
                     </div>
@@ -120,16 +134,20 @@
         &copy; 2026 MAGA SWALAYAN. All rights reserved.
     </footer>
 
-    <!-- Firebase Auth & Logika Tampil Profil -->
+    <!-- Firebase Auth & Logika Tampil Menu -->
     <script type="module">
-        import { auth } from "./firebase.js";
+        import { auth, db } from "./firebase.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const welcomeText = document.getElementById('welcomeText');
         const userNameElem = document.getElementById('userName');
         const avatarContainer = document.getElementById('userAvatarContainer');
+        const roleBadgeLabel = document.getElementById('roleBadgeLabel');
+        const menuRiwayat = document.getElementById('menuRiwayat');
+        const menuUsers = document.getElementById('menuUsers');
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const displayName = user.displayName || user.email.split('@')[0];
                 const photoURL = user.photoURL;
@@ -144,6 +162,31 @@
                     const initial = email.charAt(0).toUpperCase();
                     avatarContainer.innerHTML = `<span class="text-white font-bold">${initial}</span>`;
                 }
+
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    let userRole = "User";
+                    if (userDoc.exists()) {
+                        userRole = userDoc.data().role || "User";
+                    }
+
+                    if (userRole === "Administrator") {
+                        roleBadgeLabel.textContent = "Administrator Dashboard";
+                        menuRiwayat.classList.remove('hidden');
+                        menuUsers.classList.remove('hidden');
+                    } else {
+                        roleBadgeLabel.textContent = "Dashboard Tamu / User";
+                        menuRiwayat.classList.add('hidden');
+                        menuUsers.classList.add('hidden');
+                    }
+
+                } catch (error) {
+                    console.error("Gagal mengambil role:", error);
+                    roleBadgeLabel.textContent = "Dashboard Tamu / User";
+                }
+
             } else {
                 window.location.href = "index.html";
             }

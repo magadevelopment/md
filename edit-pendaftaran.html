@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pendaftaran - MAGA SWALAYAN (Merchandising)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Header Navbar -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 bg-white rounded-xl p-1 shadow-inner flex items-center justify-center overflow-hidden border border-indigo-400">
+                    <img src="maga.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide">Edit Data Pendaftaran</h1>
+                    <p class="text-xs text-indigo-200">Maga Swalayan</p>
+                </div>
+            </div>
+            
+            <a href="dashboard.html" class="flex items-center gap-1.5 text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 px-3.5 py-2 rounded-lg font-medium transition shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-6 flex-grow">
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-indigo-600"></i>
+                        Daftar Pendaftaran Anda
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Anda hanya dapat melihat dan mengubah data yang diinput oleh akun Anda sendiri.</p>
+                </div>
+                <div class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-indigo-100">
+                    Total Data Anda: <span id="totalData">0</span>
+                </div>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-indigo-50 text-indigo-900 text-xs sm:text-sm uppercase font-semibold">
+                            <th class="p-3.5 sm:p-4">No</th>
+                            <th class="p-3.5 sm:p-4">Nama Distributor</th>
+                            <th class="p-3.5 sm:p-4">Penanggungjawab</th>
+                            <th class="p-3.5 sm:p-4">Sales & Supervisor</th>
+                            <th class="p-3.5 sm:p-4">Produk</th>
+                            <th class="p-3.5 sm:p-4">Jatuh Tempo</th>
+                            <th class="p-3.5 sm:p-4 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm text-slate-700">
+                        <tr>
+                            <td colspan="7" class="text-center py-6 text-slate-400">Memuat data pendaftaran...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-500 border-t bg-white mt-auto">
+        &copy; 2026 MAGA SWALAYAN. All rights reserved.
+    </footer>
+
+    <!-- Script Firestore & Logika Edit -->
+    <script type="module">
+        import { auth, db } from "./firebase.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const dataTableBody = document.getElementById('dataTableBody');
+        const totalData = document.getElementById('totalData');
+        let currentUserId = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+            currentUserId = user.uid;
+            await loadMyData();
+        });
+
+        async function loadMyData() {
+            try {
+                // Query data di Firestore di mana userId sesuai dengan user yang sedang login
+                const q = query(
+                    collection(db, "pendaftaran_distributor"), 
+                    where("userId", "==", currentUserId)
+                );
+                const querySnapshot = await getDocs(q);
+
+                dataTableBody.innerHTML = "";
+                totalData.textContent = querySnapshot.size;
+
+                if (querySnapshot.empty) {
+                    dataTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada data pendaftaran yang Anda input.</td></tr>`;
+                    return;
+                }
+
+                let no = 1;
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+
+                    const row = `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-3.5 sm:p-4 font-medium">${no++}</td>
+                            <td class="p-3.5 sm:p-4 font-semibold text-slate-800">${data.namaDistributor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">${data.penanggungjawab || '-'}<br><span class="text-xs text-slate-400">${data.noHpKantor || ''}</span></td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">Sales: ${data.namaSales || '-'}<br>Spv: ${data.namaSupervisor || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600 max-w-xs truncate">${data.namaproduk || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-slate-600">${data.jatuhTempo || '-'}</td>
+                            <td class="p-3.5 sm:p-4 text-center">
+                                <button onclick='bukaModalEdit(${JSON.stringify({ id: docId, ...data })})' class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-sm transition cursor-pointer">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    dataTableBody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                dataTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-rose-500">Gagal memuat data dari database.</td></tr>`;
+            }
+        }
+
+        // Fungsi Membuka SweetAlert Form Edit
+        window.bukaModalEdit = async function(item) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Edit Data Pendaftaran',
+                html: `
+                    <div class="text-left space-y-3 text-sm">
+                        <div>
+                            <label class="font-semibold text-slate-700">Nama Distributor</label>
+                            <input id="swal-namaDistributor" class="swal2-input !m-0 !w-full !text-sm" value="${item.namaDistributor || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Penanggungjawab</label>
+                            <input id="swal-penanggungjawab" class="swal2-input !m-0 !w-full !text-sm" value="${item.penanggungjawab || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">No HP Kantor / Admin</label>
+                            <input id="swal-noHpKantor" class="swal2-input !m-0 !w-full !text-sm" value="${item.noHpKantor || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Nama Sales</label>
+                            <input id="swal-namaSales" class="swal2-input !m-0 !w-full !text-sm" value="${item.namaSales || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">No HP Sales</label>
+                            <input id="swal-noHpSales" class="swal2-input !m-0 !w-full !text-sm" value="${item.noHpSales || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Nama Supervisor</label>
+                            <input id="swal-namaSupervisor" class="swal2-input !m-0 !w-full !text-sm" value="${item.namaSupervisor || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">No HP Supervisor</label>
+                            <input id="swal-noHpSupervisor" class="swal2-input !m-0 !w-full !text-sm" value="${item.noHpSupervisor || ''}">
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Nama Produk</label>
+                            <textarea id="swal-namaProduk" class="swal2-textarea !m-0 !w-full !text-sm">${item.namaproduk || ''}</textarea>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Jatuh Tempo</label>
+                            <input id="swal-jatuhTempo" class="swal2-input !m-0 !w-full !text-sm" value="${item.jatuhTempo || ''}">
+                        </div>
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Simpan Perubahan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#4f46e5',
+                preConfirm: () => {
+                    return {
+                        namaDistributor: document.getElementById('swal-namaDistributor').value,
+                        penanggungjawab: document.getElementById('swal-penanggungjawab').value,
+                        noHpKantor: document.getElementById('swal-noHpKantor').value,
+                        namaSales: document.getElementById('swal-namaSales').value,
+                        noHpSales: document.getElementById('swal-noHpSales').value,
+                        namaSupervisor: document.getElementById('swal-namaSupervisor').value,
+                        noHpSupervisor: document.getElementById('swal-noHpSupervisor').value,
+                        namaproduk: document.getElementById('swal-namaProduk').value,
+                        jatuhTempo: document.getElementById('swal-jatuhTempo').value,
+                    }
+                }
+            });
+
+            if (formValues) {
+                try {
+                    Swal.fire({
+                        title: 'Menyimpan...',
+                        text: 'Memperbarui data di database',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    const docRef = doc(db, "pendaftaran_distributor", item.id);
+                    await updateDoc(docRef, formValues);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data pendaftaran berhasil diperbarui.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    await loadMyData();
+                } catch (error) {
+                    console.error("Gagal mengupdate:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Terjadi kesalahan saat memperbarui data.',
+                        confirmButtonColor: '#dc2626'
+                    });
+                }
+            }
+        };
+    </script>
+</body>
+</html>
