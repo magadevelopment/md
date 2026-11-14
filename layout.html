@@ -142,7 +142,7 @@
 
         <!-- AREA KONTEN UTAMA (Dimuat Dinamis via SPA Router) -->
         <main id="mainContent" class="w-full px-4 sm:px-6 lg:px-8 py-6 flex-grow">
-            <!-- Konten dimuat dinamis -->
+            <div class="text-center py-24 text-slate-400">Memeriksa sesi pengguna...</div>
         </main>
 
         <!-- Footer -->
@@ -1008,7 +1008,6 @@
                         await loadUsersData();
                     }
 
-                    // Panggil pemuat data riwayat saat riwayat.html dibuka
                     if (url.includes('riwayat.html')) {
                         if (typeof window.loadRiwayatData === 'function') {
                             await window.loadRiwayatData();
@@ -1073,15 +1072,7 @@
             applyRoleUI(role);
         }
 
-        const cachedRole = localStorage.getItem('userRole') || 'User';
-
-        loadPageContent('dashboard.html', false).then(() => {
-            loadActiveBanners();
-            if (auth.currentUser) {
-                updateUIAuth(auth.currentUser, cachedRole);
-            }
-        });
-
+        // --- PENGECEKAN AUTH KETAT DI AWAL (MENCEGAH MASUK TANPA LOGIN) ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 updateUIAuth(user, localStorage.getItem('userRole') || 'User');
@@ -1096,6 +1087,12 @@
                     }
                 } catch (e) {
                     console.error("Gagal memperbarui role:", e);
+                }
+
+                if (window.location.pathname.endsWith('layout.html') || document.getElementById('mainContent').innerHTML.includes('Memeriksa sesi')) {
+                    loadPageContent('dashboard.html', false).then(() => {
+                        loadActiveBanners();
+                    });
                 }
             } else {
                 localStorage.removeItem('userRole');

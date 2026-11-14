@@ -1,4 +1,4 @@
-const CACHE_NAME = 'maga-pwa-v4';
+const CACHE_NAME = 'maga-pwa-v5';
 const urlsToCache = [
   'dashboard.html',
   'toko.html',
