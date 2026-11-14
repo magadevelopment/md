@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MAGA SWALAYAN (Merchandising)</title>
+    
+    <!-- PWA Manifest & Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#312e81">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maga">
+    <link rel="apple-touch-icon" href="maga.png">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SweetAlert2 -->
@@ -37,6 +46,17 @@
             Masuk dengan Google
         </button>
     </div>
+
+    <!-- Pendaftaran Service Worker untuk PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((reg) => console.log('Service Worker PWA berhasil terdaftar di index:', reg.scope))
+                    .catch((err) => console.log('Pendaftaran Service Worker PWA gagal:', err));
+            });
+        }
+    </script>
 
     <!-- Firebase Script & Logika Login -->
     <script type="module">

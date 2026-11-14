@@ -4,14 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SWALAYAN MAGA (Merchandising)</title>
-    
-    <!-- PWA Manifest & Theme Color -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#312e81">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Maga">
-    <link rel="apple-touch-icon" href="maga.png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -325,20 +317,11 @@
         });
     </script>
 
-    <!-- Skrip Master Layout: Firebase Auth, SPA AJAX Router & PWA Service Worker -->
+    <!-- Skrip Master Layout: Firebase Auth & SPA AJAX Router -->
     <script type="module">
         import { auth, db } from "./firebase.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // Registrasi Service Worker untuk PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((reg) => console.log('Service Worker PWA berhasil terdaftar:', reg.scope))
-                    .catch((err) => console.log('Pendaftaran Service Worker PWA gagal:', err));
-            });
-        }
 
         let activeBanners = [];
         let currentSlideIndex = 0;

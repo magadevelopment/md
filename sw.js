@@ -1,5 +1,6 @@
-const CACHE_NAME = 'maga-pwa-v5';
+const CACHE_NAME = 'maga-pwa-v6';
 const urlsToCache = [
+  'index.html',
   'dashboard.html',
   'toko.html',
   'branding.html',
@@ -8,18 +9,21 @@ const urlsToCache = [
   'layout.html',
   'wall.png',
   'maga.png',
-  // Tambahkan CDN eksternal agar terbaca saat PWA offline/terinstal
+  // CDN eksternal yang aman untuk di-cache
   'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/sweetalert2@11',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2'
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
 self.addEventListener('install', (event) => {
   event.skipWaiting(); // Memaksa Service Worker langsung aktif
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
+      // Menggunakan cara aman agar jika ada satu CDN yang gagal, 
+      // tidak menggagalkan total instalasi cache utama
+      return Promise.allSettled(
+        urlsToCache.map(url => cache.add(url).catch(err => console.warn('Gagal cache:', url, err)))
+      );
     })
   );
 });
@@ -44,7 +48,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request).catch(() => {
-        // Fallback opsional jika fetch gagal total
+        // Fallback jika offline dan aset tidak ada di cache
       });
     })
   );
