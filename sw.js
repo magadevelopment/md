@@ -1,55 +1,54 @@
-const CACHE_NAME = 'maga-pwa-v10';
+const CACHE_NAME = 'maga-pwa-v11';
 const urlsToCache = [
-  'index.html',
-  'dashboard.html',
-  'toko.html',
-  'branding.html',
-  'form.html',
-  'absen.html',
-  'layout.html',
-  'wall.png',
-  'maga.png',
-  // CDN eksternal yang aman untuk di-cache
-  'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/sweetalert2@11',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+    'maga.png',
+    'wall.png',
+    'wallpaper.jpeg',
+    'manifest.json'
+    // PERHATIAN: JANGAN masukkan index.html, layout.html, atau file .html lainnya ke sini!
 ];
 
+// Saat Install Service Worker
 self.addEventListener('install', (event) => {
-  event.skipWaiting(); // Memaksa Service Worker langsung aktif
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Menggunakan cara aman agar jika ada satu CDN yang gagal, 
-      // tidak menggagalkan total instalasi cache utama
-      return Promise.allSettled(
-        urlsToCache.map(url => cache.add(url).catch(err => console.warn('Gagal cache:', url, err)))
-      );
-    })
-  );
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => cache.addAll(urlsToCache))
+    );
+    self.skipWaiting();
 });
 
+// Saat Activate (Hapus cache lama versi sebelumnya)
 self.addEventListener('activate', (event) => {
-  // Menghapus cache versi lama yang menumpuk
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+    event.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
         })
-      );
-    })
-  );
-  self.clients.claim();
+    );
+});
 });
 
+// Strategi Fetch: Network First untuk semua halaman HTML
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).catch(() => {
-        // Fallback jika offline dan aset tidak ada di cache
-      });
-    })
-  );
+    const requestUrl = new URL(event.request.url);
+
+    // Jika request berupa dokumen HTML, wajib ambil dari internet (Network First)
+    if (event.request.destination === 'document' || requestUrl.pathname.endsWith('.html')) {
+        event.respondWith(
+            fetch(event.request)
+                .catch(() => caches.match('index.html')) // Jika offline total, lempar ke index
+        );
+        return;
+    }
+
+    // Untuk aset gambar/ikon, gunakan cache
+    event.respondWith(
+        caches.match(event.request)
+            .then((response) => response || fetch(event.request))
+    );
 });
