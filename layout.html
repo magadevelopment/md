@@ -1064,12 +1064,15 @@
             applyRoleUI(role);
         }
 
-        // --- PENGECEKAN AUTH KETAT DI AWAL (MENCEGAH MASUK TANPA LOGIN) ---
+        // --- PENGECEKAN AUTH KETAT DI AWAL (MENCEGAH MASUK TANPA LOGIN PADA PWA) ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                updateUIAuth(user, localStorage.getItem('userRole') || 'User');
-
                 try {
+                    // Validasi token ID secara aktif ke server Firebase untuk memastikan sesi tidak basi/palsu
+                    await user.getIdToken(true);
+                    
+                    updateUIAuth(user, localStorage.getItem('userRole') || 'User');
+
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     const role = userDoc.exists() ? (userDoc.data().role || "User") : "User";
                     
@@ -1077,18 +1080,22 @@
                         localStorage.setItem('userRole', role);
                         updateUIAuth(user, role);
                     }
-                } catch (e) {
-                    console.error("Gagal memperbarui role:", e);
-                }
 
-                if (window.location.pathname.endsWith('layout.html') || document.getElementById('mainContent').innerHTML.includes('Memeriksa sesi')) {
-                    loadPageContent('dashboard.html', false).then(() => {
-                        loadActiveBanners();
-                    });
+                    if (window.location.pathname.endsWith('layout.html') || document.getElementById('mainContent').innerHTML.includes('Memeriksa sesi')) {
+                        loadPageContent('dashboard.html', false).then(() => {
+                            loadActiveBanners();
+                        });
+                    }
+                } catch (tokenError) {
+                    console.warn("Sesi auth kedaluwarsa atau tidak valid:", tokenError);
+                    localStorage.removeItem('userRole');
+                    await signOut(auth);
+                    window.location.replace("index.html");
                 }
             } else {
+                // JIKA TIDAK ADA SESI / BELUM LOGIN, TENDANG PAKSA KE INDEX.HTML
                 localStorage.removeItem('userRole');
-                window.location.href = "index.html";
+                window.location.replace("index.html");
             }
         });
 
