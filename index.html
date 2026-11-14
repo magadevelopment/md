@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MAGA SWALAYAN (Merchandising)</title>
     
+    <!-- DETEKSI OTOMATIS: Tag <base> hanya aktif di GitHub Pages, aman di Localhost -->
+    <script>
+        if (window.location.hostname.includes('github.io')) {
+            const base = document.createElement('base');
+            base.href = '/md/';
+            document.head.prepend(base);
+        }
+    </script>
+
     <!-- PWA Manifest & Theme Color -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#312e81">
