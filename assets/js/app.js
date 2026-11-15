@@ -1,9 +1,23 @@
 import { initRouter } from './router.js';
 
-// 1. Jalankan Router SPA
+// 1. Definisikan fungsi global untuk toggle sidebar
+window.toggleSidebar = function() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        if (sidebar.classList.contains('hidden')) {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        } else {
+            sidebar.classList.remove('flex');
+            sidebar.classList.add('hidden');
+        }
+    }
+};
+
+// 2. Jalankan Router SPA
 initRouter();
 
-// 2. Daftarkan Service Worker untuk PWA
+// 3. Daftarkan Service Worker untuk PWA
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')

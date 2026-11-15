@@ -1,75 +1,84 @@
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { auth } from "../firebase-init.js";
+import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { auth, db } from "../firebase-init.js";
 
 export function renderLogin() {
     return `
-        <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200 mt-6">
-            <h2 class="text-2xl font-bold text-blue-600 mb-2 text-center">Login Maga Swalayan</h2>
-            <p class="text-slate-500 text-sm mb-6 text-center">Silakan masuk menggunakan akun email Anda.</p>
+        <div class="relative w-full h-full flex items-center justify-center p-4 overflow-hidden">
+            <!-- Wallpaper Full Layar -->
+            <img src="assets/icons/wallpaper.jpeg" alt="Wallpaper Login" class="absolute inset-0 w-full h-full object-cover z-0">
             
-            <div id="error-msg" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg"></div>
+            <!-- Efek Overlay Gelap Tipis -->
+            <div class="absolute inset-0 bg-black/40 z-0"></div>
 
-            <form id="login-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                    <input type="email" id="email" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" required>
+            <!-- Card Kotak Login Melebar / Full -->
+            <div class="relative z-10 w-full max-w-xl bg-white/70 backdrop-blur-md rounded-none border border-white/40 p-10 shadow-2xl text-center space-y-6">
+                <!-- Logo & Judul -->
+                <div class="space-y-2">
+                    <div class="inline-flex border border-slate-200 rounded-none p-3 bg-white/90 shadow-xs mb-2">
+                        <img src="assets/icons/maga.png" alt="Maga Logo" class="h-10 object-contain">
+                    </div>
+                    <h1 class="text-2xl font-bold text-slate-800">Login Maga Swalayan</h1>
+                    <p class="text-sm text-slate-600 font-medium">Silakan masuk menggunakan akun Google Anda.</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="password" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">Masuk</button>
-            </form>
 
-            <div class="mt-4 text-center">
-                <span class="text-slate-400 text-sm">Atau</span>
+                <!-- Error Box -->
+                <div id="error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-none text-left"></div>
+
+                <!-- Tombol Google Login -->
+                <div class="pt-2">
+                    <button id="btn-google" class="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-none border border-slate-300 bg-white/90 hover:bg-white transition text-slate-700 font-medium text-base shadow-sm focus:outline-none">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        Masuk dengan Google
+                    </button>
+                </div>
             </div>
-
-            <button id="btn-google" class="w-full mt-4 border border-slate-300 bg-white text-slate-700 py-2 rounded-lg hover:bg-slate-50 transition font-medium flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.19v3.15C3.18 21.32 7.23 24 12 24z"/>
-                    <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.19C.43 8.1 0 9.8 0 12s.43 3.9 1.19 5.42l4.09-3.15z"/>
-                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.18 2.68 1.19 6.58l4.09 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                </svg>
-                Masuk dengan Google
-            </button>
         </div>
     `;
 }
 
 export function initLoginHandler() {
-    const form = document.getElementById('login-form');
     const btnGoogle = document.getElementById('btn-google');
     const errorBox = document.getElementById('error-msg');
-
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            errorBox.classList.add('hidden');
-
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                location.hash = '#/';
-            } catch (error) {
-                errorBox.textContent = `Gagal Login: ${error.message}`;
-                errorBox.classList.remove('hidden');
-            }
-        });
-    }
 
     if (btnGoogle) {
         btnGoogle.addEventListener('click', async () => {
             const provider = new GoogleAuthProvider();
-            errorBox.classList.add('hidden');
+            if (errorBox) errorBox.classList.add('hidden');
+
             try {
-                await signInWithPopup(auth, provider);
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                const userDocRef = doc(db, "users", user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (!userDocSnap.exists()) {
+                    let displayName = user.displayName || user.email.split('@')[0];
+                    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+                    await setDoc(userDocRef, {
+                        uid: user.uid,
+                        email: user.email,
+                        nama: displayName,
+                        photoURL: user.photoURL || "",
+                        role: "Staf",
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
                 location.hash = '#/';
             } catch (error) {
-                errorBox.textContent = `Gagal Login Google: ${error.message}`;
-                errorBox.classList.remove('hidden');
+                console.error("Gagal Login Google:", error);
+                if (errorBox) {
+                    errorBox.textContent = `Gagal Login Google: ${error.message}`;
+                    errorBox.classList.remove('hidden');
+                }
             }
         });
     }
