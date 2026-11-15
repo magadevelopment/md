@@ -15,14 +15,14 @@ export function renderBrandPublic() {
                 </div>
             </div>
 
-            <!-- Filter & Search Bar -->
-            <div class="bg-white p-4 border border-slate-200 flex flex-wrap items-center gap-3">
-                <div class="w-full sm:w-48">
+            <!-- Filter & Search Bar (Smooth Grid Layout) -->
+            <div class="bg-white p-4 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
                     <select id="filter-public-lokasi" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
                         <option value="">-- Semua Lokasi --</option>
                     </select>
                 </div>
-                <div class="w-full sm:w-48">
+                <div>
                     <select id="filter-public-kategori" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
                         <option value="">-- Semua Kategori --</option>
                         <option value="Billboard">Billboard</option>
@@ -32,16 +32,16 @@ export function renderBrandPublic() {
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-                <div class="w-full sm:w-48">
+                <div>
                     <select id="filter-public-status" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
                         <option value="">-- Semua Status --</option>
                         <option value="Belum Dipesan">Belum Dipesan</option>
                         <option value="Sudah Dipesan">Sudah Dipesan</option>
                     </select>
                 </div>
-                <div class="relative flex-1 min-w-[200px]">
+                <div class="relative">
                     <input type="text" id="search-public-branding" placeholder="Cari nama aset atau kode..." class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 pr-8">
-                    <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
             </div>
 
@@ -160,7 +160,6 @@ export async function initBrandPublicHandler() {
                 ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
                 : "bg-amber-50 text-amber-700 border-amber-200";
 
-            // Format nomor telepon untuk link WhatsApp (ubah 08... menjadi 628...)
             let formattedPhone = companyPhone.replace(/[^0-9]/g, '');
             if (formattedPhone.startsWith('0')) {
                 formattedPhone = '62' + formattedPhone.slice(1);

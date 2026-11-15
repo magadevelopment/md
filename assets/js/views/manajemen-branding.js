@@ -169,6 +169,23 @@ export function renderBranding() {
                     </div>
                 </div>
             </div>
+
+            <!-- MODAL KONFIRMASI HAPUS KUSTOM (GLOBAL) -->
+            <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
+                <div class="bg-white border border-slate-200 w-full max-w-sm shadow-2xl rounded-none overflow-hidden p-6 text-center space-y-4">
+                    <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </div>
+                    <div>
+                        <h4 id="confirm-title" class="font-bold text-slate-800 text-sm">Konfirmasi Hapus</h4>
+                        <p id="confirm-message" class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus item ini?</p>
+                    </div>
+                    <div class="flex justify-center gap-2 pt-2">
+                        <button id="btn-cancel-confirm" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition rounded-none flex-1">Batal</button>
+                        <button id="btn-yes-confirm" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition rounded-none flex-1">Hapus</button>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -190,6 +207,14 @@ export async function initBrandingHandler() {
     const zoomModal = document.getElementById('image-zoom-modal');
     const zoomedImageEl = document.getElementById('zoomed-image-el');
     const btnCloseZoom = document.getElementById('btn-close-zoom');
+
+    // Custom Confirm Modal elements
+    const customConfirmModal = document.getElementById('custom-confirm-modal');
+    const confirmTitle = document.getElementById('confirm-title');
+    const confirmMessage = document.getElementById('confirm-message');
+    const btnCancelConfirm = document.getElementById('btn-cancel-confirm');
+    const btnYesConfirm = document.getElementById('btn-yes-confirm');
+    let confirmCallback = null;
 
     const inputId = document.getElementById('branding-id');
     const inputKodeAset = document.getElementById('branding-kode-aset');
@@ -238,6 +263,31 @@ export async function initBrandingHandler() {
             toast.classList.add('translate-y-[-1rem]', 'opacity-0');
             setTimeout(() => toast.classList.add('hidden'), 300);
         }, 3000);
+    }
+
+    const showCustomConfirm = (title, message, onYes) => {
+        if (!customConfirmModal) return;
+        if (confirmTitle) confirmTitle.textContent = title;
+        if (confirmMessage) confirmMessage.textContent = message;
+        confirmCallback = onYes;
+        customConfirmModal.classList.remove('hidden');
+    };
+
+    if (btnCancelConfirm) {
+        btnCancelConfirm.onclick = () => {
+            if (customConfirmModal) customConfirmModal.classList.add('hidden');
+            confirmCallback = null;
+        };
+    }
+
+    if (btnYesConfirm) {
+        btnYesConfirm.onclick = () => {
+            if (customConfirmModal) customConfirmModal.classList.add('hidden');
+            if (typeof confirmCallback === 'function') {
+                confirmCallback();
+            }
+            confirmCallback = null;
+        };
     }
 
     // Global Zoom Handler
@@ -372,18 +422,18 @@ export async function initBrandingHandler() {
         };
     }
 
-    window.removeKategori = async (index) => {
+    window.removeKategori = (index) => {
         if (daftarKategori.length <= 1) {
             showToast("Minimal harus ada 1 kategori.", "error");
             return;
         }
-        if (confirm(`Apakah Anda yakin ingin menghapus kategori "${daftarKategori[index]}"?`)) {
+        showCustomConfirm("Hapus Kategori", `Apakah Anda yakin ingin menghapus kategori "${daftarKategori[index]}"?`, async () => {
             daftarKategori.splice(index, 1);
             await saveKategoriToDB();
             populateKategoriSelect(inputKategori.value);
             renderKategoriModalList();
             showToast("Kategori berhasil dihapus.", "success");
-        }
+        });
     };
 
     loadKategoriFromDB();
@@ -751,16 +801,17 @@ export async function initBrandingHandler() {
         if (modal) modal.classList.remove('hidden');
     };
 
-    window.deleteBranding = async (id) => {
-        if (!confirm("Apakah Anda yakin ingin menghapus aset branding ini?")) return;
-        try {
-            await deleteDoc(doc(db, "branding", id));
-            showToast("Aset branding berhasil dihapus.", "success");
-            loadBrandingData();
-        } catch (err) {
-            console.error("Gagal menghapus aset branding:", err);
-            showToast("Gagal menghapus aset branding.", "error");
-        }
+    window.deleteBranding = (id) => {
+        showCustomConfirm("Hapus Aset Branding", "Apakah Anda yakin ingin menghapus aset branding ini? Tindakan ini tidak dapat dibatalkan.", async () => {
+            try {
+                await deleteDoc(doc(db, "branding", id));
+                showToast("Aset branding berhasil dihapus.", "success");
+                loadBrandingData();
+            } catch (err) {
+                console.error("Gagal menghapus aset branding:", err);
+                showToast("Gagal menghapus aset branding.", "error");
+            }
+        });
     };
 
     if (searchInput) {

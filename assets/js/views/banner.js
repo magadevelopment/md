@@ -101,6 +101,23 @@ export function renderBanner() {
                     </form>
                 </div>
             </div>
+
+            <!-- MODAL KONFIRMASI HAPUS KUSTOM -->
+            <div id="delete-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
+                <div class="bg-white border border-slate-200 w-full max-w-sm shadow-2xl rounded-none overflow-hidden p-6 text-center space-y-4">
+                    <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">Konfirmasi Hapus</h4>
+                        <p class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus banner ini? Tindakan ini tidak dapat dibatalkan.</p>
+                    </div>
+                    <div class="flex justify-center gap-2 pt-2">
+                        <button id="btn-cancel-delete" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition rounded-none flex-1">Batal</button>
+                        <button id="btn-confirm-delete" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition rounded-none flex-1">Hapus</button>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -114,6 +131,11 @@ export async function initBannerHandler() {
     const form = document.getElementById('form-banner');
     const modalTitle = document.getElementById('modal-title');
     const searchInput = document.getElementById('search-banner');
+
+    const deleteModal = document.getElementById('delete-confirm-modal');
+    const btnCancelDelete = document.getElementById('btn-cancel-delete');
+    const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+    let bannerToDeleteId = null;
 
     const inputId = document.getElementById('banner-id');
     const inputNama = document.getElementById('banner-nama');
@@ -229,7 +251,7 @@ export async function initBannerHandler() {
                     <td class="p-3 text-center">
                         <div class="flex items-center justify-center gap-1.5">
                             <button onclick="window.editBanner('${item.id}', '${encodeURIComponent(item.nama)}', '${encodeURIComponent(item.gambar || '')}', ${isActive})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition rounded-none">Edit</button>
-                            <button onclick="window.deleteBanner('${item.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-[11px] font-medium transition rounded-none">Hapus</button>
+                            <button onclick="window.promptDeleteBanner('${item.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-[11px] font-medium transition rounded-none">Hapus</button>
                         </div>
                     </td>
                 </tr>
@@ -321,17 +343,34 @@ export async function initBannerHandler() {
         if (modal) modal.classList.remove('hidden');
     };
 
-    window.deleteBanner = async (id) => {
-        if (!confirm("Apakah Anda yakin ingin menghapus banner ini?")) return;
-        try {
-            await deleteDoc(doc(db, "banner", id));
-            showToast("Banner berhasil dihapus.", "success");
-            loadBannerData();
-        } catch (err) {
-            console.error("Gagal menghapus banner:", err);
-            showToast("Gagal menghapus banner.", "error");
-        }
+    window.promptDeleteBanner = (id) => {
+        bannerToDeleteId = id;
+        if (deleteModal) deleteModal.classList.remove('hidden');
     };
+
+    if (btnCancelDelete) {
+        btnCancelDelete.onclick = () => {
+            bannerToDeleteId = null;
+            if (deleteModal) deleteModal.classList.add('hidden');
+        };
+    }
+
+    if (btnConfirmDelete) {
+        btnConfirmDelete.onclick = async () => {
+            if (!bannerToDeleteId) return;
+            try {
+                await deleteDoc(doc(db, "banner", bannerToDeleteId));
+                showToast("Banner berhasil dihapus.", "success");
+                if (deleteModal) deleteModal.classList.add('hidden');
+                bannerToDeleteId = null;
+                loadBannerData();
+            } catch (err) {
+                console.error("Gagal menghapus banner:", err);
+                showToast("Gagal menghapus banner.", "error");
+                if (deleteModal) deleteModal.classList.add('hidden');
+            }
+        };
+    }
 
     window.toggleBannerStatus = async (id, newStatus) => {
         try {

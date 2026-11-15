@@ -36,7 +36,7 @@ export function renderManajemen() {
                     <span class="text-sm font-semibold text-slate-700">Banner</span>
                 </div>
 
-                <!-- Kelola Lokasi -->
+                <!-- Kelola Lokasi (Mengarahkan ke lokasi.js melalui hash #/lokasi) -->
                 <div class="bg-white p-6 border border-slate-200 hover:border-indigo-500 hover:shadow-md transition flex flex-col items-center justify-center text-center group cursor-pointer rounded-none" onclick="location.hash='#/lokasi'">
                     <div class="w-12 h-12 bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition mb-3 rounded-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>

@@ -13,18 +13,19 @@ import { renderText, initTextHandler } from './views/text.js';
 import { renderBrandPublic, initBrandPublicHandler } from './views/brand.js';
 import { renderBranding, initBrandingHandler } from './views/manajemen-branding.js';
 import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/pendaftaran.js';
-import { renderDaftar, initDaftarHandler } from './views/daftar.js'; // Menggunakan views/daftar.js
+import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
+import { renderLokasi, initLokasiHandler } from './views/lokasi.js'; // <-- Diimpor dari views/lokasi.js
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
-    '/branding': renderBrandPublic,             // Menu Branding di Sidebar (Publik)
-    '/manajemen-branding': renderBranding,       // Halaman Form Input/Admin Manajemen Branding
+    '/branding': renderBrandPublic,              // Menu Branding di Sidebar (Publik)
+    '/manajemen-branding': renderBranding,        // Halaman Form Input/Admin Manajemen Branding
     '/event': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Manajemen Event</h2><p class="text-slate-600">Kelola jadwal event toko.</p></div>`,
     '/produk': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Produk</h2><p class="text-slate-600">Kelola data produk.</p></div>`,
     '/banner': renderBanner,
-    '/lokasi': renderTokoPublic,
+    '/lokasi': renderLokasi,                      // <-- Mengarah ke renderLokasi (lokasi.js)
     '/text': renderText,
     '/pendaftaran': renderPendaftaranAdmin,
     '/pengaturan': renderPengaturan,
@@ -113,8 +114,10 @@ export async function router() {
             initStafHandler();
         } else if (path === '/pengaturan') {
             initPengaturanHandler();
-        } else if (path === '/toko' || path === '/lokasi') {
+        } else if (path === '/toko') {
             initTokoPublicHandler();
+        } else if (path === '/lokasi') {
+            if (typeof initLokasiHandler === 'function') initLokasiHandler(); // <-- Memanggil handler lokasi.js
         } else if (path === '/banner') {
             initBannerHandler();
         } else if (path === '/text') {
@@ -188,7 +191,7 @@ export async function router() {
 
             // --- KONTROL VISIBILITAS MENU ADMINISTRATOR (Sidebar) & ROUTE GUARD ---
             const adminMenuSection = document.getElementById('admin-menu-section');
-            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/manajemen-branding'];
+            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/manajemen-branding', '/lokasi']; // Tambahkan /lokasi ke rute admin jika khusus admin
 
             if (userRole === 'Administrator') {
                 if (adminMenuSection) adminMenuSection.classList.remove('hidden');
