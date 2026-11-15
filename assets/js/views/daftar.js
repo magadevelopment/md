@@ -130,9 +130,9 @@ export function initDaftarHandler() {
         }
     };
 
-    btnOpen.onclick = () => toggleModal(true);
-    btnClose.onclick = () => toggleModal(false);
-    btnCancel.onclick = () => toggleModal(false);
+    if (btnOpen) btnOpen.onclick = () => toggleModal(true);
+    if (btnClose) btnClose.onclick = () => toggleModal(false);
+    if (btnCancel) btnCancel.onclick = () => toggleModal(false);
 
     // Fungsi Load Data difilter berdasarkan UID User yang sedang login
     const loadData = async () => {
@@ -163,9 +163,6 @@ export function initDaftarHandler() {
                                 <h3 class="text-sm font-bold text-slate-800">${item.nama}</h3>
                             </div>
                             <div class="flex items-center gap-2">
-                                <a href="https://wa.me/${item.kontak_kantor || ''}" target="_blank" class="w-8 h-8 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center hover:bg-emerald-100 transition" title="Hubungi Kantor">
-                                    📞
-                                </a>
                                 <button onclick="window.editDaftar('${id}')" class="p-1.5 text-slate-400 hover:text-indigo-600 rounded-none hover:bg-slate-50 transition" title="Edit">✏️</button>
                                 <button onclick="window.deleteDaftar('${id}')" class="p-1.5 text-slate-400 hover:text-red-600 rounded-none hover:bg-slate-50 transition" title="Hapus">🗑️</button>
                             </div>
@@ -214,43 +211,45 @@ export function initDaftarHandler() {
     loadData();
 
     // Submit Form (Simpan / Update) dengan menyertakan UID
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert("Sesi login berakhir. Silakan login kembali.");
-            return;
-        }
-
-        const id = document.getElementById('distributor-id').value;
-        const data = {
-            uid: currentUser.uid, // Menyimpan UID pembuat data
-            nama: document.getElementById('nama').value,
-            penanggungjawab: document.getElementById('penanggungjawab').value,
-            kontak_kantor: document.getElementById('kontak_kantor').value,
-            sales_nama: document.getElementById('sales_nama').value,
-            sales_hp: document.getElementById('sales_hp').value,
-            spv_nama: document.getElementById('spv_nama').value,
-            spv_hp: document.getElementById('spv_hp').value,
-            produk: document.getElementById('produk').value,
-            termin: document.getElementById('termin').value,
-            updatedAt: new Date().toISOString()
-        };
-
-        try {
-            if (id) {
-                await updateDoc(doc(db, "pendaftaran_distributor", id), data);
-            } else {
-                data.createdAt = new Date().toISOString();
-                await addDoc(collection(db, "pendaftaran_distributor"), data);
+    if (form) {
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                alert("Sesi login berakhir. Silakan login kembali.");
+                return;
             }
-            toggleModal(false);
-            loadData();
-        } catch (err) {
-            console.error("Gagal menyimpan data:", err);
-            alert("Terjadi kesalahan saat menyimpan data.");
-        }
-    };
+
+            const id = document.getElementById('distributor-id').value;
+            const data = {
+                uid: currentUser.uid, // Menyimpan UID pembuat data
+                nama: document.getElementById('nama').value,
+                penanggungjawab: document.getElementById('penanggungjawab').value,
+                kontak_kantor: document.getElementById('kontak_kantor').value,
+                sales_nama: document.getElementById('sales_nama').value,
+                sales_hp: document.getElementById('sales_hp').value,
+                spv_nama: document.getElementById('spv_nama').value,
+                spv_hp: document.getElementById('spv_hp').value,
+                produk: document.getElementById('produk').value,
+                termin: document.getElementById('termin').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "pendaftaran_distributor", id), data);
+                } else {
+                    data.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, "pendaftaran_distributor"), data);
+                }
+                toggleModal(false);
+                loadData();
+            } catch (err) {
+                console.error("Gagal menyimpan data:", err);
+                alert("Terjadi kesalahan saat menyimpan data.");
+            }
+        };
+    }
 
     // Global helper untuk Edit & Hapus
     window.editDaftar = async (id) => {
