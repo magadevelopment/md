@@ -1,4 +1,4 @@
-const CACHE_NAME = 'maga-swalayan-cache-v5';
+const CACHE_NAME = 'maga-swalayan-cache-v6';
 const assetsToCache = [
     './index.html',
     './manifest.json',

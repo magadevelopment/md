@@ -11,12 +11,15 @@ import { renderTokoPublic, initTokoPublicHandler } from './views/toko.js';
 import { renderBanner, initBannerHandler } from './views/banner.js';
 import { renderText, initTextHandler } from './views/text.js';
 import { renderBrandPublic, initBrandPublicHandler } from './views/brand.js';
+import { renderBranding, initBrandingHandler } from './views/manajemen-branding.js';
 import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/pendaftaran.js';
+import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
-    '/branding': renderBrandPublic,
+    '/branding': renderBrandPublic,             // Menu Branding di Sidebar (Publik)
+    '/manajemen-branding': renderBranding,       // Halaman Form Input/Admin Manajemen Branding
     '/event': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Manajemen Event</h2><p class="text-slate-600">Kelola jadwal event toko.</p></div>`,
     '/produk': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Produk</h2><p class="text-slate-600">Kelola data produk.</p></div>`,
     '/banner': renderBanner,
@@ -26,7 +29,7 @@ const routes = {
     '/pengaturan': renderPengaturan,
     '/daftar': renderPendaftaranAdmin,
     '/absen': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Absensi Karyawan</h2><p class="text-slate-600">Catat kehadiran staf merchandising.</p></div>`,
-    '/analytics': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Analytics</h2><p class="text-slate-600">Analisis data dan statistik Swalayan Maga.</p></div>`,
+    '/analytics': renderAnalytics,
     '/tamu': renderTamu,
     '/staf': renderStaf,
     '/manajemen': renderManajemen,
@@ -117,6 +120,10 @@ export async function router() {
             initTextHandler();
         } else if (path === '/branding') {
             initBrandPublicHandler();
+        } else if (path === '/manajemen-branding') {
+            initBrandingHandler();
+        } else if (path === '/analytics') {
+            initAnalyticsHandler();
         } else if (path === '/pendaftaran' || path === '/daftar') {
             initPendaftaranAdminHandler();
         }
@@ -178,7 +185,7 @@ export async function router() {
 
             // --- KONTROL VISIBILITAS MENU ADMINISTRATOR (Sidebar) & ROUTE GUARD ---
             const adminMenuSection = document.getElementById('admin-menu-section');
-            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/daftar'];
+            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/daftar', '/manajemen-branding'];
 
             if (userRole === 'Administrator') {
                 if (adminMenuSection) adminMenuSection.classList.remove('hidden');
