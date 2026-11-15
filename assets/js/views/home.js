@@ -3,7 +3,7 @@ import { auth, db } from "../firebase-init.js";
 
 export function renderHome() {
     return `
-        <div class="space-y-6">
+        <div class="space-y-6 pb-10 relative">
             
             <!-- Banner Utama Selamat Datang -->
             <div class="bg-indigo-900 text-white p-6 rounded-none shadow-sm relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -34,15 +34,54 @@ export function renderHome() {
                 </div>
             </div>
 
+            <!-- Event & Kegiatan di Bawah Banner -->
+            <div class="bg-white p-5 rounded-none border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">EVENT & KEGIATAN</h3>
+                </div>
+
+                <!-- Kontainer Daftar Event -->
+                <div id="home-event-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="col-span-full p-6 text-center text-slate-400 text-xs">
+                        Memuat data event...
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL ZOOM GAMBAR EVENT (LIGHTBOX) -->
+            <div id="image-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 flex items-center justify-center p-4">
+                <div class="relative max-w-lg w-full bg-white p-2 rounded-none shadow-2xl flex flex-col items-center">
+                    <button id="close-image-modal" class="absolute -top-3 -right-3 bg-red-600 text-white rounded-full p-1.5 shadow hover:bg-red-700 transition cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                    <img id="modal-zoomed-img" src="" alt="Zoom Event" class="max-h-[80vh] w-auto object-contain">
+                    <p id="modal-zoomed-title" class="text-xs font-bold text-slate-800 mt-2 text-center"></p>
+                </div>
+            </div>
+
         </div>
     `;
 }
 
 export async function initHomeHandler() {
     const container = document.getElementById('home-banner-container');
+    const eventContainer = document.getElementById('home-event-container');
     const welcomeTitle = document.getElementById('welcome-user-title');
     const btnPrev = document.getElementById('banner-prev');
     const btnNext = document.getElementById('banner-next');
+    
+    // Modal Zoom Elemen
+    const imageModal = document.getElementById('image-modal');
+    const zoomedImg = document.getElementById('modal-zoomed-img');
+    const zoomedTitle = document.getElementById('modal-zoomed-title');
+    const closeImageModal = document.getElementById('close-image-modal');
+
+    if (closeImageModal && imageModal) {
+        closeImageModal.onclick = () => imageModal.classList.add('hidden');
+        imageModal.onclick = (e) => {
+            if (e.target === imageModal) imageModal.classList.add('hidden');
+        };
+    }
 
     // Memuat nama user yang sedang login untuk ditampilkan di Banner Utama
     try {
@@ -64,88 +103,152 @@ export async function initHomeHandler() {
         console.error("Gagal memuat nama user untuk beranda:", err);
     }
 
-    if (!container) return;
+    // --- 1. LOAD BANNER UTAMA ---
+    if (container) {
+        let autoPlayInterval = null;
+        try {
+            const querySnapshot = await getDocs(collection(db, "banner"));
+            let bannerList = [];
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data.status !== false) {
+                    bannerList.push({ id: docSnap.id, ...data });
+                }
+            });
 
-    let autoPlayInterval = null;
+            if (bannerList.length === 0) {
+                container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400">Belum ada data banner aktif.</div>`;
+            } else {
+                let currentIndex = 0;
 
-    try {
-        const querySnapshot = await getDocs(collection(db, "banner"));
-        let bannerList = [];
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            if (data.status !== false) {
-                bannerList.push({ id: docSnap.id, ...data });
+                const renderBanners = () => {
+                    let html = "";
+                    const isMobile = window.innerWidth < 768;
+                    const displayCount = isMobile ? 1 : 4;
+
+                    for (let i = 0; i < displayCount; i++) {
+                        const index = (currentIndex + i) % bannerList.length;
+                        const item = bannerList[index];
+                        const img = item.gambar || "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&auto=format&fit=crop&q=80";
+                        const title = item.nama || "Banner Utama";
+
+                        html += `
+                            <div class="border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs hover:shadow-md transition flex flex-col">
+                                <img src="${img}" alt="${title}" class="w-full h-36 object-cover">
+                                <div class="p-3">
+                                    <p class="text-sm font-medium text-slate-700 truncate">${title}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = html;
+                };
+
+                const startAutoPlay = () => {
+                    stopAutoPlay();
+                    autoPlayInterval = setInterval(() => {
+                        currentIndex = (currentIndex + 1) % bannerList.length;
+                        renderBanners();
+                    }, 3000);
+                };
+
+                const stopAutoPlay = () => {
+                    if (autoPlayInterval) clearInterval(autoPlayInterval);
+                };
+
+                renderBanners();
+                startAutoPlay();
+
+                container.onmouseenter = stopAutoPlay;
+                container.onmouseleave = startAutoPlay;
+
+                if (btnNext) {
+                    btnNext.onclick = () => {
+                        currentIndex = (currentIndex + 1) % bannerList.length;
+                        renderBanners();
+                        startAutoPlay();
+                    };
+                }
+
+                if (btnPrev) {
+                    btnPrev.onclick = () => {
+                        currentIndex = (currentIndex - 1 + bannerList.length) % bannerList.length;
+                        renderBanners();
+                        startAutoPlay();
+                    };
+                }
+
+                window.addEventListener('resize', renderBanners);
             }
-        });
-
-        if (bannerList.length === 0) {
-            container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400">Belum ada data banner aktif.</div>`;
-            return;
+        } catch (err) {
+            console.error("Gagal memuat banner beranda:", err);
+            container.innerHTML = `<div class="col-span-full p-8 text-center text-red-500">Gagal memuat banner dari database.</div>`;
         }
+    }
 
-        let currentIndex = 0;
+    // --- 2. LOAD EVENT & KEGIATAN DI BAWAH BANNER ---
+    if (eventContainer) {
+        try {
+            const eventSnapshot = await getDocs(collection(db, "event"));
+            let eventList = [];
+            eventSnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data.status !== false) {
+                    eventList.push({ id: docSnap.id, ...data });
+                }
+            });
 
-        const renderBanners = () => {
-            let html = "";
-            const isMobile = window.innerWidth < 768;
-            const displayCount = isMobile ? 1 : 4;
+            if (eventList.length === 0) {
+                eventContainer.innerHTML = `<div class="col-span-full p-6 text-center text-slate-400 text-xs">Belum ada event atau kegiatan aktif.</div>`;
+            } else {
+                let eventHtml = "";
+                eventList.forEach((item) => {
+                    const img = item.gambar || "";
+                    const title = item.judul || "Event Toko";
+                    const desc = item.deskripsi || "-";
+                    
+                    let tanggalStr = '-';
+                    if (item.tipeTanggal === 'period') {
+                        tanggalStr = `${item.tanggalMulai || ''} s/d ${item.tanggalSelesai || ''}`;
+                    } else {
+                        tanggalStr = item.tanggalSingle || item.createdAt?.substring(0, 10) || '-';
+                    }
 
-            for (let i = 0; i < displayCount; i++) {
-                const index = (currentIndex + i) % bannerList.length;
-                const item = bannerList[index];
-                const img = item.gambar || "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&auto=format&fit=crop&q=80";
-                const title = item.nama || "Banner Utama";
-
-                html += `
-                    <div class="border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs hover:shadow-md transition flex flex-col">
-                        <img src="${img}" alt="${title}" class="w-full h-36 object-cover">
-                        <div class="p-3">
-                            <p class="text-sm font-medium text-slate-700 truncate">${title}</p>
+                    eventHtml += `
+                        <div class="border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs hover:shadow-md transition flex flex-col">
+                            <!-- Foto event dengan object-contain agar tidak terpotong & tombol klik zoom -->
+                            <div class="w-full h-80 bg-slate-900 border-b border-slate-100 overflow-hidden flex items-center justify-center cursor-pointer event-thumb" data-img="${img}" data-title="${title}">
+                                ${img ? `<img src="${img}" alt="${title}" class="w-full h-full object-contain pointer-events-none hover:scale-105 transition duration-300">` : `<span class="text-xs text-slate-400">No Image</span>`}
+                            </div>
+                            <div class="p-3.5 flex flex-col justify-between flex-1 space-y-2">
+                                <div>
+                                    <span class="inline-block text-[10px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-none mb-1">${tanggalStr}</span>
+                                    <h4 class="text-xs font-bold text-slate-800 line-clamp-1">${title}</h4>
+                                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">${desc}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
+                eventContainer.innerHTML = eventHtml;
+
+                // Handler klik gambar untuk memperbesar (Zoom Modal) menggunakan Event Delegation yang aman
+                eventContainer.onclick = (e) => {
+                    const thumb = e.target.closest('.event-thumb');
+                    if (thumb) {
+                        const imgSrc = thumb.getAttribute('data-img');
+                        const imgTitle = thumb.getAttribute('data-title');
+                        if (imgSrc && imageModal && zoomedImg && zoomedTitle) {
+                            zoomedImg.src = imgSrc;
+                            zoomedTitle.textContent = imgTitle;
+                            imageModal.classList.remove('hidden');
+                        }
+                    }
+                };
             }
-            container.innerHTML = html;
-        };
-
-        const startAutoPlay = () => {
-            stopAutoPlay();
-            autoPlayInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % bannerList.length;
-                renderBanners();
-            }, 3000);
-        };
-
-        const stopAutoPlay = () => {
-            if (autoPlayInterval) clearInterval(autoPlayInterval);
-        };
-
-        renderBanners();
-        startAutoPlay();
-
-        container.onmouseenter = stopAutoPlay;
-        container.onmouseleave = startAutoPlay;
-
-        if (btnNext) {
-            btnNext.onclick = () => {
-                currentIndex = (currentIndex + 1) % bannerList.length;
-                renderBanners();
-                startAutoPlay();
-            };
+        } catch (err) {
+            console.error("Gagal memuat data event di beranda:", err);
+            eventContainer.innerHTML = `<div class="col-span-full p-6 text-center text-red-500 text-xs">Gagal memuat event dari database.</div>`;
         }
-
-        if (btnPrev) {
-            btnPrev.onclick = () => {
-                currentIndex = (currentIndex - 1 + bannerList.length) % bannerList.length;
-                renderBanners();
-                startAutoPlay();
-            };
-        }
-
-        window.addEventListener('resize', renderBanners);
-
-    } catch (err) {
-        console.error("Gagal memuat banner beranda:", err);
-        container.innerHTML = `<div class="col-span-full p-8 text-center text-red-500">Gagal memuat banner dari database.</div>`;
     }
 }

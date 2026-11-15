@@ -15,17 +15,18 @@ import { renderBranding, initBrandingHandler } from './views/manajemen-branding.
 import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/pendaftaran.js';
 import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
-import { renderLokasi, initLokasiHandler } from './views/lokasi.js'; // <-- Diimpor dari views/lokasi.js
+import { renderLokasi, initLokasiHandler } from './views/lokasi.js';
+import { renderEvent, initEventHandler } from './views/event.js';
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
     '/branding': renderBrandPublic,              // Menu Branding di Sidebar (Publik)
     '/manajemen-branding': renderBranding,        // Halaman Form Input/Admin Manajemen Branding
-    '/event': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Manajemen Event</h2><p class="text-slate-600">Kelola jadwal event toko.</p></div>`,
+    '/event': renderEvent,                        // Halaman Event (event.js)
     '/produk': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Produk</h2><p class="text-slate-600">Kelola data produk.</p></div>`,
     '/banner': renderBanner,
-    '/lokasi': renderLokasi,                      // <-- Mengarah ke renderLokasi (lokasi.js)
+    '/lokasi': renderLokasi,                      // Mengarah ke renderLokasi (lokasi.js)
     '/text': renderText,
     '/pendaftaran': renderPendaftaranAdmin,
     '/pengaturan': renderPengaturan,
@@ -58,14 +59,14 @@ async function loadHeaderProfilPerusahaan() {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            const nama = data.nama || "Swalayan Maga";
+            const nama = data.nama || "Maga Swalayan";
             const alamat = data.alamat || "-";
             const telepon = data.telepon || "-";
 
             if (nameEl) nameEl.textContent = nama;
             if (infoEl) infoEl.textContent = `${alamat} | Telp: ${telepon}`;
         } else {
-            if (nameEl) nameEl.textContent = "Swalayan Maga";
+            if (nameEl) nameEl.textContent = "Maga Swalayan";
             if (infoEl) infoEl.textContent = "- | Telp: -";
         }
     } catch (err) {
@@ -99,7 +100,7 @@ export async function router() {
         }
     }
 
-    // --- RENDER VIEW KE CONTAINER UTAMA LANGSUNG ---
+    // --- RENDER VIEW KE CONTAINER UTAMA ---
     if (appContainer) {
         const renderFunction = routes[path] || renderHome;
         appContainer.innerHTML = renderFunction();
@@ -117,7 +118,9 @@ export async function router() {
         } else if (path === '/toko') {
             initTokoPublicHandler();
         } else if (path === '/lokasi') {
-            if (typeof initLokasiHandler === 'function') initLokasiHandler(); // <-- Memanggil handler lokasi.js
+            if (typeof initLokasiHandler === 'function') initLokasiHandler();
+        } else if (path === '/event') {
+            if (typeof initEventHandler === 'function') initEventHandler();
         } else if (path === '/banner') {
             initBannerHandler();
         } else if (path === '/text') {
@@ -135,7 +138,7 @@ export async function router() {
         }
     }
 
-    // --- UPDATE INDIKATOR WARNA KELAS AKTIF PADA SIDEBAR (Siku: rounded-none) ---
+    // --- UPDATE INDIKATOR WARNA KELAS AKTIF PADA SIDEBAR ---
     const sidebarLinks = document.querySelectorAll('#sidebar-nav a');
     sidebarLinks.forEach(link => {
         const href = link.getAttribute('href');
@@ -191,7 +194,7 @@ export async function router() {
 
             // --- KONTROL VISIBILITAS MENU ADMINISTRATOR (Sidebar) & ROUTE GUARD ---
             const adminMenuSection = document.getElementById('admin-menu-section');
-            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/manajemen-branding', '/lokasi']; // Tambahkan /lokasi ke rute admin jika khusus admin
+            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/manajemen-branding', '/lokasi', '/event'];
 
             if (userRole === 'Administrator') {
                 if (adminMenuSection) adminMenuSection.classList.remove('hidden');
@@ -219,7 +222,7 @@ export async function router() {
             if (mobileEmailEl) mobileEmailEl.textContent = email;
             if (mobileRoleEl) mobileRoleEl.textContent = userRole;
 
-            // --- RENDER AVATAR DENGAN PENANGANAN ERROR & FALLBACK INSIAL ---
+            // --- RENDER AVATAR ---
             const userInitialEl = document.getElementById('user-initial');
             if (userInitialEl) {
                 const nameParts = displayName.split(' ');
@@ -268,7 +271,7 @@ export async function router() {
             }
         }
 
-        // --- RENDER BOTTOM NAVIGATION BERDASARKAN ROLE ---
+        // --- RENDER BOTTOM NAVIGATION ---
         if (bottomNav && path !== '/login') {
             if (userRole === 'Administrator') {
                 bottomNav.innerHTML = `
@@ -285,7 +288,7 @@ export async function router() {
                         <span class="text-[10px] font-medium">Branding</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/event'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
@@ -294,6 +297,7 @@ export async function router() {
                             <a href="#/analytics" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Analytics</a>
                             <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
                             <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
+                            <a href="#/event" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Event</a>
                             <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">

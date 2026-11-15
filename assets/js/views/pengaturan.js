@@ -19,6 +19,8 @@ export function renderPengaturan() {
             <!-- Form Profil Perusahaan -->
             <div class="bg-white border border-slate-200 p-4 sm:p-6 shadow-xs rounded-none">
                 <form id="form-pengaturan-perusahaan" class="space-y-4">
+                    <input type="hidden" id="comp-logo-base64">
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan / Toko</label>
@@ -46,9 +48,18 @@ export function renderPengaturan() {
                         <textarea id="comp-address" rows="3" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Masukkan alamat operasional lengkap cabang..."></textarea>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">URL / Link Logo Perusahaan</label>
-                        <input type="url" id="comp-logo" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Masukkan tautan gambar logo (opsional)">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Upload Logo Perusahaan (Maks. 192px)</label>
+                            <input type="file" id="comp-logo-file" accept="image/*" class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-none focus:outline-none bg-white file:mr-4 file:py-1 file:px-3 file:rounded-none file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400 mt-1">Otomatis diresize & dikompresi maksimal 192 piksel.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Pratinjau Logo</label>
+                            <div id="preview-logo-container" class="h-28 w-full border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden relative">
+                                <span class="text-xs text-slate-400 text-center px-2">Belum ada logo</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="pt-4 flex items-center justify-between gap-3 border-t border-slate-100">
@@ -75,7 +86,11 @@ export async function initPengaturanHandler() {
     const emailInput = document.getElementById('comp-email');
     const npwpInput = document.getElementById('comp-npwp');
     const addressInput = document.getElementById('comp-address');
-    const logoInput = document.getElementById('comp-logo');
+    
+    const inputFile = document.getElementById('comp-logo-file');
+    const inputLogoBase64 = document.getElementById('comp-logo-base64');
+    const previewContainer = document.getElementById('preview-logo-container');
+
     const toast = document.getElementById('toast-notification');
     const toastContent = document.getElementById('toast-content');
 
@@ -105,6 +120,60 @@ export async function initPengaturanHandler() {
         }, 3000);
     }
 
+    const compressImage = (file, maxDimension = 192, quality = 0.8) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxDimension) {
+                            height = Math.round((height * maxDimension) / width);
+                            width = maxDimension;
+                        }
+                    } else {
+                        if (height > maxDimension) {
+                            width = Math.round((width * maxDimension) / height);
+                            height = maxDimension;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(dataUrl);
+                };
+                img.onerror = (error) => reject(error);
+            };
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    if (inputFile) {
+        inputFile.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    const compressedBase64 = await compressImage(file, 192, 0.8);
+                    inputLogoBase64.value = compressedBase64;
+                    previewContainer.innerHTML = `<img src="${compressedBase64}" alt="Logo Preview" class="w-full h-full object-contain">`;
+                } catch (err) {
+                    console.error("Gagal memproses gambar logo:", err);
+                    showToast("Gagal memproses file gambar logo.", "error");
+                }
+            }
+        };
+    }
+
     try {
         const docRef = doc(db, "pengaturan", "profil_perusahaan");
         const docSnap = await getDoc(docRef);
@@ -115,7 +184,13 @@ export async function initPengaturanHandler() {
             if (emailInput) emailInput.value = data.email || '';
             if (npwpInput) npwpInput.value = data.npwp || '';
             if (addressInput) addressInput.value = data.alamat || '';
-            if (logoInput) logoInput.value = data.logo || '';
+            
+            if (data.logo) {
+                if (inputLogoBase64) inputLogoBase64.value = data.logo;
+                if (previewContainer) {
+                    previewContainer.innerHTML = `<img src="${data.logo}" alt="Logo Preview" class="w-full h-full object-contain">`;
+                }
+            }
         }
     } catch (err) {
         console.error("Gagal memuat profil perusahaan:", err);
@@ -144,9 +219,13 @@ export async function initPengaturanHandler() {
                     email: emailInput.value,
                     npwp: npwpInput.value,
                     alamat: addressInput.value,
-                    logo: logoInput.value,
                     updatedAt: new Date().toISOString()
                 };
+
+                const logoVal = inputLogoBase64.value;
+                if (logoVal) {
+                    payload.logo = logoVal;
+                }
 
                 await setDoc(doc(db, "pengaturan", "profil_perusahaan"), payload);
                 showToast("Profil perusahaan berhasil disimpan!", "success");

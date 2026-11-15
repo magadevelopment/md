@@ -6,11 +6,17 @@ export function renderPendaftaranAdmin() {
         <div class="space-y-6 max-w-6xl mx-auto">
             <!-- Header Halaman -->
             <div class="bg-white p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                        <span class="p-2 bg-indigo-50 text-indigo-600 rounded-none">📋</span> Rekapitulasi Pendaftaran Distributor (Admin)
-                    </h1>
-                    <p class="text-xs text-slate-500 mt-0.5">Daftar seluruh pendaftaran distributor dari semua staf atau pengguna.</p>
+                <div class="flex items-center gap-3">
+                    <a href="#/manajemen" data-link class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center gap-1.5 rounded-none">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Kembali
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span class="p-2 bg-indigo-50 text-indigo-600 rounded-none">📋</span> Rekapitulasi Pendaftaran Distributor (Admin)
+                        </h1>
+                        <p class="text-xs text-slate-500 mt-0.5">Daftar seluruh pendaftaran distributor dari semua staf atau pengguna.</p>
+                    </div>
                 </div>
                 <button id="btn-export-excel" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-none text-xs font-semibold shadow-md transition flex items-center gap-2 cursor-pointer w-full md:w-auto justify-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -50,6 +56,12 @@ export function initPendaftaranAdminHandler() {
 
                 allData.push({ id, ...item });
 
+                // Format tanggal jika ada (mengambil YYYY-MM-DD atau ISO string)
+                let formattedDate = '-';
+                if (item.createdAt) {
+                    formattedDate = item.createdAt.substring(0, 10);
+                }
+
                 // --- 1. RENDER TAMPILAN CARD (KHUSUS HP / MOBILE) ---
                 cardHtml += `
                     <div class="bg-white border border-slate-200 p-4 rounded-none shadow-xs space-y-3">
@@ -63,6 +75,10 @@ export function initPendaftaranAdminHandler() {
                             </button>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <span class="text-slate-400 block text-[10px] uppercase">Tanggal</span>
+                                <span class="font-medium text-slate-700">${formattedDate}</span>
+                            </div>
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase">Penanggungjawab</span>
                                 <span class="font-medium text-slate-700">${item.penanggungjawab || '-'}</span>
@@ -96,6 +112,7 @@ export function initPendaftaranAdminHandler() {
                 tableRowsHtml += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3 border-r border-slate-100 font-bold text-indigo-600">#${index}</td>
+                        <td class="p-3 border-r border-slate-100 text-slate-600 whitespace-nowrap">${formattedDate}</td>
                         <td class="p-3 border-r border-slate-100 font-semibold text-slate-900">${item.nama || '-'}</td>
                         <td class="p-3 border-r border-slate-100">${item.penanggungjawab || '-'}</td>
                         <td class="p-3 border-r border-slate-100">
@@ -128,6 +145,7 @@ export function initPendaftaranAdminHandler() {
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase font-bold text-[10px]">
                                     <th class="p-3 border-r border-slate-200">#</th>
+                                    <th class="p-3 border-r border-slate-200">Tanggal</th>
                                     <th class="p-3 border-r border-slate-200">Distributor</th>
                                     <th class="p-3 border-r border-slate-200">Penanggungjawab</th>
                                     <th class="p-3 border-r border-slate-200">Kontak Kantor</th>
@@ -167,11 +185,12 @@ export function initPendaftaranAdminHandler() {
             }
 
             let csvContent = "\uFEFF"; 
-            csvContent += "No,Nama Distributor,Penanggungjawab,Kontak Kantor,Nama Sales,HP Sales,Nama Supervisor,HP Supervisor,Produk,Termin Pembayaran,Tanggal Dibuat\n";
+            csvContent += "No,Tanggal Dibuat,Nama Distributor,Penanggungjawab,Kontak Kantor,Nama Sales,HP Sales,Nama Supervisor,HP Supervisor,Produk,Termin Pembayaran\n";
 
             allData.forEach((item, idx) => {
                 const row = [
                     idx + 1,
+                    `"${(item.createdAt || '').substring(0, 10)}"`,
                     `"${(item.nama || '').replace(/"/g, '""')}"`,
                     `"${(item.penanggungjawab || '').replace(/"/g, '""')}"`,
                     `"${(item.kontak_kantor || '').replace(/"/g, '""')}"`,
@@ -180,8 +199,7 @@ export function initPendaftaranAdminHandler() {
                     `"${(item.spv_nama || '').replace(/"/g, '""')}"`,
                     `"${(item.spv_hp || '').replace(/"/g, '""')}"`,
                     `"${(item.produk || '').replace(/\n/g, ' ').replace(/"/g, '""')}"`,
-                    `"${(item.termin || '').replace(/"/g, '""')}"`,
-                    `"${(item.createdAt || '').replace(/"/g, '""')}"`
+                    `"${(item.termin || '').replace(/"/g, '""')}"`
                 ];
                 csvContent += row.join(",") + "\n";
             });
