@@ -1,26 +1,30 @@
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
-import { renderHome } from './views/home.js';
+import { renderHome, initHomeHandler } from './views/home.js';
 import { renderLogin, initLoginHandler } from './views/login.js';
 import { renderManajemen } from './views/manajemen.js';
 import { renderTamu, initTamuHandler } from './views/tamu.js';
 import { renderStaf, initStafHandler } from './views/staf.js';
 import { renderPengaturan, initPengaturanHandler } from './views/pengaturan.js';
-import { renderToko, initTokoHandler } from './views/lokasi.js'; // <-- Diperbarui: Import render & handler toko dari lokasi.js
+import { renderTokoPublic, initTokoPublicHandler } from './views/toko.js';
+import { renderBanner, initBannerHandler } from './views/banner.js';
+import { renderText, initTextHandler } from './views/text.js';
+import { renderBrandPublic, initBrandPublicHandler } from './views/brand.js';
+import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/pendaftaran.js';
 
 const routes = {
     '/': renderHome,
-    '/toko': renderToko, // <-- Diperbarui: Menampilkan halaman manajemen toko dari lokasi.js
-    '/branding': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Manajemen Branding</h2><p class="text-slate-600">Atur materi promosi dan branding.</p></div>`,
+    '/toko': renderTokoPublic,
+    '/branding': renderBrandPublic,
     '/event': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Manajemen Event</h2><p class="text-slate-600">Kelola jadwal event toko.</p></div>`,
     '/produk': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Produk</h2><p class="text-slate-600">Kelola data produk.</p></div>`,
-    '/banner': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Banner</h2><p class="text-slate-600">Kelola banner utama.</p></div>`,
-    '/lokasi': renderToko, // <-- Bisa juga diarahkan ke lokasi.js jika diperlukan
-    '/text': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Running Text</h2><p class="text-slate-600">Kelola teks berjalan.</p></div>`,
-    '/pendaftaran': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Pendaftaran</h2><p class="text-slate-600">Formulir pendaftaran distributor.</p></div>`,
+    '/banner': renderBanner,
+    '/lokasi': renderTokoPublic,
+    '/text': renderText,
+    '/pendaftaran': renderPendaftaranAdmin,
     '/pengaturan': renderPengaturan,
-    '/daftar': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Daftar Pendaftaran</h2><p class="text-slate-600">Formulir pendaftaran distributor dan produk baru.</p></div>`,
+    '/daftar': renderPendaftaranAdmin,
     '/absen': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Absensi Karyawan</h2><p class="text-slate-600">Catat kehadiran staf merchandising.</p></div>`,
     '/analytics': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Analytics</h2><p class="text-slate-600">Analisis data dan statistik Swalayan Maga.</p></div>`,
     '/tamu': renderTamu,
@@ -38,6 +42,32 @@ window.handleLogout = () => {
     });
 };
 
+// Fungsi untuk memuat Nama, Alamat, dan Telepon Perusahaan ke Header Atas
+async function loadHeaderProfilPerusahaan() {
+    try {
+        const docRef = doc(db, "pengaturan", "profil_perusahaan");
+        const docSnap = await getDoc(docRef);
+
+        const nameEl = document.getElementById('header-company-name');
+        const infoEl = document.getElementById('header-company-info');
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const nama = data.nama || "Swalayan Maga";
+            const alamat = data.alamat || "-";
+            const telepon = data.telepon || "-";
+
+            if (nameEl) nameEl.textContent = nama;
+            if (infoEl) infoEl.textContent = `${alamat} | Telp: ${telepon}`;
+        } else {
+            if (nameEl) nameEl.textContent = "Swalayan Maga";
+            if (infoEl) infoEl.textContent = "- | Telp: -";
+        }
+    } catch (err) {
+        console.error("Gagal memuat profil perusahaan untuk header:", err);
+    }
+}
+
 export async function router() {
     let path = location.hash.slice(1).toLowerCase() || '/';
     const appContainer = document.getElementById('app');
@@ -45,6 +75,8 @@ export async function router() {
     const sidebar = document.getElementById('sidebar');
     const headerEl = document.querySelector('header');
     const bottomNav = document.getElementById('bottom-nav');
+
+    loadHeaderProfilPerusahaan();
 
     if (path === '/login') {
         if (sidebar) sidebar.style.display = 'none';
@@ -67,7 +99,9 @@ export async function router() {
         const renderFunction = routes[path] || renderHome;
         appContainer.innerHTML = renderFunction();
 
-        if (path === '/login') {
+        if (path === '/') {
+            initHomeHandler();
+        } else if (path === '/login') {
             initLoginHandler();
         } else if (path === '/tamu') {
             initTamuHandler();
@@ -76,11 +110,19 @@ export async function router() {
         } else if (path === '/pengaturan') {
             initPengaturanHandler();
         } else if (path === '/toko' || path === '/lokasi') {
-            initTokoHandler(); // <-- Diperbarui: Menjalankan inisialisasi handler toko/lokasi
+            initTokoPublicHandler();
+        } else if (path === '/banner') {
+            initBannerHandler();
+        } else if (path === '/text') {
+            initTextHandler();
+        } else if (path === '/branding') {
+            initBrandPublicHandler();
+        } else if (path === '/pendaftaran' || path === '/daftar') {
+            initPendaftaranAdminHandler();
         }
     }
 
-    // --- UPDATE INDIKATOR WARNA KELAS AKTIF PADA SIDEBAR ---
+    // --- UPDATE INDIKATOR WARNA KELAS AKTIF PADA SIDEBAR (Siku: rounded-none) ---
     const sidebarLinks = document.querySelectorAll('#sidebar-nav a');
     sidebarLinks.forEach(link => {
         const href = link.getAttribute('href');
@@ -136,7 +178,7 @@ export async function router() {
 
             // --- KONTROL VISIBILITAS MENU ADMINISTRATOR (Sidebar) & ROUTE GUARD ---
             const adminMenuSection = document.getElementById('admin-menu-section');
-            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan'];
+            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/daftar'];
 
             if (userRole === 'Administrator') {
                 if (adminMenuSection) adminMenuSection.classList.remove('hidden');
@@ -164,24 +206,39 @@ export async function router() {
             if (mobileEmailEl) mobileEmailEl.textContent = email;
             if (mobileRoleEl) mobileRoleEl.textContent = userRole;
 
+            // --- RENDER AVATAR DENGAN PENANGANAN ERROR & FALLBACK INSIAL ---
             const userInitialEl = document.getElementById('user-initial');
             if (userInitialEl) {
-                if (photoURL) {
-                    userInitialEl.innerHTML = `<img src="${photoURL}" alt="Profile" class="w-full h-full object-cover rounded-none">`;
-                    userInitialEl.className = "w-8 h-8 rounded-none overflow-hidden border border-slate-200 flex-shrink-0";
+                const nameParts = displayName.split(' ');
+                const initials = nameParts.length > 1 
+                    ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() 
+                    : displayName.substring(0, 2).toUpperCase();
+
+                if (photoURL && photoURL.trim() !== "") {
+                    userInitialEl.innerHTML = `<img src="${photoURL}" alt="Profile" class="w-full h-full object-cover rounded-none" onerror="this.onerror=null; this.parentNode.innerHTML='${initials}';">`;
+                    userInitialEl.className = "w-8 h-8 rounded-none overflow-hidden border border-slate-200 flex items-center justify-center bg-indigo-600 text-white font-bold text-xs flex-shrink-0";
                 } else {
-                    const nameParts = displayName.split(' ');
-                    const initials = nameParts.length > 1 
-                        ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() 
-                        : displayName.substring(0, 2).toUpperCase();
                     userInitialEl.textContent = initials;
                     userInitialEl.className = "w-8 h-8 rounded-none bg-indigo-600 text-white font-bold flex items-center justify-center text-xs flex-shrink-0";
                 }
             }
 
             const mobileAvatarImg = document.getElementById('mobile-user-avatar-img');
-            if (mobileAvatarImg && photoURL) {
-                mobileAvatarImg.src = photoURL;
+            if (mobileAvatarImg) {
+                if (photoURL && photoURL.trim() !== "") {
+                    mobileAvatarImg.src = photoURL;
+                    mobileAvatarImg.onerror = function() {
+                        this.style.display = 'none';
+                        if (this.parentNode) {
+                            const nameParts = displayName.split(' ');
+                            this.parentNode.textContent = nameParts.length > 1 
+                                ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() 
+                                : displayName.substring(0, 2).toUpperCase();
+                        }
+                    };
+                } else {
+                    mobileAvatarImg.style.display = 'none';
+                }
             }
 
             const profileBtn = document.getElementById('mobile-profile-btn');
@@ -215,7 +272,7 @@ export async function router() {
                         <span class="text-[10px] font-medium">Branding</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
@@ -225,7 +282,6 @@ export async function router() {
                             <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
                             <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
                             <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
-                            <a href="#/pengaturan" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Pengaturan</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -247,10 +303,6 @@ export async function router() {
                     <a href="#/branding" data-link class="flex flex-col items-center justify-center ${path === '/branding' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                         <span class="text-[10px] font-medium">Branding</span>
-                    </a>
-                    <a href="#/daftar" data-link class="flex flex-col items-center justify-center ${path === '/daftar' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
-                        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-                        <span class="text-[10px] font-medium">Daftar</span>
                     </a>
                     <div class="relative flex-1">
                         <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/absen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
