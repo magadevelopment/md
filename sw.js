@@ -1,17 +1,16 @@
-const CACHE_NAME = 'maga-swalayan-cache-v1';
+const CACHE_NAME = 'maga-swalayan-cache-v3';
 const assetsToCache = [
     './index.html',
     './manifest.json',
     './assets/css/style.css',
+    './assets/icons/maga.png',
     './assets/js/app.js',
+    './assets/js/firebase-init.js',
     './assets/js/router.js',
     './assets/js/views/home.js',
-    './assets/js/views/about.js',
-    './assets/js/views/contact.js',
-    'https://cdn.tailwindcss.com'
+    './assets/js/views/login.js'
 ];
 
-// Install Service Worker & Cache Aset
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
@@ -21,7 +20,6 @@ self.addEventListener('install', event => {
     self.skipWaiting();
 });
 
-// Activate & Hapus Cache Lama jika ada pembaruan versi
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys => {
@@ -30,14 +28,17 @@ self.addEventListener('activate', event => {
             );
         })
     );
-    self.claim();
+    // DIPERBAIKI: Menggunakan clients.claim() agar Service Worker langsung aktif mengontrol halaman
+    clients.claim();
 });
 
-// Fetch Strategy: Cache dengan fallback ke Network
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then(response => {
-            return response || fetch(event.request);
-        })
-    );
+    // Hanya tangani request lokal untuk menghindari error CORS CDN
+    if (event.request.url.startsWith(self.location.origin)) {
+        event.respondWith(
+            caches.match(event.request).then(response => {
+                return response || fetch(event.request);
+            })
+        );
+    }
 });
