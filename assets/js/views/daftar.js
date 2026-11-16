@@ -5,14 +5,14 @@ export function renderDaftar() {
     return `
         <div class="space-y-6 max-w-5xl mx-auto">
             <!-- Header Halaman -->
-            <div class="bg-white p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="bg-white dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                        <span class="p-2 bg-indigo-50 text-indigo-600 rounded-none">📋</span> Daftar Pendaftaran Distributor Saya
+                    <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        <span class="p-2 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-none">📋</span> Daftar Pendaftaran Distributor Saya
                     </h1>
-                    <p class="text-xs text-slate-500 mt-0.5">Kelola dan tambah data pendaftaran distributor Anda.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kelola dan tambah data pendaftaran distributor Anda.</p>
                 </div>
-                <button id="btn-open-modal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-none text-xs font-semibold shadow-md transition flex items-center gap-2 cursor-pointer">
+                <button id="btn-open-modal" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white px-4 py-2.5 rounded-none text-xs font-semibold shadow-md transition flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Tambah Pendaftaran Baru
                 </button>
@@ -20,19 +20,19 @@ export function renderDaftar() {
 
             <!-- List Card Distributor -->
             <div id="daftar-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="col-span-full p-8 text-center text-slate-400 bg-white border border-slate-200">
+                <div class="col-span-full p-8 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                     Memuat data pendaftaran...
                 </div>
             </div>
 
             <!-- Modal Form Pendaftaran -->
-            <div id="modal-pendaftaran" class="fixed inset-0 bg-slate-900/50 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-                <div class="bg-white max-w-lg w-full p-6 shadow-2xl relative my-8 border border-slate-200">
-                    <div class="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
-                        <h3 id="modal-title" class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-none">📄</span> Formulir Pendaftaran Distributor Baru
+            <div id="modal-pendaftaran" class="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/70 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-white dark:bg-slate-900 max-w-lg w-full p-6 shadow-2xl relative my-8 border border-slate-200 dark:border-slate-800">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                        <h3 id="modal-title" class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                            <span class="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-none">📄</span> Formulir Pendaftaran Distributor Baru
                         </h3>
-                        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1 rounded-none hover:bg-slate-100">
+                        <button id="btn-close-modal" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-none hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -41,50 +41,50 @@ export function renderDaftar() {
                         <input type="hidden" id="distributor-id">
                         
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Distributor</label>
-                            <input type="text" id="nama" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan nama distributor">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Distributor</label>
+                            <input type="text" id="nama" required class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan nama distributor">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Penanggungjawab</label>
-                            <input type="text" id="penanggungjawab" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama penanggungjawab">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Penanggungjawab</label>
+                            <input type="text" id="penanggungjawab" required class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Nama penanggungjawab">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor HP Kantor / Admin</label>
-                            <input type="text" id="kontak_kantor" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: 081234567890">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nomor HP Kantor / Admin</label>
+                            <input type="text" id="kontak_kantor" required class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 081234567890">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Sales</label>
-                                <input type="text" id="sales_nama" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan nama sales">
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Sales</label>
+                                <input type="text" id="sales_nama" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan nama sales">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">No HP Sales</label>
-                                <input type="text" id="sales_hp" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: 081234567891">
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">No HP Sales</label>
+                                <input type="text" id="sales_hp" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 081234567891">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Supervisor</label>
-                                <input type="text" id="spv_nama" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan nama supervisor">
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Supervisor</label>
+                                <input type="text" id="spv_nama" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan nama supervisor">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">No HP Supervisor</label>
-                                <input type="text" id="spv_hp" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: 081234567892">
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">No HP Supervisor</label>
+                                <input type="text" id="spv_hp" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 081234567892">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Produk yang Dibawa</label>
-                            <textarea id="produk" rows="3" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Daftar produk yang dibawa"></textarea>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Produk yang Dibawa</label>
+                            <textarea id="produk" rows="3" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Daftar produk yang dibawa"></textarea>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Jatuh Tempo (Termin Pembayaran)</label>
-                            <select id="termin" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Jatuh Tempo (Termin Pembayaran)</label>
+                            <select id="termin" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                                 <option value="">-- Pilih Jangka Waktu Jatuh Tempo --</option>
                                 <option value="7 Hari">7 Hari</option>
                                 <option value="14 Hari">14 Hari</option>
@@ -97,13 +97,13 @@ export function renderDaftar() {
 
                         <!-- Input Custom Termin (Muncul jika pilih Lainnya) -->
                         <div id="termin-custom-container" class="hidden">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Tulis Jangka Waktu Jatuh Tempo</label>
-                            <input type="text" id="termin_custom" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: 90 Hari atau COD">
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Tulis Jangka Waktu Jatuh Tempo</label>
+                            <input type="text" id="termin_custom" class="w-full text-xs px-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 90 Hari atau COD">
                         </div>
 
-                        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                            <button type="button" id="btn-cancel" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-none transition cursor-pointer">Batal</button>
-                            <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-none transition shadow-md cursor-pointer flex items-center gap-1.5">
+                        <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <button type="button" id="btn-cancel" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition cursor-pointer">Batal</button>
+                            <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 rounded-none transition shadow-md cursor-pointer flex items-center gap-1.5">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                                 Simpan & Kirim
                             </button>
@@ -152,7 +152,7 @@ export function initDaftarHandler() {
             document.getElementById('distributor-id').value = '';
             if (customTerminContainer) customTerminContainer.classList.add('hidden');
             if (inputCustomTermin) inputCustomTermin.required = false;
-            modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-none">📄</span> Formulir Pendaftaran Distributor Baru`;
+            modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-none">📄</span> Formulir Pendaftaran Distributor Baru`;
         }
     };
 
@@ -165,7 +165,7 @@ export function initDaftarHandler() {
         try {
             const currentUser = auth.currentUser;
             if (!currentUser) {
-                container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 bg-white border border-slate-200">Silakan login terlebih dahulu.</div>`;
+                container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">Silakan login terlebih dahulu.</div>`;
                 return;
             }
 
@@ -181,39 +181,39 @@ export function initDaftarHandler() {
                 if (!item.nama || item.nama.trim() === "") return;
 
                 listHtml += `
-                    <div class="bg-white p-5 border border-slate-200 shadow-xs space-y-4 relative">
+                    <div class="bg-white dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4 relative">
                         <div class="flex justify-between items-start">
                             <div class="flex items-center gap-2">
-                                <span class="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 rounded-none text-[10px] font-bold">#${index}</span>
-                                <h3 class="text-sm font-bold text-slate-800">${item.nama}</h3>
+                                <span class="px-2.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 rounded-none text-[10px] font-bold border border-indigo-100 dark:border-indigo-900">#${index}</span>
+                                <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100">${item.nama}</h3>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button onclick="window.editDaftar('${id}')" class="p-1.5 text-slate-400 hover:text-indigo-600 rounded-none hover:bg-slate-50 transition" title="Edit">✏️</button>
-                                <button onclick="window.deleteDaftar('${id}')" class="p-1.5 text-slate-400 hover:text-red-600 rounded-none hover:bg-slate-50 transition" title="Hapus">🗑️</button>
+                                <button onclick="window.editDaftar('${id}')" class="p-1.5 text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-none hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer" title="Edit">✏️</button>
+                                <button onclick="window.deleteDaftar('${id}')" class="p-1.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-none hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer" title="Hapus">🗑️</button>
                             </div>
                         </div>
 
-                        <p class="text-xs text-slate-500">PJ: <span class="font-medium text-slate-700">${item.penanggungjawab || '-'}</span></p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">PJ: <span class="font-medium text-slate-700 dark:text-slate-200">${item.penanggungjawab || '-'}</span></p>
 
                         <div class="grid grid-cols-2 gap-3 pt-1">
-                            <div class="bg-slate-50 p-3 rounded-none border border-slate-100">
-                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Kontak Kantor</span>
-                                <span class="text-xs font-semibold text-slate-700">${item.kontak_kantor || '-'}</span>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-none border border-slate-100 dark:border-slate-800">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Kontak Kantor</span>
+                                <span class="text-xs font-semibold text-slate-700 dark:text-slate-200">${item.kontak_kantor || '-'}</span>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-none border border-slate-100">
-                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Termin Pembayaran</span>
-                                <span class="text-xs font-semibold text-indigo-600">${item.termin || '-'}</span>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-none border border-slate-100 dark:border-slate-800">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Termin Pembayaran</span>
+                                <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">${item.termin || '-'}</span>
                             </div>
                         </div>
 
-                        <div class="text-xs space-y-1 bg-indigo-50/40 p-3 rounded-none border border-indigo-50">
-                            <div class="flex justify-between"><span class="text-slate-500">Sales:</span> <span class="font-semibold text-slate-700">${item.sales_nama || '-'} (${item.sales_hp || '-'})</span></div>
-                            <div class="flex justify-between"><span class="text-slate-500">Supervisor:</span> <span class="font-semibold text-slate-700">${item.spv_nama || '-'} (${item.spv_hp || '-'})</span></div>
+                        <div class="text-xs space-y-1 bg-indigo-50/40 dark:bg-indigo-950/30 p-3 rounded-none border border-indigo-50 dark:border-indigo-950/50">
+                            <div class="flex justify-between"><span class="text-slate-500 dark:text-slate-400">Sales:</span> <span class="font-semibold text-slate-700 dark:text-slate-200">${item.sales_nama || '-'} (${item.sales_hp || '-'})</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500 dark:text-slate-400">Supervisor:</span> <span class="font-semibold text-slate-700 dark:text-slate-200">${item.spv_nama || '-'} (${item.spv_hp || '-'})</span></div>
                         </div>
 
                         <div>
-                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Produk:</span>
-                            <div class="bg-slate-50 p-3 rounded-none border border-slate-100 text-xs text-slate-700 whitespace-pre-line">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">Produk:</span>
+                            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-none border border-slate-100 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 whitespace-pre-line">
                                 ${item.produk || '-'}
                             </div>
                         </div>
@@ -223,13 +223,13 @@ export function initDaftarHandler() {
             });
 
             if (listHtml === "") {
-                container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 bg-white border border-slate-200">Belum ada data pendaftaran distributor Anda.</div>`;
+                container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">Belum ada data pendaftaran distributor Anda.</div>`;
             } else {
                 container.innerHTML = listHtml;
             }
         } catch (err) {
             console.error("Gagal memuat data pendaftaran:", err);
-            container.innerHTML = `<div class="col-span-full p-8 text-center text-red-500 bg-white border border-slate-200">Gagal memuat data dari database.</div>`;
+            container.innerHTML = `<div class="col-span-full p-8 text-center text-red-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">Gagal memuat data dari database.</div>`;
         }
     };
 
@@ -319,7 +319,7 @@ export function initDaftarHandler() {
                     inputCustomTermin.value = '';
                 }
 
-                modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-none">✏️</span> Edit Pendaftaran Distributor`;
+                modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-none">✏️</span> Edit Pendaftaran Distributor`;
                 toggleModal(true);
             }
         } catch (err) {

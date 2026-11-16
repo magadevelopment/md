@@ -14,6 +14,22 @@ window.toggleSidebar = function() {
     }
 };
 
+// 1.5. Inisialisasi Mode Gelap & Cerah Berdasarkan LocalStorage
+function initAppTheme() {
+    const htmlEl = document.documentElement; // tag <html>
+    const savedTheme = localStorage.getItem('maga_theme');
+    
+    // Jika tersimpan 'dark' atau sistem mendukung mode gelap dan belum ada settingan
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlEl.classList.add('dark');
+    } else {
+        htmlEl.classList.remove('dark');
+    }
+}
+
+// Jalankan inisialisasi tema saat aplikasi pertama kali dimuat
+initAppTheme();
+
 // 2. Jalankan Router SPA
 initRouter();
 

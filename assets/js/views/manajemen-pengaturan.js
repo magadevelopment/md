@@ -12,13 +12,13 @@ export function renderPengaturan() {
             </div>
 
             <!-- Header Halaman & Tombol Kembali -->
-            <div class="bg-white p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-lg sm:text-xl font-bold text-slate-800">Pengaturan Perusahaan</h1>
-                    <p class="text-xs text-slate-500 mt-0.5">Kelola identitas operasional serta narasi Company Profile Swalayan Maga.</p>
+                    <h1 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">Pengaturan Perusahaan</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kelola identitas operasional serta narasi Company Profile Swalayan Maga.</p>
                 </div>
-                <a href="#/manajemen" data-link class="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold transition rounded-none">
-                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="#/manajemen" data-link class="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition rounded-none">
+                    <svg class="w-4 h-4 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                     <span>Kembali</span>
@@ -26,65 +26,65 @@ export function renderPengaturan() {
             </div>
 
             <!-- Tab Navigation -->
-            <div class="flex border-b border-slate-200 bg-white">
-                <button type="button" id="tab-btn-profil" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 cursor-pointer">
+            <div class="flex border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <button type="button" id="tab-btn-profil" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 transition flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                     Profil Perusahaan
                 </button>
-                <button type="button" id="tab-btn-narasi" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 cursor-pointer">
+                <button type="button" id="tab-btn-narasi" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition flex items-center gap-2 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     Company Profile (Narasi)
                 </button>
             </div>
 
             <!-- Tab Content 1: Profil Perusahaan -->
-            <div id="tab-content-profil" class="bg-white border border-slate-200 p-4 sm:p-6 shadow-xs rounded-none">
+            <div id="tab-content-profil" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs rounded-none">
                 <form id="form-pengaturan-perusahaan" class="space-y-4">
                     <input type="hidden" id="comp-logo-base64">
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Perusahaan / Toko</label>
-                            <input type="text" id="comp-name" required class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Contoh: PT Swalayan Maga Utama">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Perusahaan / Toko</label>
+                            <input type="text" id="comp-name" required class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: PT Swalayan Maga Utama">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Telepon / WhatsApp</label>
-                            <input type="text" id="comp-phone" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Contoh: 081234567890">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor Telepon / WhatsApp</label>
+                            <input type="text" id="comp-phone" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 081234567890">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Resmi</label>
-                            <input type="email" id="comp-email" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Contoh: info@swalayanmaga.com">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Resmi</label>
+                            <input type="email" id="comp-email" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: info@swalayanmaga.com">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">NPWP Perusahaan</label>
-                            <input type="text" id="comp-npwp" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Contoh: 01.234.567.8-901.000">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">NPWP Perusahaan</label>
+                            <input type="text" id="comp-npwp" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: 01.234.567.8-901.000">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
-                        <textarea id="comp-address" rows="3" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Masukkan alamat operasional lengkap cabang..."></textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Alamat Lengkap</label>
+                        <textarea id="comp-address" rows="3" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan alamat operasional lengkap cabang..."></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Upload Logo Perusahaan (Maks. 192px)</label>
-                            <input type="file" id="comp-logo-file" accept="image/*" class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-none focus:outline-none bg-white file:mr-4 file:py-1 file:px-3 file:rounded-none file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                            <p class="text-[10px] text-slate-400 mt-1">Otomatis diresize & dikompresi maksimal 192 piksel.</p>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Upload Logo Perusahaan (Maks. 192px)</label>
+                            <input type="file" id="comp-logo-file" accept="image/*" class="w-full px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 file:mr-4 file:py-1 file:px-3 file:rounded-none file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:dark:bg-indigo-950/60 file:text-indigo-700 file:dark:text-indigo-300 hover:file:bg-indigo-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Otomatis diresize & dikompresi maksimal 192 piksel.</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Pratinjau Logo</label>
-                            <div id="preview-logo-container" class="h-28 w-full border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden relative">
-                                <span class="text-xs text-slate-400 text-center px-2">Belum ada logo</span>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pratinjau Logo</label>
+                            <div id="preview-logo-container" class="h-28 w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-center overflow-hidden relative">
+                                <span class="text-xs text-slate-400 dark:text-slate-500 text-center px-2">Belum ada logo</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
-                        <button type="submit" id="btn-save-comp" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition rounded-none cursor-pointer flex items-center justify-center gap-2">
+                    <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+                        <button type="submit" id="btn-save-comp" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-xs font-semibold transition rounded-none cursor-pointer flex items-center justify-center gap-2 shadow-md">
                             <span>Simpan Perubahan</span>
                         </button>
                     </div>
@@ -92,46 +92,46 @@ export function renderPengaturan() {
             </div>
 
             <!-- Tab Content 2: Company Profile Narasi dengan Toolbar Format Teks -->
-            <div id="tab-content-narasi" class="hidden bg-white border border-slate-200 p-4 sm:p-6 shadow-xs rounded-none">
+            <div id="tab-content-narasi" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xs rounded-none">
                 <form id="form-company-profile" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Judul / Profil Singkat Perusahaan</label>
-                        <input type="text" id="narrative-title" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Contoh: Tentang Maga Swalayan">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Judul / Profil Singkat Perusahaan</label>
+                        <input type="text" id="narrative-title" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Contoh: Tentang Maga Swalayan">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Visi Perusahaan</label>
-                        <textarea id="narrative-vision" rows="2" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Masukkan visi perusahaan..."></textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Visi Perusahaan</label>
+                        <textarea id="narrative-vision" rows="2" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan visi perusahaan..."></textarea>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Misi Perusahaan</label>
-                        <textarea id="narrative-mission" rows="3" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition" placeholder="Masukkan poin-poin misi perusahaan..."></textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Misi Perusahaan</label>
+                        <textarea id="narrative-mission" rows="3" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Masukkan poin-poin misi perusahaan..."></textarea>
                     </div>
 
                     <!-- Sejarah & Deskripsi Lengkap dengan Toolbar Format Teks -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <label class="block text-xs font-semibold text-slate-700">Sejarah & Deskripsi Lengkap Company Profile</label>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Sejarah & Deskripsi Lengkap Company Profile</label>
                             <!-- Toolbar Tombol Format -->
-                            <div class="flex flex-wrap items-center gap-1 bg-slate-100 p-1 border border-slate-200">
-                                <button type="button" onclick="formatText('bold')" class="px-2 py-1 text-[11px] font-bold bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Tebal (Bold)">B</button>
-                                <button type="button" onclick="formatText('italic')" class="px-2 py-1 text-[11px] italic bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Miring (Italic)">I</button>
-                                <button type="button" onclick="formatText('underline')" class="px-2 py-1 text-[11px] underline bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Garis Bawah (Underline)">U</button>
-                                <span class="w-[1px] h-4 bg-slate-300 mx-0.5"></span>
-                                <button type="button" onclick="formatText('left')" class="px-2 py-1 text-[11px] bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Rata Kiri">⫷</button>
-                                <button type="button" onclick="formatText('center')" class="px-2 py-1 text-[11px] bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Tengah">⫾</button>
-                                <button type="button" onclick="formatText('right')" class="px-2 py-1 text-[11px] bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Rata Kanan">⫸</button>
-                                <button type="button" onclick="formatText('justify')" class="px-2 py-1 text-[11px] bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Rata Kanan-Kiri">≣</button>
-                                <span class="w-[1px] h-4 bg-slate-300 mx-0.5"></span>
-                                <button type="button" onclick="formatText('list')" class="px-2 py-1 text-[11px] bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer" title="Daftar Berurutan / Bullet">1.</button>
+                            <div class="flex flex-wrap items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
+                                <button type="button" onclick="formatText('bold')" class="px-2 py-1 text-[11px] font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Tebal (Bold)">B</button>
+                                <button type="button" onclick="formatText('italic')" class="px-2 py-1 text-[11px] italic bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Miring (Italic)">I</button>
+                                <button type="button" onclick="formatText('underline')" class="px-2 py-1 text-[11px] underline bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Garis Bawah (Underline)">U</button>
+                                <span class="w-[1px] h-4 bg-slate-300 dark:bg-slate-600 mx-0.5"></span>
+                                <button type="button" onclick="formatText('left')" class="px-2 py-1 text-[11px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Rata Kiri">⫷</button>
+                                <button type="button" onclick="formatText('center')" class="px-2 py-1 text-[11px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Tengah">⫾</button>
+                                <button type="button" onclick="formatText('right')" class="px-2 py-1 text-[11px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Rata Kanan">⫸</button>
+                                <button type="button" onclick="formatText('justify')" class="px-2 py-1 text-[11px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Rata Kanan-Kiri">≣</button>
+                                <span class="w-[1px] h-4 bg-slate-300 dark:bg-slate-600 mx-0.5"></span>
+                                <button type="button" onclick="formatText('list')" class="px-2 py-1 text-[11px] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition cursor-pointer" title="Daftar Berurutan / Bullet">1.</button>
                             </div>
                         </div>
-                        <textarea id="narrative-history" rows="6" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 transition font-mono" placeholder="Tuliskan latar belakang, sejarah, atau narasi lengkap profil perusahaan di sini..."></textarea>
+                        <textarea id="narrative-history" rows="6" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 transition font-mono bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Tuliskan latar belakang, sejarah, atau narasi lengkap profil perusahaan di sini..."></textarea>
                     </div>
 
-                    <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
-                        <button type="submit" id="btn-save-narrative" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition rounded-none cursor-pointer flex items-center justify-center gap-2">
+                    <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+                        <button type="submit" id="btn-save-narrative" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-xs font-semibold transition rounded-none cursor-pointer flex items-center justify-center gap-2 shadow-md">
                             <span>Simpan Company Profile</span>
                         </button>
                     </div>
@@ -196,15 +196,15 @@ export async function initPengaturanHandler() {
 
     if (tabBtnProfil && tabBtnNarasi && tabContentProfil && tabContentNarasi) {
         tabBtnProfil.onclick = () => {
-            tabBtnProfil.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 cursor-pointer";
-            tabBtnNarasi.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 cursor-pointer";
+            tabBtnProfil.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 transition flex items-center gap-2 cursor-pointer";
+            tabBtnNarasi.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition flex items-center gap-2 cursor-pointer";
             tabContentProfil.classList.remove('hidden');
             tabContentNarasi.classList.add('hidden');
         };
 
         tabBtnNarasi.onclick = () => {
-            tabBtnNarasi.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 cursor-pointer";
-            tabBtnProfil.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 cursor-pointer";
+            tabBtnNarasi.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 transition flex items-center gap-2 cursor-pointer";
+            tabBtnProfil.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition flex items-center gap-2 cursor-pointer";
             tabContentNarasi.classList.remove('hidden');
             tabContentProfil.classList.add('hidden');
         };
@@ -235,11 +235,11 @@ export async function initPengaturanHandler() {
         if (!toast || !toastContent) return;
         
         if (type === 'success') {
-            toastContent.className = "px-4 py-3 shadow-lg border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-medium flex items-center gap-2 rounded-none w-full";
-            toastContent.innerHTML = `<svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${message}</span>`;
+            toastContent.className = "px-4 py-3 shadow-lg border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 text-xs font-medium flex items-center gap-2 rounded-none w-full";
+            toastContent.innerHTML = `<svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${message}</span>`;
         } else {
-            toastContent.className = "px-4 py-3 shadow-lg border border-red-200 bg-red-50 text-red-800 text-xs font-medium flex items-center gap-2 rounded-none w-full";
-            toastContent.innerHTML = `<svg class="w-4 h-4 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${message}</span>`;
+            toastContent.className = "px-4 py-3 shadow-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/80 text-red-800 dark:text-red-200 text-xs font-medium flex items-center gap-2 rounded-none w-full";
+            toastContent.innerHTML = `<svg class="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${message}</span>`;
         }
 
         toast.classList.remove('hidden');

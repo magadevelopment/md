@@ -6,10 +6,10 @@ export function renderStaf() {
         <div class="space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-xl font-bold text-slate-800">Daftar Staf / Administrator</h1>
-                    <p class="text-xs text-slate-500 mt-0.5" id="staf-info-count">Memuat informasi jumlah...</p>
+                    <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Daftar Staf / Administrator</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="staf-info-count">Memuat informasi jumlah...</p>
                 </div>
-                <button id="btn-refresh-staf" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center justify-center gap-2 self-start sm:self-auto rounded-none">
+                <button id="btn-refresh-staf" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-xs font-semibold transition flex items-center justify-center gap-2 self-start sm:self-auto rounded-none cursor-pointer shadow-md">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     Muat Ulang Data
                 </button>
@@ -17,7 +17,7 @@ export function renderStaf() {
 
             <!-- CONTAINER UTAMA (Card untuk HP, Tabel untuk Desktop) -->
             <div id="staf-container">
-                <div class="p-6 text-center text-slate-400 bg-white border border-slate-200">Memuat data administrator...</div>
+                <div class="p-6 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">Memuat data administrator...</div>
             </div>
         </div>
     `;
@@ -43,7 +43,7 @@ export async function initStafHandler() {
             });
 
             if (stafList.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 bg-white border border-slate-200 rounded-none">Tidak ada pengguna dengan role Administrator.</div>`;
+                container.innerHTML = `<div class="p-6 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none">Tidak ada pengguna dengan role Administrator.</div>`;
                 if (infoCountEl) infoCountEl.textContent = `Total: 0 Administrator`;
                 return;
             }
@@ -57,18 +57,18 @@ export async function initStafHandler() {
             
             // --- 2. TAMPILAN TABEL UNTUK DESKTOP / TABLET ---
             let tableRowsHTML = `
-                <div class="hidden sm:block bg-white border border-slate-200 overflow-hidden shadow-xs rounded-none">
+                <div class="hidden sm:block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs rounded-none">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider">
+                                <tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold uppercase tracking-wider">
                                     <th class="p-3.5 w-12 text-center">No</th>
                                     <th class="p-3.5">Pengguna</th>
                                     <th class="p-3.5">Email</th>
                                     <th class="p-3.5 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-700 dark:text-slate-300">
             `;
 
             stafList.forEach((data, index) => {
@@ -87,16 +87,16 @@ export async function initStafHandler() {
 
                 // Render Card (HP)
                 cardsHTML += `
-                    <div class="bg-white border border-slate-200 p-4 shadow-xs rounded-none flex flex-col gap-3">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-xs rounded-none flex flex-col gap-3">
                         <div class="flex items-center gap-3">
                             ${avatarHTML}
                             <div class="overflow-hidden">
-                                <h3 class="font-bold text-sm text-slate-800 truncate">${name}</h3>
-                                <p class="text-xs text-slate-500 truncate">${email}</p>
+                                <h3 class="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">${name}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${email}</p>
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-slate-100 flex justify-end">
-                            <button onclick="window.demoteToUser('${uid}')" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs border border-red-200 transition cursor-pointer rounded-none text-center">
+                        <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                            <button onclick="window.demoteToUser('${uid}')" class="w-full py-2 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-700 dark:text-red-300 font-semibold text-xs border border-red-200 dark:border-red-900 transition cursor-pointer rounded-none text-center">
                                 Batalkan Administrator
                             </button>
                         </div>
@@ -105,15 +105,15 @@ export async function initStafHandler() {
 
                 // Render Baris Tabel (Desktop)
                 tableRowsHTML += `
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="p-3.5 text-center text-slate-500 font-medium">${index + 1}</td>
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
+                        <td class="p-3.5 text-center text-slate-500 dark:text-slate-400 font-medium">${index + 1}</td>
                         <td class="p-3.5 flex items-center gap-3">
                             ${avatarHTML}
-                            <span class="font-semibold text-slate-800">${name}</span>
+                            <span class="font-semibold text-slate-800 dark:text-slate-100">${name}</span>
                         </td>
-                        <td class="p-3.5 text-slate-600">${email}</td>
+                        <td class="p-3.5 text-slate-600 dark:text-slate-300">${email}</td>
                         <td class="p-3.5 text-center">
-                            <button onclick="window.demoteToUser('${uid}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-[11px] border border-red-200 transition cursor-pointer rounded-none">
+                            <button onclick="window.demoteToUser('${uid}')" class="px-3 py-1.5 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-700 dark:text-red-300 font-semibold text-[11px] border border-red-200 dark:border-red-900 transition cursor-pointer rounded-none">
                                 Batalkan Administrator
                             </button>
                         </td>
@@ -127,7 +127,7 @@ export async function initStafHandler() {
             container.innerHTML = cardsHTML + tableRowsHTML;
         } catch (error) {
             console.error("Gagal memuat data administrator:", error);
-            container.innerHTML = `<div class="p-6 text-center text-red-500 bg-white border border-slate-200 rounded-none">Gagal memuat data dari database. Pastikan koneksi internet stabil.</div>`;
+            container.innerHTML = `<div class="p-6 text-center text-red-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none">Gagal memuat data dari database. Pastikan koneksi internet stabil.</div>`;
             if (infoCountEl) infoCountEl.textContent = `Gagal memuat data.`;
         }
     };
@@ -152,7 +152,7 @@ export async function initStafHandler() {
     if (refreshBtn) {
         refreshBtn.onclick = () => {
             const container = document.getElementById('staf-container');
-            if (container) container.innerHTML = `<div class="p-6 text-center text-slate-400 bg-white border border-slate-200 rounded-none">Memuat ulang data...</div>`;
+            if (container) container.innerHTML = `<div class="p-6 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none">Memuat ulang data...</div>`;
             loadStaf();
         };
     }

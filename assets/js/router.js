@@ -17,7 +17,6 @@ import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
 import { renderLokasi, initLokasiHandler } from './views/manajemen-lokasi.js';
 import * as manajemenEventModule from './views/manajemen-event.js';
-// Tambahkan impor modul manajemen produk di sini:
 import * as manajemenProdukModule from './views/manajemen-produk.js';
 
 const routes = {
@@ -32,7 +31,7 @@ const routes = {
     '/manajemen-text': renderText,
     '/manajemen-pendaftaran': renderPendaftaranAdmin,
     '/manajemen-pengaturan': renderPengaturan,
-    '/daftar': renderDaftar,                       // Halaman Daftar (views/daftar.js)
+    '/daftar': renderDaftar,                      // Halaman Daftar (views/daftar.js)
     '/analytics': renderAnalytics,
     '/tamu': renderTamu,
     '/staf': renderStaf,
@@ -126,7 +125,6 @@ export async function router() {
             } else if (typeof manajemenEventModule.initManajemenEventHandler === 'function') {
                 manajemenEventModule.initManajemenEventHandler();
             }
-        // Tambahkan inisialisasi handler untuk manajemen produk di sini:
         } else if (path === '/manajemen-produk') {
             if (typeof manajemenProdukModule.initManajemenProduk === 'function') {
                 manajemenProdukModule.initManajemenProduk();
@@ -211,7 +209,7 @@ export async function router() {
                 '/manajemen-pengaturan', '/manajemen-pendaftaran', 
                 '/manajemen-branding', '/manajemen-lokasi', 
                 '/manajemen-banner', '/manajemen-text', '/manajemen-event',
-                '/manajemen-produk' // Masukkan juga ke daftar rute admin jika diperlukan
+                '/manajemen-produk'
             ];
 
             if (userRole === 'Administrator') {
@@ -303,22 +301,28 @@ export async function router() {
                     </a>
                     <a href="#/branding" data-link class="flex flex-col items-center justify-center ${path === '/branding' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                        <span class="text-[10px] font-medium">Kerja Sama Display</span>
+                        <span class="text-[10px] font-medium">Display</span>
                     </a>
                     <div class="relative flex-1">
                         <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/manajemen-produk'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
-                        <div id="mobile-more-popup" class="hidden absolute bottom-16 right-0 w-48 bg-white border border-slate-200 rounded-none shadow-xl py-2 z-50">
+                        <div id="mobile-more-popup" class="hidden absolute bottom-16 right-0 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none shadow-xl py-2 z-50">
                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Administrator</div>
-                            <a href="#/analytics" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Analytics</a>
-                            <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
-                            <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
-                            <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
-                            <a href="#/manajemen-produk" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen Produk</a>
-                            <div class="border-t border-slate-100 my-1"></div>
-                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
+                            <a href="#/analytics" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Analytics</a>
+                            <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Tamu</a>
+                            <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Staf</a>
+                            <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Manajemen</a>
+                            <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+                            <button onclick="toggleTheme()" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-amber-400 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                    Terang / Gelap
+                                </span>
+                            </button>
+                            <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                 Keluar
                             </button>
@@ -337,7 +341,7 @@ export async function router() {
                     </a>
                     <a href="#/branding" data-link class="flex flex-col items-center justify-center ${path === '/branding' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                        <span class="text-[10px] font-medium">Kerja Sama Display</span>
+                        <span class="text-[10px] font-medium">Display</span>
                     </a>
                     <a href="#/daftar" data-link class="flex flex-col items-center justify-center ${path === '/daftar' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
@@ -348,10 +352,16 @@ export async function router() {
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
-                        <div id="mobile-more-popup" class="hidden absolute bottom-16 right-0 w-48 bg-white border border-slate-200 rounded-none shadow-xl py-2 z-50">
+                        <div id="mobile-more-popup" class="hidden absolute bottom-16 right-0 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none shadow-xl py-2 z-50">
                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Menu Lainnya</div>
-                            <div class="border-t border-slate-100 my-1"></div>
-                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
+                            <button onclick="toggleTheme()" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-amber-400 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                    Terang / Gelap
+                                </span>
+                            </button>
+                            <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                 Keluar
                             </button>

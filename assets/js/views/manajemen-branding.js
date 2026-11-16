@@ -12,34 +12,34 @@ export function renderBranding() {
             </div>
 
             <!-- Header Title & Action -->
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white p-4 border border-slate-200">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white dark:bg-slate-900 p-4 border border-slate-200 dark:border-slate-800">
                 <div class="flex items-center gap-3">
-                    <a href="#/manajemen" data-link class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center gap-1.5 rounded-none">
+                    <a href="#/manajemen" data-link class="px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 rounded-none">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Kembali
                     </a>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h1 class="text-xl font-bold text-slate-800">Manajemen Branding</h1>
-                            <span id="badge-total-aset" class="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">Total: 0 Aset</span>
+                            <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Manajemen Branding</h1>
+                            <span id="badge-total-aset" class="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold border border-indigo-100 dark:border-indigo-900">Total: 0 Aset</span>
                         </div>
-                        <p class="text-xs text-slate-500 mt-0.5">Kelola materi promosi, logo, aset branding, harga sewa, dan status pemesanan Swalayan Maga.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kelola materi promosi, logo, aset branding, harga sewa, dan status pemesanan Swalayan Maga.</p>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <select id="filter-lokasi" class="px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                    <select id="filter-lokasi" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                         <option value="">-- Semua Lokasi --</option>
                     </select>
-                    <select id="filter-status" class="px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                    <select id="filter-status" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                         <option value="">-- Semua Status --</option>
                         <option value="Belum Dipesan">Belum Dipesan</option>
                         <option value="Sudah Dipesan">Sudah Dipesan</option>
                     </select>
                     <div class="relative w-full sm:w-48">
-                        <input type="text" id="search-branding" placeholder="Cari aset branding..." class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 pr-8">
+                        <input type="text" id="search-branding" placeholder="Cari aset branding..." class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 pr-8 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                         <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
-                    <button id="btn-open-modal" class="px-4 py-2 bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-semibold transition flex items-center justify-center gap-2 rounded-none cursor-pointer flex-shrink-0">
+                    <button id="btn-open-modal" class="px-4 py-2 bg-indigo-900 hover:bg-indigo-800 dark:bg-indigo-950 dark:hover:bg-indigo-900 text-white text-xs font-semibold transition flex items-center justify-center gap-2 rounded-none cursor-pointer flex-shrink-0 border border-indigo-800 dark:border-indigo-900 shadow-md">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         Tambah Aset
                     </button>
@@ -48,7 +48,7 @@ export function renderBranding() {
 
             <!-- Container Data (Responsive Table for Desktop & Card List for Mobile) -->
             <div id="branding-container">
-                <div class="p-8 text-center text-slate-400 bg-white border border-slate-200 text-xs">Memuat data branding...</div>
+                <div class="p-8 text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">Memuat data branding...</div>
             </div>
 
             <!-- MODAL ZOOM GAMBAR (LIGHTBOX) -->
@@ -60,11 +60,11 @@ export function renderBranding() {
             </div>
 
             <!-- MODAL FORM TAMBAH / EDIT BRANDING -->
-            <div id="branding-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4 overflow-y-auto">
-                <div class="bg-white border border-slate-200 w-full max-w-2xl shadow-2xl rounded-none overflow-hidden transform transition-all my-8">
-                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                        <h3 id="modal-title" class="font-bold text-slate-800 text-sm">Tambah Aset Branding Baru</h3>
-                        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1">
+            <div id="branding-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 dark:bg-slate-950/70 flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl shadow-2xl rounded-none overflow-hidden transform transition-all my-8">
+                    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/60">
+                        <h3 id="modal-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Tambah Aset Branding Baru</h3>
+                        <button id="btn-close-modal" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 p-1">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -76,22 +76,22 @@ export function renderBranding() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama / Judul Aset</label>
-                                    <input type="text" id="branding-nama" required class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600" placeholder="Misal: Titik Promo Depan Kasir">
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama / Judul Aset</label>
+                                    <input type="text" id="branding-nama" required class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="Misal: Titik Promo Depan Kasir">
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <div class="flex justify-between items-center mb-1">
-                                            <label class="block text-xs font-semibold text-slate-700">Kategori Aset</label>
-                                            <button type="button" id="btn-manage-kategori" class="text-[10px] text-indigo-600 hover:underline font-medium">Kelola</button>
+                                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Kategori Aset</label>
+                                            <button type="button" id="btn-manage-kategori" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Kelola</button>
                                         </div>
-                                        <select id="branding-kategori" required class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                                        <select id="branding-kategori" required class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                                             <!-- Dynamic options -->
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tahun Periode</label>
-                                        <select id="branding-tahun" required class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tahun Periode</label>
+                                        <select id="branding-tahun" required class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                                             <option value="2026" selected>2026</option>
                                             <option value="2027">2027</option>
                                             <option value="2028">2028</option>
@@ -101,47 +101,47 @@ export function renderBranding() {
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-1">
-                                        <label class="block text-xs font-semibold text-slate-700">Lokasi Penempatan (Toko Cabang)</label>
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Lokasi Penempatan (Toko Cabang)</label>
                                     </div>
-                                    <select id="branding-lokasi" required class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                                    <select id="branding-lokasi" required class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                                         <!-- Dynamic options from toko_cabang -->
                                     </select>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Bulanan (Rp)</label>
-                                        <input type="text" id="branding-harga-bulan" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600" placeholder="0">
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Harga Bulanan (Rp)</label>
+                                        <input type="text" id="branding-harga-bulan" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="0">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Tahunan (Rp)</label>
-                                        <input type="text" id="branding-harga-tahun" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600" placeholder="0">
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Harga Tahunan (Rp)</label>
+                                        <input type="text" id="branding-harga-tahun" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200" placeholder="0">
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Status Pemesanan</label>
-                                    <select id="branding-status-pesan" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600 bg-white">
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Status Pemesanan</label>
+                                    <select id="branding-status-pesan" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                                         <option value="Belum Dipesan">Belum Dipesan</option>
                                         <option value="Sudah Dipesan">Sudah Dipesan</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Upload File Gambar Aset</label>
-                                    <input type="file" id="branding-file" accept="image/*" class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-none focus:outline-none bg-white file:mr-4 file:py-1 file:px-3 file:rounded-none file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                                    <p class="text-[10px] text-slate-400 mt-1">Otomatis dikompresi (Maks. 500 KB).</p>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Upload File Gambar Aset</label>
+                                    <input type="file" id="branding-file" accept="image/*" class="w-full px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 file:mr-4 file:py-1 file:px-3 file:rounded-none file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:dark:bg-indigo-950/60 file:text-indigo-700 file:dark:text-indigo-300 hover:file:bg-indigo-100 cursor-pointer">
+                                    <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Otomatis dikompresi (Maks. 500 KB).</p>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Pratinjau Aset Branding</label>
-                                <div id="preview-container" class="h-48 w-full border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden relative">
-                                    <span class="text-xs text-slate-400 text-center px-4">Pratinjau Gambar Aset</span>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pratinjau Aset Branding</label>
+                                <div id="preview-container" class="h-48 w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-center overflow-hidden relative">
+                                    <span class="text-xs text-slate-400 dark:text-slate-500 text-center px-4">Pratinjau Gambar Aset</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
-                            <button type="button" id="btn-cancel-modal" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition rounded-none">
+                        <div class="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+                            <button type="button" id="btn-cancel-modal" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition rounded-none">
                                 Batal
                             </button>
-                            <button type="submit" id="btn-save-branding" class="px-5 py-2 bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-semibold transition rounded-none cursor-pointer">
+                            <button type="submit" id="btn-save-branding" class="px-5 py-2 bg-indigo-900 hover:bg-indigo-800 dark:bg-indigo-950 dark:hover:bg-indigo-900 text-white text-xs font-semibold transition rounded-none cursor-pointer border border-indigo-800 dark:border-indigo-900 shadow-md">
                                 Simpan Aset
                             </button>
                         </div>
@@ -150,20 +150,20 @@ export function renderBranding() {
             </div>
 
             <!-- MODAL KELOLA KATEGORI -->
-            <div id="kategori-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
-                <div class="bg-white border border-slate-200 w-full max-w-md shadow-2xl rounded-none overflow-hidden">
-                    <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                        <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Kelola Kategori Aset</h3>
-                        <button id="btn-close-kategori-modal" class="text-slate-400 hover:text-slate-600 p-1">
+            <div id="kategori-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 dark:bg-slate-950/70 flex items-center justify-center p-4">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md shadow-2xl rounded-none overflow-hidden">
+                    <div class="px-5 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/60">
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wider">Kelola Kategori Aset</h3>
+                        <button id="btn-close-kategori-modal" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 p-1">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
                     <div class="p-5 space-y-4">
                         <div class="flex gap-2">
-                            <input type="text" id="new-kategori-input" placeholder="Nama kategori baru..." class="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-none focus:outline-none focus:border-indigo-600">
-                            <button type="button" id="btn-add-kategori" class="px-4 py-2 bg-indigo-900 hover:bg-indigo-800 text-white text-xs font-semibold transition rounded-none">Tambah</button>
+                            <input type="text" id="new-kategori-input" placeholder="Nama kategori baru..." class="flex-1 px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-none focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                            <button type="button" id="btn-add-kategori" class="px-4 py-2 bg-indigo-900 hover:bg-indigo-800 dark:bg-indigo-950 dark:hover:bg-indigo-900 text-white text-xs font-semibold transition rounded-none border border-indigo-800 dark:border-indigo-900 shadow-md">Tambah</button>
                         </div>
-                        <div class="border border-slate-200 bg-slate-50 max-h-48 overflow-y-auto divide-y divide-slate-100" id="kategori-list-container">
+                        <div class="border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 max-h-48 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="kategori-list-container">
                             <!-- Daftar kategori -->
                         </div>
                     </div>
@@ -171,18 +171,18 @@ export function renderBranding() {
             </div>
 
             <!-- MODAL KONFIRMASI HAPUS KUSTOM (GLOBAL) -->
-            <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
-                <div class="bg-white border border-slate-200 w-full max-w-sm shadow-2xl rounded-none overflow-hidden p-6 text-center space-y-4">
-                    <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto">
+            <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 dark:bg-slate-950/70 flex items-center justify-center p-4">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm shadow-2xl rounded-none overflow-hidden p-6 text-center space-y-4">
+                    <div class="w-12 h-12 bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto border border-red-100 dark:border-red-900">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </div>
                     <div>
-                        <h4 id="confirm-title" class="font-bold text-slate-800 text-sm">Konfirmasi Hapus</h4>
-                        <p id="confirm-message" class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus item ini?</p>
+                        <h4 id="confirm-title" class="font-bold text-slate-800 dark:text-slate-100 text-sm">Konfirmasi Hapus</h4>
+                        <p id="confirm-message" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Apakah Anda yakin ingin menghapus item ini?</p>
                     </div>
                     <div class="flex justify-center gap-2 pt-2">
-                        <button id="btn-cancel-confirm" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition rounded-none flex-1">Batal</button>
-                        <button id="btn-yes-confirm" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition rounded-none flex-1">Hapus</button>
+                        <button id="btn-cancel-confirm" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition rounded-none flex-1">Batal</button>
+                        <button id="btn-yes-confirm" class="px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white text-xs font-semibold transition rounded-none flex-1 shadow-md">Hapus</button>
                     </div>
                 </div>
             </div>
@@ -247,11 +247,11 @@ export async function initBrandingHandler() {
     function showToast(message, type = 'success') {
         if (!toast || !toastContent) return;
         if (type === 'success') {
-            toastContent.className = "px-4 py-3 shadow-lg border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-medium flex items-center gap-2 rounded-none w-full";
-            toastContent.innerHTML = `<svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${message}</span>`;
+            toastContent.className = "px-4 py-3 shadow-lg border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 text-xs font-medium flex items-center gap-2 rounded-none w-full";
+            toastContent.innerHTML = `<svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${message}</span>`;
         } else {
-            toastContent.className = "px-4 py-3 shadow-lg border border-red-200 bg-red-50 text-red-800 text-xs font-medium flex items-center gap-2 rounded-none w-full";
-            toastContent.innerHTML = `<svg class="w-4 h-4 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${message}</span>`;
+            toastContent.className = "px-4 py-3 shadow-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/80 text-red-800 dark:text-red-200 text-xs font-medium flex items-center gap-2 rounded-none w-full";
+            toastContent.innerHTML = `<svg class="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${message}</span>`;
         }
         toast.classList.remove('hidden');
         setTimeout(() => {
@@ -351,13 +351,13 @@ export async function initBrandingHandler() {
         let html = "";
         daftarKategori.forEach((kat, index) => {
             html += `
-                <div class="px-3 py-2 flex items-center justify-between text-xs bg-white">
-                    <span class="font-medium text-slate-700">${kat}</span>
-                    <button onclick="window.removeKategori(${index})" class="text-red-500 hover:text-red-700 font-semibold px-2 py-0.5 bg-red-50 hover:bg-red-100 transition">Hapus</button>
+                <div class="px-3 py-2 flex items-center justify-between text-xs bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 last:border-none">
+                    <span class="font-medium text-slate-700 dark:text-slate-300">${kat}</span>
+                    <button onclick="window.removeKategori(${index})" class="text-red-500 dark:text-red-400 hover:text-red-700 font-semibold px-2 py-0.5 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 transition border border-red-100 dark:border-red-900 rounded-none">Hapus</button>
                 </div>
             `;
         });
-        kategoriListContainer.innerHTML = html || `<div class="p-3 text-center text-slate-400 text-xs">Belum ada kategori.</div>`;
+        kategoriListContainer.innerHTML = html || `<div class="p-3 text-center text-slate-400 dark:text-slate-500 text-xs">Belum ada kategori.</div>`;
     };
 
     // Load Lokasi dari koleksi Firestore `toko_cabang`
@@ -535,7 +535,7 @@ export async function initBrandingHandler() {
 
         if (data.length === 0) {
             container.innerHTML = `
-                <div class="bg-white border border-slate-200 p-8 text-center text-slate-400 text-xs">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 text-center text-slate-400 dark:text-slate-500 text-xs">
                     Belum ada data aset branding yang tersedia.
                 </div>
             `;
@@ -544,11 +544,11 @@ export async function initBrandingHandler() {
 
         let mobileHtml = `<div class="grid grid-cols-1 gap-4 md:hidden">`;
         let desktopHtml = `
-            <div class="hidden md:block bg-white border border-slate-200 overflow-hidden shadow-xs">
+            <div class="hidden md:block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs uppercase tracking-wider">
+                            <tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 text-xs uppercase tracking-wider">
                                 <th class="p-3 w-12 text-center">No</th>
                                 <th class="p-3 w-32">Kode Aset</th>
                                 <th class="p-3 w-32">Preview</th>
@@ -559,62 +559,62 @@ export async function initBrandingHandler() {
                                 <th class="p-3 w-28 text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-700 dark:text-slate-300">
         `;
 
         data.forEach((item, index) => {
             const imgUrl = item.gambar || "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=500&auto=format&fit=crop&q=60";
             const statusPesan = item.statusPesan || "Belum Dipesan";
             const badgeClass = statusPesan === "Sudah Dipesan" 
-                ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
-                : "bg-amber-50 text-amber-700 border-amber-200";
+                ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900" 
+                : "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-900";
 
             mobileHtml += `
-                <div class="bg-white border border-slate-200 p-4 space-y-3 shadow-xs">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 space-y-3 shadow-xs">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold text-slate-500">#${index + 1}</span>
-                            <span class="px-2 py-0.5 bg-slate-100 font-mono font-bold text-[11px] text-slate-700 border border-slate-200">${item.kodeAset || '-'}</span>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400">#${index + 1}</span>
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 font-mono font-bold text-[11px] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">${item.kodeAset || '-'}</span>
                         </div>
                         <span class="px-2 py-1 text-[10px] font-semibold border ${badgeClass} inline-block rounded-none">
                             ${statusPesan}
                         </span>
                     </div>
                     <div class="flex gap-3 items-center">
-                        <div class="h-20 w-28 bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 cursor-pointer" onclick="window.zoomImage('${encodeURIComponent(imgUrl)}')" title="Klik untuk memperbesar">
+                        <div class="h-20 w-28 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex-shrink-0 cursor-pointer" onclick="window.zoomImage('${encodeURIComponent(imgUrl)}')" title="Klik untuk memperbesar">
                             <img src="${imgUrl}" alt="${item.nama}" class="w-full h-full object-cover">
                         </div>
                         <div class="space-y-1 flex-1 min-w-0">
-                            <h4 class="font-bold text-slate-800 text-sm truncate">${item.nama}</h4>
-                            <div class="text-[11px] text-indigo-600 font-semibold">${item.kategori || '-'} | <span class="text-slate-600">${item.lokasi || '-'} (${item.tahun || '-'})</span></div>
-                            <div class="text-xs text-slate-600">Bulan: <span class="font-semibold">${formatRupiahDisplay(item.hargaBulan)}</span></div>
-                            <div class="text-xs text-slate-500">Tahun: <span class="font-semibold">${formatRupiahDisplay(item.hargaTahun)}</span></div>
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate">${item.nama}</h4>
+                            <div class="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold">${item.kategori || '-'} | <span class="text-slate-600 dark:text-slate-400">${item.lokasi || '-'} (${item.tahun || '-'})</span></div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Bulan: <span class="font-semibold text-slate-800 dark:text-slate-200">${formatRupiahDisplay(item.hargaBulan)}</span></div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">Tahun: <span class="font-semibold text-slate-800 dark:text-slate-200">${formatRupiahDisplay(item.hargaTahun)}</span></div>
                         </div>
                     </div>
-                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                        <button onclick="window.editBranding('${item.id}', '${encodeURIComponent(item.nama)}', '${item.hargaBulan || 0}', '${item.hargaTahun || 0}', '${statusPesan}', '${encodeURIComponent(item.gambar || '')}', '${encodeURIComponent(item.kategori || '')}', '${item.tahun || ''}', '${encodeURIComponent(item.lokasi || '')}', '${encodeURIComponent(item.kodeAset || '')}')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition rounded-none">Edit</button>
-                        <button onclick="window.deleteBranding('${item.id}')" class="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium transition rounded-none">Hapus</button>
+                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <button onclick="window.editBranding('${item.id}', '${encodeURIComponent(item.nama)}', '${item.hargaBulan || 0}', '${item.hargaTahun || 0}', '${statusPesan}', '${encodeURIComponent(item.gambar || '')}', '${encodeURIComponent(item.kategori || '')}', '${item.tahun || ''}', '${encodeURIComponent(item.lokasi || '')}', '${encodeURIComponent(item.kodeAset || '')}')" class="px-3 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition rounded-none">Edit</button>
+                        <button onclick="window.deleteBranding('${item.id}')" class="px-3 py-1 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-600 dark:text-red-300 text-xs font-medium transition rounded-none border border-red-100 dark:border-red-900">Hapus</button>
                     </div>
                 </div>
             `;
 
             desktopHtml += `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                    <td class="p-3 text-center font-bold text-slate-500">${index + 1}</td>
-                    <td class="p-3 font-mono font-bold text-slate-700">${item.kodeAset || '-'}</td>
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition border-b border-slate-100 dark:border-slate-800">
+                    <td class="p-3 text-center font-bold text-slate-500 dark:text-slate-400">${index + 1}</td>
+                    <td class="p-3 font-mono font-bold text-slate-700 dark:text-slate-300">${item.kodeAset || '-'}</td>
                     <td class="p-3">
-                        <div class="h-12 w-24 bg-slate-100 border border-slate-200 overflow-hidden cursor-pointer" onclick="window.zoomImage('${encodeURIComponent(imgUrl)}')" title="Klik untuk memperbesar">
+                        <div class="h-12 w-24 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer" onclick="window.zoomImage('${encodeURIComponent(imgUrl)}')" title="Klik untuk memperbesar">
                             <img src="${imgUrl}" alt="${item.nama}" class="w-full h-full object-cover">
                         </div>
                     </td>
-                    <td class="p-3 font-medium text-slate-800">${item.nama}</td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-100">${item.nama}</td>
                     <td class="p-3">
-                        <div class="font-semibold text-indigo-700">${item.kategori || '-'}</div>
-                        <div class="text-slate-500 text-[11px]">${item.lokasi || '-'} (Tahun: ${item.tahun || '-'})</div>
+                        <div class="font-semibold text-indigo-700 dark:text-indigo-400">${item.kategori || '-'}</div>
+                        <div class="text-slate-500 dark:text-slate-400 text-[11px]">${item.lokasi || '-'} (Tahun: ${item.tahun || '-'})</div>
                     </td>
                     <td class="p-3">
-                        <div class="text-slate-700 font-semibold">Bulan: ${formatRupiahDisplay(item.hargaBulan)}</div>
-                        <div class="text-slate-500 text-[11px]">Tahun: ${formatRupiahDisplay(item.hargaTahun)}</div>
+                        <div class="text-slate-700 dark:text-slate-300 font-semibold">Bulan: ${formatRupiahDisplay(item.hargaBulan)}</div>
+                        <div class="text-slate-500 dark:text-slate-400 text-[11px]">Tahun: ${formatRupiahDisplay(item.hargaTahun)}</div>
                     </td>
                     <td class="p-3 text-center">
                         <span class="px-2 py-1 text-[10px] font-semibold border ${badgeClass} inline-block rounded-none">
@@ -623,8 +623,8 @@ export async function initBrandingHandler() {
                     </td>
                     <td class="p-3 text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <button onclick="window.editBranding('${item.id}', '${encodeURIComponent(item.nama)}', '${item.hargaBulan || 0}', '${item.hargaTahun || 0}', '${statusPesan}', '${encodeURIComponent(item.gambar || '')}', '${encodeURIComponent(item.kategori || '')}', '${item.tahun || ''}', '${encodeURIComponent(item.lokasi || '')}', '${encodeURIComponent(item.kodeAset || '')}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition rounded-none">Edit</button>
-                            <button onclick="window.deleteBranding('${item.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-[11px] font-medium transition rounded-none">Hapus</button>
+                            <button onclick="window.editBranding('${item.id}', '${encodeURIComponent(item.nama)}', '${item.hargaBulan || 0}', '${item.hargaTahun || 0}', '${statusPesan}', '${encodeURIComponent(item.gambar || '')}', '${encodeURIComponent(item.kategori || '')}', '${item.tahun || ''}', '${encodeURIComponent(item.lokasi || '')}', '${encodeURIComponent(item.kodeAset || '')}')" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-medium transition rounded-none">Edit</button>
+                            <button onclick="window.deleteBranding('${item.id}')" class="px-2.5 py-1 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-600 dark:text-red-300 text-[11px] font-medium transition rounded-none border border-red-100 dark:border-red-900">Hapus</button>
                         </div>
                     </td>
                 </tr>
@@ -668,7 +668,7 @@ export async function initBrandingHandler() {
             applyFilterAndSearch();
         } catch (err) {
             console.error("Gagal memuat data branding:", err);
-            container.innerHTML = `<div class="p-8 text-center text-red-500 bg-white border border-slate-200 text-xs">Gagal memuat data dari database.</div>`;
+            container.innerHTML = `<div class="p-8 text-center text-red-500 dark:text-red-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">Gagal memuat data dari database.</div>`;
         }
     };
 
@@ -688,7 +688,7 @@ export async function initBrandingHandler() {
             if (inputHargaBulan) inputHargaBulan.value = '';
             if (inputHargaTahun) inputHargaTahun.value = '';
             if (modalTitle) modalTitle.textContent = "Tambah Aset Branding Baru";
-            if (previewContainer) previewContainer.innerHTML = `<span class="text-xs text-slate-400 text-center px-4">Pratinjau Gambar Aset</span>`;
+            if (previewContainer) previewContainer.innerHTML = `<span class="text-xs text-slate-400 dark:text-slate-500 text-center px-4">Pratinjau Gambar Aset</span>`;
             if (modal) modal.classList.remove('hidden');
         };
     }
