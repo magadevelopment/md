@@ -16,16 +16,12 @@ import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/man
 import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
 import { renderLokasi, initLokasiHandler } from './views/manajemen-lokasi.js';
-import { renderEvent, initEventHandler } from './views/manajemen-event.js';
-import { renderManajemenProduk, initManajemenProdukHandler } from './views/manajemen-produk.js';
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
     '/branding': renderBrandPublic,              // Menu Branding di Sidebar (Publik)
     '/manajemen-branding': renderBranding,        // Halaman Form Input/Admin Manajemen Branding
-    '/manajemen-event': renderEvent,              // Halaman Manajemen Event
-    '/manajemen-produk': renderManajemenProduk,   // Halaman Manajemen Produk
     '/manajemen-banner': renderBanner,
     '/manajemen-lokasi': renderLokasi,
     '/manajemen-text': renderText,
@@ -120,10 +116,6 @@ export async function router() {
             initTokoPublicHandler();
         } else if (path === '/manajemen-lokasi') {
             if (typeof initLokasiHandler === 'function') initLokasiHandler();
-        } else if (path === '/manajemen-event') {
-            if (typeof initEventHandler === 'function') initEventHandler();
-        } else if (path === '/manajemen-produk') {
-            if (typeof initManajemenProdukHandler === 'function') initManajemenProdukHandler();
         } else if (path === '/manajemen-banner') {
             initBannerHandler();
         } else if (path === '/manajemen-text') {
@@ -201,7 +193,7 @@ export async function router() {
                 '/analytics', '/tamu', '/staf', '/manajemen', 
                 '/manajemen-pengaturan', '/manajemen-pendaftaran', 
                 '/manajemen-branding', '/manajemen-lokasi', 
-                '/manajemen-event', '/manajemen-produk', '/manajemen-banner', '/manajemen-text'
+                '/manajemen-banner', '/manajemen-text'
             ];
 
             if (userRole === 'Administrator') {
@@ -296,7 +288,7 @@ export async function router() {
                         <span class="text-[10px] font-medium">Branding</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/manajemen-event', '/manajemen-produk'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
@@ -305,8 +297,6 @@ export async function router() {
                             <a href="#/analytics" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Analytics</a>
                             <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
                             <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
-                            <a href="#/manajemen-event" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Event</a>
-                            <a href="#/manajemen-produk" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Produk</a>
                             <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
