@@ -34,7 +34,19 @@ export function renderHome() {
                 </div>
             </div>
 
-            <!-- Event & Kegiatan di Bawah Banner -->
+            <!-- COMPANY PROFILE DI ANTARA BANNER & EVENT -->
+            <div class="bg-white p-5 sm:p-6 rounded-none border border-slate-200 shadow-sm space-y-5">
+                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">COMPANY PROFILE</h3>
+                    <span id="company-profile-badge" class="text-[10px] font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-none">Maga Swalayan</span>
+                </div>
+
+                <div id="company-profile-content" class="space-y-4 text-xs text-slate-700">
+                    <div class="p-4 text-center text-slate-400">Memuat profil perusahaan...</div>
+                </div>
+            </div>
+
+            <!-- Event & Kegiatan di Bawah Company Profile -->
             <div class="bg-white p-5 rounded-none border border-slate-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">EVENT & KEGIATAN</h3>
@@ -79,6 +91,8 @@ export function renderHome() {
 
 export async function initHomeHandler() {
     const container = document.getElementById('home-banner-container');
+    const companyProfileContainer = document.getElementById('company-profile-content');
+    const companyProfileBadge = document.getElementById('company-profile-badge');
     const eventContainer = document.getElementById('home-event-container');
     const produkContainer = document.getElementById('home-produk-container');
     const welcomeTitle = document.getElementById('welcome-user-title');
@@ -201,7 +215,57 @@ export async function initHomeHandler() {
         }
     }
 
-    // --- 2. LOAD EVENT & KEGIATAN DI BAWAH BANNER ---
+    // --- 1.5. LOAD COMPANY PROFILE DI ANTARA BANNER & EVENT ---
+    if (companyProfileContainer) {
+        try {
+            const docRefNarasi = doc(db, "pengaturan", "company_profile_narasi");
+            const snapNarasi = await getDoc(docRefNarasi);
+
+            if (snapNarasi.exists()) {
+                const data = snapNarasi.data();
+                const judul = data.judul || "Maga Swalayan";
+                const visi = data.visi || "-";
+                const misi = data.misi || "-";
+                const sejarah = data.sejarah || "-";
+
+                if (companyProfileBadge) companyProfileBadge.textContent = judul;
+
+                companyProfileContainer.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 border-l-4 border-indigo-600">
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">${judul}</h4>
+                            <div class="text-slate-600 leading-relaxed">${sejarah}</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-indigo-50/50 p-4 border border-indigo-100">
+                                <h5 class="font-bold text-indigo-900 text-xs uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    Visi Perusahaan
+                                </h5>
+                                <p class="text-slate-700 leading-relaxed">${visi}</p>
+                            </div>
+
+                            <div class="bg-emerald-50/50 p-4 border border-emerald-100">
+                                <h5 class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                    Misi Perusahaan
+                                </h5>
+                                <div class="text-slate-700 leading-relaxed whitespace-pre-line">${misi}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                companyProfileContainer.innerHTML = `<div class="p-4 text-center text-slate-400">Data Company Profile belum diatur di menu Pengaturan.</div>`;
+            }
+        } catch (err) {
+            console.error("Gagal memuat company profile:", err);
+            companyProfileContainer.innerHTML = `<div class="p-4 text-center text-red-500">Gagal memuat data Company Profile.</div>`;
+        }
+    }
+
+    // --- 2. LOAD EVENT & KEGIATAN DI BAWAH COMPANY PROFILE ---
     if (eventContainer) {
         try {
             const eventSnapshot = await getDocs(collection(db, "event"));

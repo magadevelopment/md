@@ -1,7 +1,7 @@
-import { collection, getDocs, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { db } from "../firebase-init.js";
 
-export function renderEvent() {
+export function renderManajemenEvent() {
     return `
         <div class="space-y-4 sm:space-y-6 max-w-7xl mx-auto relative px-2 sm:px-0 pb-10">
             <!-- Toast Notification Container -->
@@ -11,11 +11,19 @@ export function renderEvent() {
                 </div>
             </div>
 
-            <!-- Header Halaman & Tombol Tambah -->
+            <!-- Header Halaman & Tombol Kembali -->
             <div class="bg-white p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-xl font-bold text-slate-800">Event</h1>
-                    <p class="text-xs text-slate-500 mt-0.5">Kelola informasi jadwal event, promo, dan kegiatan toko.</p>
+                <div class="flex items-center gap-3">
+                    <a href="#/manajemen" data-link class="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold transition rounded-none" title="Kembali ke Manajemen">
+                        <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span>Kembali</span>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Manajemen Event</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">Kelola informasi jadwal event, promo, dan kegiatan toko.</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                     <div class="relative flex-1 md:w-64">
@@ -72,7 +80,7 @@ export function renderEvent() {
                 <div class="bg-white border border-slate-200 max-w-3xl w-full shadow-2xl rounded-none relative overflow-hidden">
                     <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                         <h3 class="font-bold text-slate-800 text-sm">Tambah Event</h3>
-                        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1">
+                        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -146,7 +154,7 @@ export function renderEvent() {
     `;
 }
 
-export function initEventHandler() {
+export function initManajemenEvent() {
     const tableBody = document.getElementById('table-event-body');
     const mobileContainer = document.getElementById('mobile-event-container');
     const modal = document.getElementById('modal-event');

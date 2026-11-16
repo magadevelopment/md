@@ -11,11 +11,19 @@ export function renderManajemenProduk() {
                 </div>
             </div>
 
-            <!-- Header Halaman & Tombol Tambah -->
+            <!-- Header Halaman & Tombol Kembali -->
             <div class="bg-white p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-xl font-bold text-slate-800">Manajemen Produk</h1>
-                    <p class="text-xs text-slate-500 mt-0.5">Kelola informasi produk, harga, dan diskon toko.</p>
+                <div class="flex items-center gap-3">
+                    <a href="#/manajemen" data-link class="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold transition rounded-none" title="Kembali ke Manajemen">
+                        <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span>Kembali</span>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Manajemen Produk</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">Kelola informasi produk, harga, dan diskon toko.</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                     <div class="relative flex-1 md:w-64">
@@ -73,13 +81,12 @@ export function renderManajemenProduk() {
                 <div class="bg-white border border-slate-200 max-w-3xl w-full shadow-2xl rounded-none relative overflow-hidden">
                     <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                         <h3 class="font-bold text-slate-800 text-sm">Tambah Produk Baru</h3>
-                        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1">
+                        <button type="button" id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
                     <form id="form-tambah-produk" class="p-6 space-y-4">
                         <input type="hidden" id="produk-img-base64">
-                        <!-- Hidden input untuk menyimpan nilai angka murni -->
                         <input type="hidden" id="produk-harga-awal-raw" value="0">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -149,7 +156,6 @@ export function initManajemenProdukHandler() {
     const form = document.getElementById('form-tambah-produk');
     const searchInput = document.getElementById('search-produk');
     
-    // Form Inputs kalkulasi otomatis
     const inputHargaAwal = document.getElementById('produk-harga-awal');
     const inputHargaAwalRaw = document.getElementById('produk-harga-awal-raw');
     const inputDiskonPersen = document.getElementById('produk-diskon-persen');
@@ -181,11 +187,10 @@ export function initManajemenProdukHandler() {
         }, 3000);
     }
 
-    // Format input menjadi ribuan otomatis saat diketik
     if (inputHargaAwal) {
         inputHargaAwal.oninput = (e) => {
-            let val = e.target.value.replace(/\D/g, ''); // Hapus semua karakter non-digit
-            inputHargaAwalRaw.value = val; // Simpan nilai murni
+            let val = e.target.value.replace(/\D/g, '');
+            inputHargaAwalRaw.value = val;
             
             if (val !== '') {
                 e.target.value = Number(val).toLocaleString('id-ID');
@@ -196,12 +201,13 @@ export function initManajemenProdukHandler() {
         };
     }
 
-    // Kalkulasi otomatis harga setelah diskon di form modal
     const hitungHargaAkhir = () => {
         const hargaAwal = parseFloat(inputHargaAwalRaw.value) || 0;
         const diskon = parseFloat(inputDiskonPersen.value) || 0;
         const hargaAkhir = hargaAwal - (hargaAwal * diskon / 100);
-        inputHargaAkhirPreview.value = "Rp " + Math.max(0, hargaAkhir).toLocaleString('id-ID');
+        if (inputHargaAkhirPreview) {
+            inputHargaAkhirPreview.value = "Rp " + Math.max(0, hargaAkhir).toLocaleString('id-ID');
+        }
     };
 
     if (inputDiskonPersen) inputDiskonPersen.oninput = hitungHargaAkhir;
@@ -320,7 +326,7 @@ export function initManajemenProdukHandler() {
                     <td class="p-3 border-r border-slate-100 text-center"><input type="checkbox" class="rounded-none"></td>
                     <td class="p-3 border-r border-slate-100">
                         <div class="h-16 w-12 bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center mx-auto">
-                            ${item.gambar ? `<img src="${item.gambar}" alt="Produk" class="w-full h-full object-cover max-w-[500px] max-h-[500px]">` : `<span class="text-[9px] text-slate-400">No Image</span>`}
+                            ${item.gambar ? `<img src="${item.gambar}" alt="Produk" class="w-full h-full object-cover">` : `<span class="text-[9px] text-slate-400">No Image</span>`}
                         </div>
                     </td>
                     <td class="p-3 border-r border-slate-100 font-semibold text-slate-900">${item.nama || '-'}</td>
@@ -340,7 +346,7 @@ export function initManajemenProdukHandler() {
             mobileHtml += `
                 <div class="p-4 flex gap-3 items-center bg-white">
                     <div class="h-20 w-16 bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center flex-shrink-0">
-                        ${item.gambar ? `<img src="${item.gambar}" alt="Produk" class="w-full h-full object-cover max-w-[500px] max-h-[500px]">` : `<span class="text-[8px] text-slate-400">No Img</span>`}
+                        ${item.gambar ? `<img src="${item.gambar}" alt="Produk" class="w-full h-full object-cover">` : `<span class="text-[8px] text-slate-400">No Img</span>`}
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-start gap-2 mb-1">

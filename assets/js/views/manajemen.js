@@ -4,20 +4,20 @@ export function renderManajemen() {
             <h1 class="text-xl font-bold text-slate-800">Pengaturan & Manajemen</h1>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- Manajemen Branding -->
+                <!-- Kerja Sama Display (Sebelumnya Manajemen Branding) -->
                 <div class="bg-white p-6 border border-slate-200 hover:border-indigo-500 hover:shadow-md transition flex flex-col items-center justify-center text-center group cursor-pointer rounded-none" onclick="location.hash='#/manajemen-branding'">
                     <div class="w-12 h-12 bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition mb-3 rounded-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-slate-700">Manajemen Branding</span>
+                    <span class="text-sm font-semibold text-slate-700">Kerja Sama Display</span>
                 </div>
 
-                <!-- Manajemen Event -->
+                <!-- Daftar Event (Sebelumnya Manajemen Event) -->
                 <div class="bg-white p-6 border border-slate-200 hover:border-indigo-500 hover:shadow-md transition flex flex-col items-center justify-center text-center group cursor-pointer rounded-none" onclick="location.hash='#/manajemen-event'">
                     <div class="w-12 h-12 bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition mb-3 rounded-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
-                    <span class="text-sm font-semibold text-slate-700">Manajemen Event</span>
+                    <span class="text-sm font-semibold text-slate-700">Daftar Event</span>
                 </div>
 
                 <!-- Produk (Diperbarui ke #/manajemen-produk) -->

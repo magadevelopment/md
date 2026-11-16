@@ -16,19 +16,23 @@ import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/man
 import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
 import { renderLokasi, initLokasiHandler } from './views/manajemen-lokasi.js';
+import * as manajemenEventModule from './views/manajemen-event.js';
+// Tambahkan impor modul manajemen produk di sini:
+import * as manajemenProdukModule from './views/manajemen-produk.js';
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
     '/branding': renderBrandPublic,              // Menu Branding di Sidebar (Publik)
     '/manajemen-branding': renderBranding,        // Halaman Form Input/Admin Manajemen Branding
+    '/manajemen-event': manajemenEventModule.renderManajemenEvent, // Rute untuk Daftar Event
+    '/manajemen-produk': manajemenProdukModule.renderManajemenProduk, // Rute untuk Manajemen Produk
     '/manajemen-banner': renderBanner,
     '/manajemen-lokasi': renderLokasi,
     '/manajemen-text': renderText,
     '/manajemen-pendaftaran': renderPendaftaranAdmin,
     '/manajemen-pengaturan': renderPengaturan,
-    '/daftar': renderDaftar,                      // Halaman Daftar (views/daftar.js)
-    '/absen': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Absensi Karyawan</h2><p class="text-slate-600">Catat kehadiran staf merchandising.</p></div>`,
+    '/daftar': renderDaftar,                       // Halaman Daftar (views/daftar.js)
     '/analytics': renderAnalytics,
     '/tamu': renderTamu,
     '/staf': renderStaf,
@@ -116,6 +120,19 @@ export async function router() {
             initTokoPublicHandler();
         } else if (path === '/manajemen-lokasi') {
             if (typeof initLokasiHandler === 'function') initLokasiHandler();
+        } else if (path === '/manajemen-event') {
+            if (typeof manajemenEventModule.initManajemenEvent === 'function') {
+                manajemenEventModule.initManajemenEvent();
+            } else if (typeof manajemenEventModule.initManajemenEventHandler === 'function') {
+                manajemenEventModule.initManajemenEventHandler();
+            }
+        // Tambahkan inisialisasi handler untuk manajemen produk di sini:
+        } else if (path === '/manajemen-produk') {
+            if (typeof manajemenProdukModule.initManajemenProduk === 'function') {
+                manajemenProdukModule.initManajemenProduk();
+            } else if (typeof manajemenProdukModule.initManajemenProdukHandler === 'function') {
+                manajemenProdukModule.initManajemenProdukHandler();
+            }
         } else if (path === '/manajemen-banner') {
             initBannerHandler();
         } else if (path === '/manajemen-text') {
@@ -193,7 +210,8 @@ export async function router() {
                 '/analytics', '/tamu', '/staf', '/manajemen', 
                 '/manajemen-pengaturan', '/manajemen-pendaftaran', 
                 '/manajemen-branding', '/manajemen-lokasi', 
-                '/manajemen-banner', '/manajemen-text'
+                '/manajemen-banner', '/manajemen-text', '/manajemen-event',
+                '/manajemen-produk' // Masukkan juga ke daftar rute admin jika diperlukan
             ];
 
             if (userRole === 'Administrator') {
@@ -285,10 +303,10 @@ export async function router() {
                     </a>
                     <a href="#/branding" data-link class="flex flex-col items-center justify-center ${path === '/branding' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                        <span class="text-[10px] font-medium">Branding</span>
+                        <span class="text-[10px] font-medium">Kerja Sama Display</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/manajemen-produk'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
@@ -298,6 +316,7 @@ export async function router() {
                             <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
                             <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
                             <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
+                            <a href="#/manajemen-produk" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen Produk</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -318,20 +337,19 @@ export async function router() {
                     </a>
                     <a href="#/branding" data-link class="flex flex-col items-center justify-center ${path === '/branding' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                        <span class="text-[10px] font-medium">Branding</span>
+                        <span class="text-[10px] font-medium">Kerja Sama Display</span>
                     </a>
                     <a href="#/daftar" data-link class="flex flex-col items-center justify-center ${path === '/daftar' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} flex-1 py-1">
                         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                         <span class="text-[10px] font-medium">Daftar</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/absen'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
                         <div id="mobile-more-popup" class="hidden absolute bottom-16 right-0 w-48 bg-white border border-slate-200 rounded-none shadow-xl py-2 z-50">
                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Menu Lainnya</div>
-                            <a href="#/absen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Absen Karyawan</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
