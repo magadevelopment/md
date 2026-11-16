@@ -48,13 +48,27 @@ export function renderHome() {
                 </div>
             </div>
 
-            <!-- MODAL ZOOM GAMBAR EVENT (LIGHTBOX) -->
+            <!-- Produk di Bawah Event -->
+            <div class="bg-white p-5 rounded-none border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">PRODUK</h3>
+                </div>
+
+                <!-- Kontainer Daftar Produk -->
+                <div id="home-produk-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="col-span-full p-6 text-center text-slate-400 text-xs">
+                        Memuat data produk...
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL ZOOM GAMBAR (LIGHTBOX) -->
             <div id="image-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 flex items-center justify-center p-4">
                 <div class="relative max-w-lg w-full bg-white p-2 rounded-none shadow-2xl flex flex-col items-center">
                     <button id="close-image-modal" class="absolute -top-3 -right-3 bg-red-600 text-white rounded-full p-1.5 shadow hover:bg-red-700 transition cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
-                    <img id="modal-zoomed-img" src="" alt="Zoom Event" class="max-h-[80vh] w-auto object-contain">
+                    <img id="modal-zoomed-img" src="" alt="Zoom Image" class="max-h-[80vh] w-auto object-contain">
                     <p id="modal-zoomed-title" class="text-xs font-bold text-slate-800 mt-2 text-center"></p>
                 </div>
             </div>
@@ -66,6 +80,7 @@ export function renderHome() {
 export async function initHomeHandler() {
     const container = document.getElementById('home-banner-container');
     const eventContainer = document.getElementById('home-event-container');
+    const produkContainer = document.getElementById('home-produk-container');
     const welcomeTitle = document.getElementById('welcome-user-title');
     const btnPrev = document.getElementById('banner-prev');
     const btnNext = document.getElementById('banner-next');
@@ -216,8 +231,7 @@ export async function initHomeHandler() {
 
                     eventHtml += `
                         <div class="border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs hover:shadow-md transition flex flex-col">
-                            <!-- Foto event dengan object-contain agar tidak terpotong & tombol klik zoom -->
-                            <div class="w-full h-80 bg-slate-900 border-b border-slate-100 overflow-hidden flex items-center justify-center cursor-pointer event-thumb" data-img="${img}" data-title="${title}">
+                            <div class="w-full h-80 bg-slate-900 border-b border-slate-100 overflow-hidden flex items-center justify-center cursor-pointer zoom-thumb" data-img="${img}" data-title="${title}">
                                 ${img ? `<img src="${img}" alt="${title}" class="w-full h-full object-contain pointer-events-none hover:scale-105 transition duration-300">` : `<span class="text-xs text-slate-400">No Image</span>`}
                             </div>
                             <div class="p-3.5 flex flex-col justify-between flex-1 space-y-2">
@@ -231,24 +245,79 @@ export async function initHomeHandler() {
                     `;
                 });
                 eventContainer.innerHTML = eventHtml;
-
-                // Handler klik gambar untuk memperbesar (Zoom Modal) menggunakan Event Delegation yang aman
-                eventContainer.onclick = (e) => {
-                    const thumb = e.target.closest('.event-thumb');
-                    if (thumb) {
-                        const imgSrc = thumb.getAttribute('data-img');
-                        const imgTitle = thumb.getAttribute('data-title');
-                        if (imgSrc && imageModal && zoomedImg && zoomedTitle) {
-                            zoomedImg.src = imgSrc;
-                            zoomedTitle.textContent = imgTitle;
-                            imageModal.classList.remove('hidden');
-                        }
-                    }
-                };
             }
         } catch (err) {
             console.error("Gagal memuat data event di beranda:", err);
             eventContainer.innerHTML = `<div class="col-span-full p-6 text-center text-red-500 text-xs">Gagal memuat event dari database.</div>`;
         }
     }
+
+    // --- 3. LOAD PRODUK DI BAWAH EVENT ---
+    if (produkContainer) {
+        try {
+            const produkSnapshot = await getDocs(collection(db, "produk"));
+            let produkList = [];
+            produkSnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data.status !== false) {
+                    produkList.push({ id: docSnap.id, ...data });
+                }
+            });
+
+            if (produkList.length === 0) {
+                produkContainer.innerHTML = `<div class="col-span-full p-6 text-center text-slate-400 text-xs">Belum ada produk aktif.</div>`;
+            } else {
+                let produkHtml = "";
+                produkList.forEach((item) => {
+                    const img = item.gambar || "";
+                    const title = item.nama || "Produk Toko";
+                    const hargaAwal = parseFloat(item.hargaAwal) || 0;
+                    const diskon = parseFloat(item.diskonPersen) || 0;
+                    const hargaAkhir = parseFloat(item.hargaAkhir) || hargaAwal;
+
+                    const hargaAwalStr = "Rp " + hargaAwal.toLocaleString('id-ID');
+                    const hargaAkhirStr = "Rp " + hargaAkhir.toLocaleString('id-ID');
+
+                    produkHtml += `
+                        <div class="border border-slate-200 rounded-none overflow-hidden bg-white shadow-xs hover:shadow-md transition flex flex-col">
+                            <div class="w-full h-80 bg-slate-900 border-b border-slate-100 overflow-hidden flex items-center justify-center cursor-pointer zoom-thumb" data-img="${img}" data-title="${title}">
+                                ${img ? `<img src="${img}" alt="${title}" class="w-full h-full object-contain pointer-events-none hover:scale-105 transition duration-300">` : `<span class="text-xs text-slate-400">No Image</span>`}
+                            </div>
+                            <div class="p-3.5 flex flex-col justify-between flex-1 space-y-1.5">
+                                <h4 class="text-xs font-bold text-slate-800 line-clamp-1">${title}</h4>
+                                <div class="space-y-0.5">
+                                    ${diskon > 0 ? `<p class="text-[11px] text-slate-400 line-through">${hargaAwalStr}</p>` : ''}
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-xs font-bold text-indigo-900">${hargaAkhirStr}</p>
+                                        ${diskon > 0 ? `<span class="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 font-semibold">Diskon ${diskon}%</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                produkContainer.innerHTML = produkHtml;
+            }
+        } catch (err) {
+            console.error("Gagal memuat data produk di beranda:", err);
+            produkContainer.innerHTML = `<div class="col-span-full p-6 text-center text-red-500 text-xs">Gagal memuat produk dari database.</div>`;
+        }
+    }
+
+    // --- GLOBAL ZOOM HANDLER (Event Delegation untuk Event & Produk) ---
+    const handleZoomClick = (e) => {
+        const thumb = e.target.closest('.zoom-thumb');
+        if (thumb) {
+            const imgSrc = thumb.getAttribute('data-img');
+            const imgTitle = thumb.getAttribute('data-title');
+            if (imgSrc && imageModal && zoomedImg && zoomedTitle) {
+                zoomedImg.src = imgSrc;
+                zoomedTitle.textContent = imgTitle;
+                imageModal.classList.remove('hidden');
+            }
+        }
+    };
+
+    if (eventContainer) eventContainer.onclick = handleZoomClick;
+    if (produkContainer) produkContainer.onclick = handleZoomClick;
 }

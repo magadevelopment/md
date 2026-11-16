@@ -6,30 +6,31 @@ import { renderLogin, initLoginHandler } from './views/login.js';
 import { renderManajemen } from './views/manajemen.js';
 import { renderTamu, initTamuHandler } from './views/tamu.js';
 import { renderStaf, initStafHandler } from './views/staf.js';
-import { renderPengaturan, initPengaturanHandler } from './views/pengaturan.js';
+import { renderPengaturan, initPengaturanHandler } from './views/manajemen-pengaturan.js';
 import { renderTokoPublic, initTokoPublicHandler } from './views/toko.js';
-import { renderBanner, initBannerHandler } from './views/banner.js';
-import { renderText, initTextHandler } from './views/text.js';
+import { renderBanner, initBannerHandler } from './views/manajemen-banner.js';
+import { renderText, initTextHandler } from './views/manajemen-text.js';
 import { renderBrandPublic, initBrandPublicHandler } from './views/brand.js';
 import { renderBranding, initBrandingHandler } from './views/manajemen-branding.js';
-import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/pendaftaran.js';
+import { renderPendaftaranAdmin, initPendaftaranAdminHandler } from './views/manajemen-pendaftaran.js';
 import { renderDaftar, initDaftarHandler } from './views/daftar.js';
 import { renderAnalytics, initAnalyticsHandler } from './views/analytics.js';
-import { renderLokasi, initLokasiHandler } from './views/lokasi.js';
-import { renderEvent, initEventHandler } from './views/event.js';
+import { renderLokasi, initLokasiHandler } from './views/manajemen-lokasi.js';
+import { renderEvent, initEventHandler } from './views/manajemen-event.js';
+import { renderManajemenProduk, initManajemenProdukHandler } from './views/manajemen-produk.js';
 
 const routes = {
     '/': renderHome,
     '/toko': renderTokoPublic,
     '/branding': renderBrandPublic,              // Menu Branding di Sidebar (Publik)
     '/manajemen-branding': renderBranding,        // Halaman Form Input/Admin Manajemen Branding
-    '/event': renderEvent,                        // Halaman Event (event.js)
-    '/produk': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Produk</h2><p class="text-slate-600">Kelola data produk.</p></div>`,
-    '/banner': renderBanner,
-    '/lokasi': renderLokasi,                      // Mengarah ke renderLokasi (lokasi.js)
-    '/text': renderText,
-    '/pendaftaran': renderPendaftaranAdmin,
-    '/pengaturan': renderPengaturan,
+    '/manajemen-event': renderEvent,              // Halaman Manajemen Event
+    '/manajemen-produk': renderManajemenProduk,   // Halaman Manajemen Produk
+    '/manajemen-banner': renderBanner,
+    '/manajemen-lokasi': renderLokasi,
+    '/manajemen-text': renderText,
+    '/manajemen-pendaftaran': renderPendaftaranAdmin,
+    '/manajemen-pengaturan': renderPengaturan,
     '/daftar': renderDaftar,                      // Halaman Daftar (views/daftar.js)
     '/absen': () => `<div class="bg-white p-6 border border-slate-200"><h2 class="text-xl font-bold text-indigo-900 mb-2">Absensi Karyawan</h2><p class="text-slate-600">Catat kehadiran staf merchandising.</p></div>`,
     '/analytics': renderAnalytics,
@@ -113,17 +114,19 @@ export async function router() {
             initTamuHandler();
         } else if (path === '/staf') {
             initStafHandler();
-        } else if (path === '/pengaturan') {
+        } else if (path === '/manajemen-pengaturan') {
             initPengaturanHandler();
         } else if (path === '/toko') {
             initTokoPublicHandler();
-        } else if (path === '/lokasi') {
+        } else if (path === '/manajemen-lokasi') {
             if (typeof initLokasiHandler === 'function') initLokasiHandler();
-        } else if (path === '/event') {
+        } else if (path === '/manajemen-event') {
             if (typeof initEventHandler === 'function') initEventHandler();
-        } else if (path === '/banner') {
+        } else if (path === '/manajemen-produk') {
+            if (typeof initManajemenProdukHandler === 'function') initManajemenProdukHandler();
+        } else if (path === '/manajemen-banner') {
             initBannerHandler();
-        } else if (path === '/text') {
+        } else if (path === '/manajemen-text') {
             initTextHandler();
         } else if (path === '/branding') {
             initBrandPublicHandler();
@@ -131,7 +134,7 @@ export async function router() {
             initBrandingHandler();
         } else if (path === '/analytics') {
             initAnalyticsHandler();
-        } else if (path === '/pendaftaran') {
+        } else if (path === '/manajemen-pendaftaran') {
             initPendaftaranAdminHandler();
         } else if (path === '/daftar') {
             if (typeof initDaftarHandler === 'function') initDaftarHandler();
@@ -194,7 +197,12 @@ export async function router() {
 
             // --- KONTROL VISIBILITAS MENU ADMINISTRATOR (Sidebar) & ROUTE GUARD ---
             const adminMenuSection = document.getElementById('admin-menu-section');
-            const adminRoutes = ['/analytics', '/tamu', '/staf', '/manajemen', '/pengaturan', '/pendaftaran', '/manajemen-branding', '/lokasi', '/event'];
+            const adminRoutes = [
+                '/analytics', '/tamu', '/staf', '/manajemen', 
+                '/manajemen-pengaturan', '/manajemen-pendaftaran', 
+                '/manajemen-branding', '/manajemen-lokasi', 
+                '/manajemen-event', '/manajemen-produk', '/manajemen-banner', '/manajemen-text'
+            ];
 
             if (userRole === 'Administrator') {
                 if (adminMenuSection) adminMenuSection.classList.remove('hidden');
@@ -288,7 +296,7 @@ export async function router() {
                         <span class="text-[10px] font-medium">Branding</span>
                     </a>
                     <div class="relative flex-1">
-                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/event'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
+                        <button id="mobile-more-btn" class="w-full flex flex-col items-center justify-center ${['/analytics', '/tamu', '/staf', '/manajemen', '/manajemen-event', '/manajemen-produk'].includes(path) ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'} py-1 focus:outline-none">
                             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                             <span class="text-[10px] font-medium">More</span>
                         </button>
@@ -297,7 +305,8 @@ export async function router() {
                             <a href="#/analytics" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Analytics</a>
                             <a href="#/tamu" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Tamu</a>
                             <a href="#/staf" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Staf</a>
-                            <a href="#/event" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Event</a>
+                            <a href="#/manajemen-event" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Event</a>
+                            <a href="#/manajemen-produk" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Produk</a>
                             <a href="#/manajemen" data-link class="block px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">Manajemen</a>
                             <div class="border-t border-slate-100 my-1"></div>
                             <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">

@@ -1,4 +1,4 @@
-import { getDocs, collection, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getDocs, collection, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { db } from "../firebase-init.js";
 
 export function renderStaf() {
@@ -132,17 +132,17 @@ export async function initStafHandler() {
         }
     };
 
-    // Fungsi global untuk mengubah role Administrator kembali menjadi Staf/User di Firestore
+    // Fungsi global untuk menghapus dokumen pengguna dari tabel users di Firestore
     window.demoteToUser = async (uid) => {
-        if (!confirm("Apakah Anda yakin ingin mencabut hak Administrator dari pengguna ini?")) return;
+        if (!confirm("Apakah Anda yakin ingin membatalkan administrator dan menghapus pengguna ini dari database?")) return;
         try {
             const userDocRef = doc(db, "users", uid);
-            await updateDoc(userDocRef, { role: "Staf" });
-            alert("Hak Administrator berhasil dicabut!");
-            loadStaf(); // Muat ulang data setelah update
+            await deleteDoc(userDocRef);
+            alert("Pengguna berhasil dihapus dari database!");
+            loadStaf(); // Muat ulang data setelah dihapus
         } catch (err) {
-            console.error("Gagal memperbarui role:", err);
-            alert("Gagal memperbarui role pengguna.");
+            console.error("Gagal menghapus pengguna:", err);
+            alert("Gagal menghapus pengguna dari database.");
         }
     };
 

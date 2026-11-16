@@ -1,4 +1,4 @@
-import { getDocs, collection, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getDocs, collection, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { db } from "../firebase-init.js";
 
 export function renderTamu() {
@@ -95,9 +95,12 @@ export async function initTamuHandler() {
                                 <p class="text-xs text-slate-500 truncate">${email}</p>
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-slate-100 flex justify-end">
-                            <button onclick="window.promoteToAdmin('${uid}')" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200 transition cursor-pointer rounded-none text-center">
+                        <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+                            <button onclick="window.promoteToAdmin('${uid}')" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200 transition cursor-pointer rounded-none text-center">
                                 Jadikan Administrator
+                            </button>
+                            <button onclick="window.deleteUser('${uid}')" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs border border-red-200 transition cursor-pointer rounded-none text-center">
+                                Hapus
                             </button>
                         </div>
                     </div>
@@ -113,9 +116,14 @@ export async function initTamuHandler() {
                         </td>
                         <td class="p-3.5 text-slate-600">${email}</td>
                         <td class="p-3.5 text-center">
-                            <button onclick="window.promoteToAdmin('${uid}')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-[11px] border border-indigo-200 transition cursor-pointer rounded-none">
-                                Jadikan Administrator
-                            </button>
+                            <div class="inline-flex items-center gap-1.5">
+                                <button onclick="window.promoteToAdmin('${uid}')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-[11px] border border-indigo-200 transition cursor-pointer rounded-none">
+                                    Jadikan Administrator
+                                </button>
+                                <button onclick="window.deleteUser('${uid}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[11px] border border-red-200 transition cursor-pointer rounded-none">
+                                    Hapus
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -139,10 +147,24 @@ export async function initTamuHandler() {
             const userDocRef = doc(db, "users", uid);
             await updateDoc(userDocRef, { role: "Administrator" });
             alert("Pengguna berhasil diubah menjadi Administrator!");
-            loadUsers(); // Muat ulang data setelah update
+            loadUsers();
         } catch (err) {
             console.error("Gagal memperbarui role:", err);
             alert("Gagal memperbarui role pengguna.");
+        }
+    };
+
+    // Fungsi global untuk menghapus data profil pengguna dari Firestore
+    window.deleteUser = async (uid) => {
+        if (!confirm("Apakah Anda yakin ingin menghapus data pengguna ini dari database? Catatan: Jika akun terdaftar di Authentication Firebase, Anda juga perlu menghapusnya secara manual di Firebase Console.")) return;
+        try {
+            const userDocRef = doc(db, "users", uid);
+            await deleteDoc(userDocRef);
+            alert("Data pengguna berhasil dihapus!");
+            loadUsers();
+        } catch (err) {
+            console.error("Gagal menghapus pengguna:", err);
+            alert("Gagal menghapus pengguna dari database.");
         }
     };
 

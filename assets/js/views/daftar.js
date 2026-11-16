@@ -91,7 +91,14 @@ export function renderDaftar() {
                                 <option value="30 Hari">30 Hari</option>
                                 <option value="45 Hari">45 Hari</option>
                                 <option value="60 Hari">60 Hari</option>
+                                <option value="custom">Lainnya (Isi Sendiri)</option>
                             </select>
+                        </div>
+
+                        <!-- Input Custom Termin (Muncul jika pilih Lainnya) -->
+                        <div id="termin-custom-container" class="hidden">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Tulis Jangka Waktu Jatuh Tempo</label>
+                            <input type="text" id="termin_custom" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: 90 Hari atau COD">
                         </div>
 
                         <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
@@ -116,8 +123,25 @@ export function initDaftarHandler() {
     const btnCancel = document.getElementById('btn-cancel');
     const form = document.getElementById('form-pendaftaran');
     const modalTitle = document.getElementById('modal-title');
+    const selectTermin = document.getElementById('termin');
+    const customTerminContainer = document.getElementById('termin-custom-container');
+    const inputCustomTermin = document.getElementById('termin_custom');
 
     if (!container) return;
+
+    // Toggle Tampilan Input Custom Termin berdasarkan pilihan dropdown
+    if (selectTermin && customTerminContainer) {
+        selectTermin.onchange = () => {
+            if (selectTermin.value === 'custom') {
+                customTerminContainer.classList.remove('hidden');
+                inputCustomTermin.required = true;
+            } else {
+                customTerminContainer.classList.add('hidden');
+                inputCustomTermin.required = false;
+                inputCustomTermin.value = '';
+            }
+        };
+    }
 
     const toggleModal = (show = true) => {
         if (show) {
@@ -126,6 +150,8 @@ export function initDaftarHandler() {
             modal.classList.add('hidden');
             form.reset();
             document.getElementById('distributor-id').value = '';
+            if (customTerminContainer) customTerminContainer.classList.add('hidden');
+            if (inputCustomTermin) inputCustomTermin.required = false;
             modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-none">📄</span> Formulir Pendaftaran Distributor Baru`;
         }
     };
@@ -143,7 +169,6 @@ export function initDaftarHandler() {
                 return;
             }
 
-            // Query Firestore hanya mengambil data milik user yang sedang aktif (uid sama)
             const q = query(collection(db, "pendaftaran_distributor"), where("uid", "==", currentUser.uid));
             const querySnapshot = await getDocs(q);
             let listHtml = "";
@@ -210,7 +235,7 @@ export function initDaftarHandler() {
 
     loadData();
 
-    // Submit Form (Simpan / Update) dengan menyertakan UID
+    // Submit Form (Simpan / Update)
     if (form) {
         form.onsubmit = async (e) => {
             e.preventDefault();
@@ -220,9 +245,12 @@ export function initDaftarHandler() {
                 return;
             }
 
+            const selectedTermin = selectTermin.value;
+            const finalTermin = selectedTermin === 'custom' ? inputCustomTermin.value.trim() : selectedTermin;
+
             const id = document.getElementById('distributor-id').value;
             const data = {
-                uid: currentUser.uid, // Menyimpan UID pembuat data
+                uid: currentUser.uid,
                 nama: document.getElementById('nama').value,
                 penanggungjawab: document.getElementById('penanggungjawab').value,
                 kontak_kantor: document.getElementById('kontak_kantor').value,
@@ -231,7 +259,7 @@ export function initDaftarHandler() {
                 spv_nama: document.getElementById('spv_nama').value,
                 spv_hp: document.getElementById('spv_hp').value,
                 produk: document.getElementById('produk').value,
-                termin: document.getElementById('termin').value,
+                termin: finalTermin,
                 updatedAt: new Date().toISOString()
             };
 
@@ -270,7 +298,26 @@ export function initDaftarHandler() {
                 document.getElementById('spv_nama').value = targetData.spv_nama || '';
                 document.getElementById('spv_hp').value = targetData.spv_hp || '';
                 document.getElementById('produk').value = targetData.produk || '';
-                document.getElementById('termin').value = targetData.termin || '';
+
+                const termVal = targetData.termin || '';
+                const standardOptions = ['7 Hari', '14 Hari', '30 Hari', '45 Hari', '60 Hari'];
+                
+                if (standardOptions.includes(termVal)) {
+                    selectTermin.value = termVal;
+                    customTerminContainer.classList.add('hidden');
+                    inputCustomTermin.required = false;
+                    inputCustomTermin.value = '';
+                } else if (termVal !== '') {
+                    selectTermin.value = 'custom';
+                    customTerminContainer.classList.remove('hidden');
+                    inputCustomTermin.required = true;
+                    inputCustomTermin.value = termVal;
+                } else {
+                    selectTermin.value = '';
+                    customTerminContainer.classList.add('hidden');
+                    inputCustomTermin.required = false;
+                    inputCustomTermin.value = '';
+                }
 
                 modalTitle.innerHTML = `<span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-none">✏️</span> Edit Pendaftaran Distributor`;
                 toggleModal(true);
