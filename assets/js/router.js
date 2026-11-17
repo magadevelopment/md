@@ -39,6 +39,27 @@ const routes = {
     '/login': renderLogin
 };
 
+// --- FASILITAS KIRIM PESAN WHATSAPP GLOBAL (Metode 1: wa.me) ---
+window.kirimPesanWhatsApp = (nomorTujuan, pesanTeks) => {
+    if (!nomorTujuan) {
+        alert("Nomor telepon tujuan tidak valid!");
+        return;
+    }
+    
+    // Membersihkan karakter non-digit dan format nomor HP
+    let nomor = String(nomorTujuan).replace(/\D/g, '');
+    if (nomor.startsWith('0')) {
+        nomor = '62' + nomor.slice(1);
+    } else if (!nomor.startsWith('62')) {
+        nomor = '62' + nomor;
+    }
+    
+    const pesan = encodeURIComponent(pesanTeks || "");
+    const waUrl = `https://wa.me/${nomor}?text=${pesan}`;
+    
+    window.open(waUrl, '_blank');
+};
+
 // Fungsi Logout Global
 window.handleLogout = () => {
     signOut(auth).then(() => {
@@ -322,7 +343,7 @@ export async function router() {
                                 </span>
                             </button>
                             <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
-                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
+                            <button onclick="window.handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                 Keluar
                             </button>
@@ -361,7 +382,7 @@ export async function router() {
                                 </span>
                             </button>
                             <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
-                            <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
+                            <button onclick="window.handleLogout()" class="w-full text-left px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                 Keluar
                             </button>
